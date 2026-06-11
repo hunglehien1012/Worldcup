@@ -1189,7 +1189,12 @@
             </div>
             <div class="team-dropdown" id="teamDropdown">
               <div class="team-search-box">
-                <input type="text" id="teamSearchInput" autocomplete="off" />
+                <input
+                  type="text"
+                  id="teamSearchInput"
+                  autocomplete="off"
+                  placeholder="Tìm đội (tiếng Việt hoặc tiếng Anh)..."
+                />
               </div>
               <div class="team-list" id="teamList"></div>
               <button class="clear-all-btn" id="clearAllBtn">
@@ -1252,7 +1257,7 @@
           nhất.</span
         ><br />
         <span class="i18n" data-vi="Nguồn:" data-en="Source:">Nguồn:</span>
-        <span>Brian Le</span>
+        <span>FIFA.com</span>
       </div>
     </div>
     <script>
@@ -1763,8 +1768,8 @@
         // Team search placeholder
         document.getElementById("teamSearchInput").placeholder =
           lang === "vi"
-            ? "(Tiếng Việt hoặc tiếng Anh)..."
-            : "(English or Vietnamese)...";
+            ? "Đội (tiếng Việt hoặc tiếng Anh)..."
+            : "Search by (English or Vietnamese)...";
         // Week label (also in DOM with .i18n, but set explicitly too)
         document.getElementById("weekLabel").textContent =
           lang === "vi" ? "— Trong tuần này —" : "— This week —";
