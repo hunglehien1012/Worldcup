@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lịch Thi Đấu World Cup 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-page:        #f0f2f5;
+      --bg-card:        #ffffff;
+      --bg-card-top:    #f5f7fa;
+      --bg-input:       #ffffff;
+      --bg-stat:        #ffffff;
+      --bg-header-from: #1a3a6e;
+      --bg-header-to:   #0d2040;
+      --bg-time:        #e8f0fe;
+      --bg-group:       #ede9ff;
+      --border-main:    #dde2ea;
+      --border-card:    #e2e6ed;
+      --border-top:     #e8edf3;
+      --border-time:    #b8cef5;
+      --border-group:   #c4b8f0;
+      --border-focus:   #3a7bd5;
+      --border-day:     #c8a84b;
+      --text-primary:   #1a2233;
+      --text-muted:     #8a98ac;
+      --text-team:      #1a2233;
+      --text-vs:        #9aa8bc;
+      --text-time:      #1a5bbf;
+      --text-group:     #5a40c0;
+      --text-stat-num:  #c8920a;
+      --text-day:       #b8880a;
+      --text-host:      #c8920a;
+      --text-footer:    #8a98ac;
+      --text-empty:     #9aa8bc;
+      --icon-toggle:    #c8920a;
+    }
+
+    [data-theme="dark"] {
+      --bg-page:        #0f1923;
+      --bg-card:        #162030;
+      --bg-card-top:    #0d1e33;
+      --bg-input:       #162030;
+      --bg-stat:        #162030;
+      --bg-header-from: #1a3a6e;
+      --bg-header-to:   #0d2040;
+      --bg-time:        #0a1628;
+      --bg-group:       #1e1a40;
+      --border-main:    #2a3f5a;
+      --border-card:    #2a3f5a;
+      --border-top:     #1e3050;
+      --border-time:    #1e3a6a;
+      --border-group:   #3a3080;
+      --border-focus:   #3a7bd5;
+      --border-day:     #c8a84b;
+      --text-primary:   #e0e6ed;
+      --text-muted:     #7a8fa6;
+      --text-team:      #dce8f5;
+      --text-vs:        #4a6070;
+      --text-time:      #4a9de8;
+      --text-group:     #a090e8;
+      --text-stat-num:  #FFD700;
+      --text-day:       #c8a84b;
+      --text-host:      #c8a84b;
+      --text-footer:    #4a6070;
+      --text-empty:     #4a6070;
+      --icon-toggle:    #FFD700;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 14px 12px 32px;
+      overflow-x: hidden;
+      transition: background 0.25s, color 0.25s;
+    }
+    .container { max-width: 860px; margin: 0 auto; width: 100%; }
+
+    .header {
+      background: linear-gradient(135deg, var(--bg-header-from) 0%, var(--bg-header-to) 100%);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #2a4a7e;
+    }
+    .logo-circle {
+      width: 48px; height: 48px; min-width: 48px;
+      border-radius: 50%;
+      background: #c8a84b;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 10px; color: #fff;
+      text-align: center; line-height: 1.3;
+    }
+    .header-text { flex: 1; min-width: 0; }
+    .header-text h1 {
+      font-size: 16px; font-weight: 700;
+      color: #FFD700; margin-bottom: 2px; line-height: 1.25;
+    }
+    .header-text p { font-size: 12px; color: #a0b4d0; }
+    .header-text .hosts {
+      font-size: 11px; color: #c8a84b;
+      font-weight: 600; margin-top: 2px; letter-spacing: 0.8px;
+    }
+
+    .theme-toggle {
+      flex-shrink: 0; cursor: pointer;
+      user-select: none; -webkit-tap-highlight-color: transparent;
+    }
+    .toggle-track {
+      width: 44px; height: 24px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px; position: relative;
+      border: 1px solid rgba(255,255,255,0.3);
+      transition: background 0.25s;
+    }
+    .toggle-knob {
+      width: 18px; height: 18px;
+      background: #fff; border-radius: 50%;
+      position: absolute; top: 2px; left: 2px;
+      transition: transform 0.25s, background 0.25s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .toggle-knob svg { width: 11px; height: 11px; stroke: var(--icon-toggle); transition: stroke 0.25s; }
+    [data-theme="dark"] .toggle-knob { transform: translateX(20px); background: #2a3f5a; }
+    [data-theme="dark"] .toggle-track { background: rgba(255,255,255,0.1); }
+
+    .filters {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; margin-bottom: 10px;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; }
+    .filter-group.full { grid-column: 1 / -1; }
+    .filter-group label {
+      font-size: 10px; color: var(--text-muted); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 5px;
+      transition: color 0.25s;
+    }
+    .filter-group label svg { width: 13px; height: 13px; stroke: var(--text-muted); flex-shrink: 0; transition: stroke 0.25s; }
+    .filter-group select,
+    .filter-group input {
+      padding: 10px 12px;
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-size: 14px; width: 100%; outline: none;
+      transition: border-color 0.2s, background 0.25s, color 0.25s;
+      -webkit-appearance: none; appearance: none;
+      min-height: 44px;
+    }
+    .filter-group select {
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a98ac' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      padding-right: 32px;
+    }
+    [data-theme="dark"] .filter-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a8fa6' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    }
+    .filter-group select:focus,
+    .filter-group input:focus { border-color: var(--border-focus); }
+    .filter-group input::placeholder { color: var(--text-muted); }
+
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 7px; margin-bottom: 14px;
+    }
+    .stat {
+      background: var(--bg-stat); border: 1px solid var(--border-card);
+      border-radius: 10px; padding: 10px 6px; text-align: center;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .stat .num {
+      font-size: 20px; font-weight: 700;
+      color: var(--text-stat-num); line-height: 1; transition: color 0.25s;
+    }
+    .stat .lbl {
+      font-size: 9px; color: var(--text-muted);
+      margin-top: 4px; line-height: 1.3; transition: color 0.25s;
+    }
+
+    .week-label {
+      font-size: 11px; color: var(--text-muted);
+      text-align: center; margin-bottom: 12px;
+      letter-spacing: 1px; text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .day-block { margin-bottom: 14px; }
+    .day-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 8px; padding-bottom: 6px;
+      border-bottom: 2px solid var(--border-day);
+    }
+    .day-label { font-size: 13px; font-weight: 700; color: var(--text-day); transition: color 0.25s; }
+    .day-date  { font-size: 12px; color: var(--text-muted); transition: color 0.25s; }
+
+    .matches { display: flex; flex-direction: column; gap: 7px; }
+    .match-card {
+      background: var(--bg-card); border: 1px solid var(--border-card);
+      border-radius: 10px; overflow: hidden;
+      transition: border-color 0.2s, background 0.25s;
+    }
+    .match-card:hover { border-color: var(--border-focus); }
+    .card-top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 12px; background: var(--bg-card-top);
+      border-bottom: 1px solid var(--border-top);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .match-time {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-time); background: var(--bg-time);
+      padding: 3px 10px; border-radius: 5px;
+      border: 1px solid var(--border-time);
+      letter-spacing: 0.5px; transition: all 0.25s;
+    }
+    .group-badge {
+      font-size: 10px; font-weight: 700;
+      color: var(--text-group); background: var(--bg-group);
+      border: 1px solid var(--border-group);
+      padding: 3px 9px; border-radius: 5px;
+      white-space: nowrap; transition: all 0.25s;
+    }
+    .card-body {
+      display: grid; grid-template-columns: 1fr 38px 1fr;
+      align-items: center; padding: 10px 12px; gap: 4px;
+    }
+    .team { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .team-left  { justify-content: flex-end; text-align: right; }
+    .team-right { justify-content: flex-start; }
+    .flag { font-size: 20px; flex-shrink: 0; line-height: 1; }
+    .team-name {
+      font-size: 12px; font-weight: 600; color: var(--text-team);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: color 0.25s;
+    }
+    .vs {
+      font-size: 11px; font-weight: 700;
+      color: var(--text-vs); text-align: center; transition: color 0.25s;
+    }
+
+    .empty {
+      text-align: center; padding: 3rem 1rem;
+      color: var(--text-empty); font-size: 14px; line-height: 1.6;
+    }
+    .empty svg { width: 36px; height: 36px; stroke: var(--text-empty); display: block; margin: 0 auto 10px; transition: stroke 0.25s; }
+
+    .footer {
+      text-align: center; margin-top: 1.5rem;
+      font-size: 11px; color: var(--text-footer); line-height: 1.7;
+      transition: color 0.25s;
+    }
+    .footer span { color: var(--text-host); }
+
+    @media (min-width: 600px) {
+      body { padding: 20px 20px 40px; }
+      .header { padding: 18px 20px; gap: 16px; }
+      .logo-circle { width: 54px; height: 54px; min-width: 54px; font-size: 11px; }
+      .header-text h1 { font-size: 20px; }
+      .filters { grid-template-columns: 1fr 1fr 1fr; }
+      .filter-group.full { grid-column: auto; }
+      .stats { gap: 10px; }
+      .stat { padding: 12px 8px; }
+      .stat .num { font-size: 24px; }
+      .stat .lbl { font-size: 11px; }
+      .card-body { padding: 12px 16px; gap: 8px; }
+      .card-top  { padding: 8px 16px; }
+      .match-time { font-size: 14px; padding: 4px 12px; }
+      .group-badge { font-size: 11px; padding: 4px 10px; }
+      .flag { font-size: 22px; }
+      .team-name { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="logo-circle">FIFA<br>2026</div>
+    <div class="header-text">
+      <h1>LỊCH THI ĐẤU WORLD CUP 2026</h1>
+      <p>Giờ Việt Nam 🇻🇳 &nbsp;(UTC+7)</p>
+      <div class="hosts">CANADA · MEXICO · USA</div>
+    </div>
+    <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle dark/light mode">
+      <div class="toggle-track">
+        <div class="toggle-knob">
+          <svg id="toggleIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M11 15h1"/><path d="M12 15v3"/></svg>
+        Ngày thi đấu
+      </label>
+      <select id="dateFilter">
+        <option value="">Tất cả ngày</option>
+        <option value="12/06">Thứ Năm 12/06</option>
+        <option value="13/06">Thứ Sáu 13/06</option>
+        <option value="14/06">Thứ Bảy 14/06</option>
+        <option value="15/06">Chủ Nhật 15/06</option>
+        <option value="16/06">Thứ Hai 16/06</option>
+        <option value="17/06">Thứ Ba 17/06</option>
+        <option value="18/06">Thứ Tư 18/06</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -8"/><path d="M4 10a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -8"/></svg>
+        Bảng đấu
+      </label>
+      <select id="groupFilter">
+        <option value="">Tất cả bảng</option>
+        <option value="BẢNG A">Bảng A</option>
+        <option value="BẢNG B">Bảng B</option>
+        <option value="BẢNG C">Bảng C</option>
+        <option value="BẢNG D">Bảng D</option>
+        <option value="BẢNG E">Bảng E</option>
+        <option value="BẢNG F">Bảng F</option>
+        <option value="BẢNG G">Bảng G</option>
+        <option value="BẢNG H">Bảng H</option>
+        <option value="BẢNG I">Bảng I</option>
+        <option value="BẢNG J">Bảng J</option>
+      </select>
+    </div>
+    <div class="filter-group full">
+      <label>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l6 2v5h-3v8a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1v-8h-3v-5l6 -2a3 3 0 0 0 6 0"/></svg>
+        Tìm đội bóng
+      </label>
+      <input type="text" id="teamFilter" placeholder="Nhập tên đội... (vd: brazil, germany)" />
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num" id="statMatches">20</div><div class="lbl">Trận đấu</div></div>
+    <div class="stat"><div class="num" id="statDays">7</div><div class="lbl">Ngày thi đấu</div></div>
+    <div class="stat"><div class="num" id="statGroups">10</div><div class="lbl">Bảng đấu</div></div>
+    <div class="stat"><div class="num" id="statTeams">40</div><div class="lbl">Đội bóng</div></div>
+  </div>
+
+  <div class="week-label">— Trong tuần này —</div>
+  <div id="schedule"></div>
+
+  <div class="footer">
+    * Lịch thi đấu có thể thay đổi. Vui lòng theo dõi cập nhật mới nhất.<br>
+    Nguồn: <span>FIFA.com</span>
+  </div>
+
+</div>
+<script>
+  var SVG_SUN  = '<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>';
+  var SVG_MOON = '<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008"/>';
+
+  var FLAGS = {
+    'MEXICO':'🇲🇽','SOUTH AFRICA':'🇿🇦','SOUTH KOREA':'🇰🇷','CZECH REPUBLIC':'🇨🇿',
+    'CANADA':'🇨🇦','BOSNIA & HERZEGOVINA':'🇧🇦','UNITED STATES':'🇺🇸','PARAGUAY':'🇵🇾',
+    'AUSTRALIA':'🇦🇺','TÜRKİYE':'🇹🇷','ARGENTINA':'🇦🇷','ALGERIA':'🇩🇿',
+    'GERMANY':'🇩🇪','JAPAN':'🇯🇵','BELGIUM':'🇧🇪','EGYPT':'🇪🇬',
+    'SPAIN':'🇪🇸','IRAN':'🇮🇷','FRANCE':'🇫🇷','SENEGAL':'🇸🇳',
+    'BRAZIL':'🇧🇷','MOROCCO':'🇲🇦','ENGLAND':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','CROATIA':'🇭🇷',
+    'PORTUGAL':'🇵🇹','GHANA':'🇬🇭','NETHERLANDS':'🇳🇱','TUNISIA':'🇹🇳',
+    'COLOMBIA':'🇨🇴','QATAR':'🇶🇦','URUGUAY':'🇺🇾','SAUDI ARABIA':'🇸🇦',
+    'SWITZERLAND':'🇨🇭','AUSTRIA':'🇦🇹','ITALY':'🇮🇹','NORWAY':'🇳🇴',
+    'DENMARK':'🇩🇰','PANAMA':'🇵🇦','POLAND':'🇵🇱','IVORY COAST':'🇨🇮'
+  };
+
+  var DATA = [
+    {day:'Thứ Năm', date:'12/06',time:'02:00',home:'MEXICO',        away:'SOUTH AFRICA',        group:'BẢNG A'},
+    {day:'Thứ Năm', date:'12/06',time:'09:00',home:'SOUTH KOREA',   away:'CZECH REPUBLIC',      group:'BẢNG A'},
+    {day:'Thứ Sáu', date:'13/06',time:'02:00',home:'CANADA',        away:'BOSNIA & HERZEGOVINA',group:'BẢNG B'},
+    {day:'Thứ Sáu', date:'13/06',time:'09:00',home:'UNITED STATES', away:'PARAGUAY',            group:'BẢNG B'},
+    {day:'Thứ Sáu', date:'13/06',time:'11:00',home:'AUSTRALIA',     away:'TÜRKİYE',             group:'BẢNG C'},
+    {day:'Thứ Bảy', date:'14/06',time:'02:00',home:'ARGENTINA',     away:'ALGERIA',             group:'BẢNG C'},
+    {day:'Thứ Bảy', date:'14/06',time:'05:00',home:'GERMANY',       away:'JAPAN',               group:'BẢNG D'},
+    {day:'Thứ Bảy', date:'14/06',time:'08:00',home:'BELGIUM',       away:'EGYPT',               group:'BẢNG D'},
+    {day:'Chủ Nhật',date:'15/06',time:'02:00',home:'SPAIN',         away:'IRAN',                group:'BẢNG E'},
+    {day:'Chủ Nhật',date:'15/06',time:'05:00',home:'FRANCE',        away:'SENEGAL',             group:'BẢNG E'},
+    {day:'Chủ Nhật',date:'15/06',time:'08:00',home:'BRAZIL',        away:'MOROCCO',             group:'BẢNG F'},
+    {day:'Thứ Hai', date:'16/06',time:'02:00',home:'ENGLAND',       away:'CROATIA',             group:'BẢNG F'},
+    {day:'Thứ Hai', date:'16/06',time:'05:00',home:'PORTUGAL',      away:'GHANA',               group:'BẢNG G'},
+    {day:'Thứ Hai', date:'16/06',time:'08:00',home:'NETHERLANDS',   away:'TUNISIA',             group:'BẢNG G'},
+    {day:'Thứ Ba',  date:'17/06',time:'02:00',home:'COLOMBIA',      away:'QATAR',               group:'BẢNG H'},
+    {day:'Thứ Ba',  date:'17/06',time:'05:00',home:'URUGUAY',       away:'SAUDI ARABIA',        group:'BẢNG H'},
+    {day:'Thứ Ba',  date:'17/06',time:'08:00',home:'SWITZERLAND',   away:'AUSTRIA',             group:'BẢNG I'},
+    {day:'Thứ Tư',  date:'18/06',time:'02:00',home:'ITALY',         away:'NORWAY',              group:'BẢNG I'},
+    {day:'Thứ Tư',  date:'18/06',time:'05:00',home:'DENMARK',       away:'PANAMA',              group:'BẢNG J'},
+    {day:'Thứ Tư',  date:'18/06',time:'08:00',home:'POLAND',        away:'IVORY COAST',         group:'BẢNG J'},
+  ];
+
+  var html = document.documentElement;
+  var toggleIcon = document.getElementById('toggleIcon');
+
+  var currentTheme = 'light';
+
+  function applyTheme(theme) {
+    currentTheme = theme;
+    html.setAttribute('data-theme', theme);
+    toggleIcon.innerHTML = theme === 'dark' ? SVG_MOON : SVG_SUN;
+  }
+
+  applyTheme('light');
+
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  });
+
+  function getFiltered() {
+    var d = document.getElementById('dateFilter').value;
+    var t = document.getElementById('teamFilter').value.toLowerCase().trim();
+    var g = document.getElementById('groupFilter').value;
+    return DATA.filter(function(m) {
+      if (d && m.date  !== d) return false;
+      if (g && m.group !== g) return false;
+      if (t && m.home.toLowerCase().indexOf(t) === -1 && m.away.toLowerCase().indexOf(t) === -1) return false;
+      return true;
+    });
+  }
+
+  function matchCard(m) {
+    var hf = FLAGS[m.home] || '🏳';
+    var af = FLAGS[m.away] || '🏳';
+    return '<div class="match-card">'
+      + '<div class="card-top">'
+      + '<span class="match-time">' + m.time + '</span>'
+      + '<span class="group-badge">' + m.group + '</span>'
+      + '</div>'
+      + '<div class="card-body">'
+      + '<div class="team team-left"><span class="team-name">' + m.home + '</span><span class="flag">' + hf + '</span></div>'
+      + '<div class="vs">VS</div>'
+      + '<div class="team team-right"><span class="flag">' + af + '</span><span class="team-name">' + m.away + '</span></div>'
+      + '</div></div>';
+  }
+
+  function render() {
+    var filtered = getFiltered();
+    var sched = document.getElementById('schedule');
+
+    var days   = {};
+    var teams  = {};
+    var groups = {};
+    filtered.forEach(function(m) {
+      days[m.date] = 1;
+      teams[m.home] = 1; teams[m.away] = 1;
+      groups[m.group] = 1;
+    });
+    document.getElementById('statMatches').textContent = filtered.length;
+    document.getElementById('statDays').textContent    = Object.keys(days).length;
+    document.getElementById('statGroups').textContent  = Object.keys(groups).length;
+    document.getElementById('statTeams').textContent   = Object.keys(teams).length;
+
+    if (!filtered.length) {
+      sched.innerHTML = '<div class="empty">'
+        + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.039 5.062a7 7 0 0 0 9.91 9.89m1.584 -2.434a7 7 0 0 0 -9.038 -9.057"/><path d="M3 3l18 18"/></svg>'
+        + 'Không tìm thấy trận đấu phù hợp.<br>Thử thay đổi bộ lọc khác.</div>';
+      return;
+    }
+
+    var byDate = {};
+    var dateOrder = [];
+    filtered.forEach(function(m) {
+      if (!byDate[m.date]) { byDate[m.date] = { day: m.day, matches: [] }; dateOrder.push(m.date); }
+      byDate[m.date].matches.push(m);
+    });
+
+    sched.innerHTML = dateOrder.map(function(date) {
+      var block = byDate[date];
+      return '<div class="day-block">'
+        + '<div class="day-header"><span class="day-label">' + block.day + '</span><span class="day-date">' + date + '/2026</span></div>'
+        + '<div class="matches">' + block.matches.map(matchCard).join('') + '</div>'
+        + '</div>';
+    }).join('');
+  }
+
+  document.getElementById('dateFilter').addEventListener('change', render);
+  document.getElementById('groupFilter').addEventListener('change', render);
+  document.getElementById('teamFilter').addEventListener('input', render);
+  render();
+</script>
+</body>
+</html>
