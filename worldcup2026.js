@@ -322,7 +322,10 @@ function rebuildDateFilter() {
         : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
     var div = document.createElement("div");
     var past = isDatePast(o.date);
-    div.className = "cs-option" + (currentVal === o.date ? " selected" : "") + (past ? " past-day" : "");
+    div.className =
+      "cs-option" +
+      (currentVal === o.date ? " selected" : "") +
+      (past ? " past-day" : "");
     div.setAttribute("data-value", o.date);
     div.textContent = label;
     dd.appendChild(div);
@@ -901,20 +904,10 @@ function applyI18n() {
     var v = el.getAttribute("data-" + currentLang);
     if (v !== null) el.textContent = v;
   });
-  document.getElementById("headerTitle").textContent =
-    currentLang === "vi"
-      ? "LỊCH THI ĐẤU WORLD CUP 2026"
-      : "FIFA WORLD CUP 2026 SCHEDULE";
-  document.getElementById("headerTz").innerHTML =
-    currentLang === "vi"
-      ? "Giờ Việt Nam 🇻🇳 &nbsp;"
-      : "California Time 🇺🇸 &nbsp;";
   document.getElementById("teamSearchInput").placeholder =
     currentLang === "vi"
       ? "Tìm đội (tiếng Việt hoặc tiếng Anh)..."
       : "Search team (English or Vietnamese)...";
-  document.getElementById("weekLabel").textContent =
-    currentLang === "vi" ? "— Lịch thi đấu —" : "— Match Schedule —";
   updateHideFinishedLabel();
 }
 
@@ -1046,7 +1039,9 @@ function getAbbrev(name) {
     .replace(/[^a-z\s]/g, "")
     .trim()
     .split(/\s+/)
-    .map(function (w) { return w[0] || ""; })
+    .map(function (w) {
+      return w[0] || "";
+    })
     .join("");
 }
 function matchesAbbrev(name, qna) {
@@ -1103,6 +1098,18 @@ function renderTeamList(q) {
 
 // ===== EXPAND STATE =====
 var expandedId = null;
+
+// ===== TOAST NOTIFICATION =====
+function showToast(msg, type) {
+  var toast = document.getElementById("aiToast");
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.className = "ai-toast " + (type || "info");
+  toast.classList.add("show");
+  setTimeout(function () {
+    toast.classList.remove("show");
+  }, 2500);
+}
 
 // ===== RENDER =====
 function getMatchDisplayDate(m) {
@@ -1247,8 +1254,6 @@ function matchCard(m) {
   var centerHtml,
     hasResult = !!m.result;
   if (hasResult) {
-    var hint =
-      currentLang === "vi" ? "Nhấn để xem chi tiết" : "Tap for details";
     centerHtml =
       '<div style="text-align:center;">' +
       '<div class="score-block" style="justify-content:center;"><span class="score-num">' +
@@ -1256,9 +1261,6 @@ function matchCard(m) {
       '</span><span class="score-dash">-</span><span class="score-num">' +
       m.result.awayScore +
       "</span></div>" +
-      '<div class="result-hint"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01"/><circle cx="12" cy="12" r="9"/></svg>' +
-      hint +
-      "</div>" +
       "</div>";
   } else {
     centerHtml = '<div class="vs">VS</div>';
@@ -1363,6 +1365,14 @@ function render() {
     })
     .join("");
 
+  // Click handlers for cards WITHOUT results → show toast
+  sched.querySelectorAll(".match-card:not(.has-result)").forEach(function (card) {
+    card.addEventListener("click", function () {
+      var msg = currentLang === "vi" ? "Trận đấu chưa kết thúc." : "Match not finished yet.";
+      showToast(msg, "info");
+    });
+  });
+
   // Click handlers for cards with results
   sched.querySelectorAll(".match-card.has-result").forEach(function (card) {
     card.addEventListener("click", function () {
@@ -1386,25 +1396,33 @@ document.getElementById("dateFilter").addEventListener("change", render);
 document.getElementById("groupFilter").addEventListener("change", render);
 
 // ===== HIDE FINISHED BUTTON =====
-document.getElementById("hideFinishedBtn").addEventListener("click", function() {
-  hideFinished = !hideFinished;
-  this.classList.toggle("active", hideFinished);
-  updateHideFinishedLabel();
-  render();
-});
+document
+  .getElementById("hideFinishedBtn")
+  .addEventListener("click", function () {
+    hideFinished = !hideFinished;
+    this.classList.toggle("active", hideFinished);
+    updateHideFinishedLabel();
+    render();
+  });
 
 function updateHideFinishedLabel() {
   var el = document.getElementById("hideFinishedLabel");
   if (!el) return;
   if (hideFinished) {
-    el.textContent = currentLang === "vi" ? "Hiện trận đã kết thúc" : "Show finished";
+    el.textContent =
+      currentLang === "vi" ? "Hiện trận đã kết thúc" : "Show finished";
     // swap eye icon to eye-off
     var svg = document.querySelector("#hideFinishedBtn svg");
-    if (svg) svg.innerHTML = '<path d="M3 3l18 18"/><path d="M10.584 10.587a2 2 0 0 0 2.828 2.83"/><path d="M9.363 5.365A9.466 9.466 0 0 1 12 5c3.6 0 6.6 2 9 6c-.9 1.514-1.927 2.757-3.05 3.737M5.634 5.634A16.536 16.536 0 0 0 3 12c2.4 4 5.4 6 9 6c1.266 0 2.48-.31 3.618-.902"/>';
+    if (svg)
+      svg.innerHTML =
+        '<path d="M3 3l18 18"/><path d="M10.584 10.587a2 2 0 0 0 2.828 2.83"/><path d="M9.363 5.365A9.466 9.466 0 0 1 12 5c3.6 0 6.6 2 9 6c-.9 1.514-1.927 2.757-3.05 3.737M5.634 5.634A16.536 16.536 0 0 0 3 12c2.4 4 5.4 6 9 6c1.266 0 2.48-.31 3.618-.902"/>';
   } else {
-    el.textContent = currentLang === "vi" ? "Ẩn trận đã kết thúc" : "Hide finished";
+    el.textContent =
+      currentLang === "vi" ? "Ẩn trận đã kết thúc" : "Hide finished";
     var svg = document.querySelector("#hideFinishedBtn svg");
-    if (svg) svg.innerHTML = '<path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4-5.4 6-9 6c-3.6 0-6.6-2-9-6c2.4-4 5.4-6 9-6c3.6 0 6.6 2 9 6"/>';
+    if (svg)
+      svg.innerHTML =
+        '<path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4-5.4 6-9 6c-3.6 0-6.6-2-9-6c2.4-4 5.4-6 9-6c3.6 0 6.6 2 9 6"/>';
   }
 }
 
@@ -1482,19 +1500,23 @@ document.addEventListener(
 // Returns today's date as "DD/MM" in VN timezone (UTC+7)
 function getTodayDDMM() {
   var now = new Date();
-  var vnMs = now.getTime() + (now.getTimezoneOffset() * 60000) + (VN_OFFSET_MIN * 60000);
+  var vnMs =
+    now.getTime() + now.getTimezoneOffset() * 60000 + VN_OFFSET_MIN * 60000;
   var vnDate = new Date(vnMs);
-  var d = vnDate.getDate(), mo = vnDate.getMonth() + 1;
+  var d = vnDate.getDate(),
+    mo = vnDate.getMonth() + 1;
   return (d < 10 ? "0" : "") + d + "/" + (mo < 10 ? "0" : "") + mo;
 }
 
 // Returns true if ALL matches on that display-date are finished (have result)
 function isDatePast(dateStr) {
-  var matchesOnDate = DATA.filter(function(m) {
+  var matchesOnDate = DATA.filter(function (m) {
     return getMatchDisplayDate(m) === dateStr;
   });
   if (!matchesOnDate.length) return false;
-  return matchesOnDate.every(function(m) { return !!m.result; });
+  return matchesOnDate.every(function (m) {
+    return !!m.result;
+  });
 }
 
 // Init
@@ -1503,12 +1525,15 @@ rebuildGroupFilter();
 renderTeamList("");
 
 // Auto-select today's date
-(function() {
+(function () {
   var today = getTodayDDMM();
   var sel = document.getElementById("dateFilter");
   var hasToday = false;
   for (var i = 0; i < sel.options.length; i++) {
-    if (sel.options[i].value === today) { hasToday = true; break; }
+    if (sel.options[i].value === today) {
+      hasToday = true;
+      break;
+    }
   }
   if (hasToday) {
     sel.value = today;
@@ -1541,7 +1566,7 @@ async function fetchCountOnly() {
 
 async function fetchAndIncrement() {
   var r = await fetch(
-    "https://api.counterapi.dev/v1/hunglehien1012/worldcup2026/up/",
+    "https://api.counterapi.dev/v1/hunglehien1012/worldcup2026/",
   );
   if (!r.ok) throw new Error();
   return (await r.json()).count || 0;
