@@ -338,7 +338,6 @@
         height: 12px;
         stroke: var(--accent);
       }
-      .filter-group select,
       .filter-group input {
         padding: 10px 12px;
         border: 1px solid var(--border-main);
@@ -352,25 +351,114 @@
           border-color 0.2s,
           background 0.25s,
           color 0.25s;
-        -webkit-appearance: none;
-        appearance: none;
         min-height: 44px;
       }
-      .filter-group select {
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a98ac' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-        padding-right: 32px;
-      }
-      [data-theme="dark"] .filter-group select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a8fa6' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      }
-      .filter-group select:focus,
       .filter-group input:focus {
         border-color: var(--border-focus);
       }
       .filter-group input::placeholder {
         color: var(--text-muted);
+      }
+
+      /* CUSTOM SELECT DROPDOWN */
+      .custom-select-wrapper {
+        position: relative;
+        width: 100%;
+      }
+      .custom-select-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        border: 1.5px solid var(--border-focus);
+        border-radius: 8px;
+        background: var(--bg-input);
+        color: var(--text-primary);
+        font-size: 14px;
+        min-height: 44px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          border-color 0.2s,
+          background 0.25s,
+          color 0.25s;
+        gap: 8px;
+      }
+      .custom-select-trigger:hover {
+        border-color: var(--border-focus);
+      }
+      .custom-select-trigger .cs-label {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .custom-select-trigger .cs-chevron {
+        flex-shrink: 0;
+        color: var(--text-muted);
+        transition: transform 0.2s;
+        display: flex;
+        align-items: center;
+      }
+      .custom-select-trigger.open .cs-chevron {
+        transform: rotate(180deg);
+      }
+      .custom-select-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        z-index: 300;
+        background: var(--bg-card);
+        border: 1px solid var(--border-card);
+        border-radius: 10px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+        overflow: hidden;
+        max-height: 280px;
+        overflow-y: auto;
+      }
+      .custom-select-dropdown.open {
+        display: block;
+      }
+      .custom-select-dropdown::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-select-dropdown::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-select-dropdown::-webkit-scrollbar-thumb {
+        background: var(--border-main);
+        border-radius: 2px;
+      }
+      .cs-option {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        font-size: 14px;
+        color: var(--text-primary);
+        cursor: pointer;
+        border-left: 3px solid transparent;
+        transition:
+          background 0.15s,
+          border-color 0.15s,
+          color 0.15s;
+        background: transparent;
+      }
+      .cs-option:hover {
+        background: var(--bg-card-top);
+      }
+      .cs-option.selected {
+        background: #eaf2ff;
+        border-left-color: var(--border-focus);
+        color: var(--border-focus);
+        font-weight: 600;
+      }
+      [data-theme="dark"] .cs-option.selected {
+        background: #0d1e38;
+        color: #4a9de8;
+        border-left-color: #4a9de8;
       }
 
       /* TEAM MULTI-SELECT */
@@ -1079,9 +1167,30 @@
                 >Ngày thi đấu</span
               >
             </label>
-            <select id="dateFilter">
+            <select id="dateFilter" style="display: none">
               <option value="">Tất cả ngày</option>
             </select>
+            <div class="custom-select-wrapper" id="dateSelectWrapper">
+              <div class="custom-select-trigger" id="dateSelectTrigger">
+                <span class="cs-label" id="dateSelectLabel">Tất cả ngày</span>
+                <span class="cs-chevron">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </span>
+              </div>
+              <div class="custom-select-dropdown" id="dateSelectDropdown"></div>
+            </div>
           </div>
           <div class="filter-group">
             <label>
@@ -1104,28 +1213,45 @@
                 >Bảng đấu</span
               >
             </label>
-            <select id="groupFilter">
-              <option
-                value=""
-                class="i18n"
-                data-vi="Tất cả bảng"
-                data-en="All groups"
-              >
-                Tất cả bảng
-              </option>
-              <option value="BẢNG A">Bảng A / Group A</option>
-              <option value="BẢNG B">Bảng B / Group B</option>
-              <option value="BẢNG C">Bảng C / Group C</option>
-              <option value="BẢNG D">Bảng D / Group D</option>
-              <option value="BẢNG E">Bảng E / Group E</option>
-              <option value="BẢNG F">Bảng F / Group F</option>
-              <option value="BẢNG G">Bảng G / Group G</option>
-              <option value="BẢNG H">Bảng H / Group H</option>
-              <option value="BẢNG I">Bảng I / Group I</option>
-              <option value="BẢNG J">Bảng J / Group J</option>
-              <option value="BẢNG K">Bảng K / Group K</option>
-              <option value="BẢNG L">Bảng L / Group L</option>
+            <select id="groupFilter" style="display: none">
+              <option value="">Tất cả bảng</option>
+              <option value="BẢNG A">Bảng A</option>
+              <option value="BẢNG B">Bảng B</option>
+              <option value="BẢNG C">Bảng C</option>
+              <option value="BẢNG D">Bảng D</option>
+              <option value="BẢNG E">Bảng E</option>
+              <option value="BẢNG F">Bảng F</option>
+              <option value="BẢNG G">Bảng G</option>
+              <option value="BẢNG H">Bảng H</option>
+              <option value="BẢNG I">Bảng I</option>
+              <option value="BẢNG J">Bảng J</option>
+              <option value="BẢNG K">Bảng K</option>
+              <option value="BẢNG L">Bảng L</option>
             </select>
+            <div class="custom-select-wrapper" id="groupSelectWrapper">
+              <div class="custom-select-trigger" id="groupSelectTrigger">
+                <span class="cs-label" id="groupSelectLabel">Tất cả bảng</span>
+                <span class="cs-chevron">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </span>
+              </div>
+              <div
+                class="custom-select-dropdown"
+                id="groupSelectDropdown"
+              ></div>
+            </div>
           </div>
           <div class="filter-group full" id="teamFilterGroup">
             <div class="team-filter-label-row">
@@ -1551,10 +1677,8 @@
         });
         var sel = document.getElementById("dateFilter");
         var prev = sel.value;
-        sel.innerHTML =
-          '<option value="">' +
-          (currentLang === "vi" ? "Tất cả ngày" : "All dates") +
-          "</option>";
+        var allLabel = currentLang === "vi" ? "Tất cả ngày" : "All dates";
+        sel.innerHTML = '<option value="">' + allLabel + "</option>";
         order.forEach(function (o) {
           var label =
             currentLang === "vi"
@@ -1566,6 +1690,109 @@
           sel.appendChild(opt);
         });
         if (prev) sel.value = prev;
+        // Rebuild custom date dropdown
+        var currentVal = sel.value;
+        var currentText = currentVal
+          ? (function () {
+              var o = order.find(function (x) {
+                return x.date === currentVal;
+              });
+              if (!o) return allLabel;
+              return currentLang === "vi"
+                ? o.dayVN + " " + o.date
+                : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+            })()
+          : allLabel;
+        document.getElementById("dateSelectLabel").textContent = currentText;
+        var dd = document.getElementById("dateSelectDropdown");
+        dd.innerHTML = "";
+        var allOpt = document.createElement("div");
+        allOpt.className = "cs-option" + (currentVal === "" ? " selected" : "");
+        allOpt.setAttribute("data-value", "");
+        allOpt.textContent = allLabel;
+        dd.appendChild(allOpt);
+        order.forEach(function (o) {
+          var label =
+            currentLang === "vi"
+              ? o.dayVN + " " + o.date
+              : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+          var div = document.createElement("div");
+          div.className =
+            "cs-option" + (currentVal === o.date ? " selected" : "");
+          div.setAttribute("data-value", o.date);
+          div.textContent = label;
+          dd.appendChild(div);
+        });
+        // Attach click handlers
+        dd.querySelectorAll(".cs-option").forEach(function (opt) {
+          opt.addEventListener("click", function () {
+            var val = this.getAttribute("data-value");
+            document.getElementById("dateFilter").value = val;
+            document.getElementById("dateSelectLabel").textContent =
+              this.textContent;
+            dd.querySelectorAll(".cs-option").forEach(function (o) {
+              o.classList.remove("selected");
+            });
+            this.classList.add("selected");
+            closeDateDropdown();
+            render();
+          });
+        });
+      }
+
+      function rebuildGroupFilter() {
+        var groups = [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+        ];
+        var allLabel = currentLang === "vi" ? "Tất cả bảng" : "All groups";
+        var currentVal = document.getElementById("groupFilter").value;
+        var currentText = currentVal
+          ? currentLang === "vi"
+            ? currentVal.replace("BẢNG ", "Bảng ")
+            : currentVal.replace("BẢNG ", "Group ")
+          : allLabel;
+        document.getElementById("groupSelectLabel").textContent = currentText;
+        var dd = document.getElementById("groupSelectDropdown");
+        dd.innerHTML = "";
+        var allOpt = document.createElement("div");
+        allOpt.className = "cs-option" + (currentVal === "" ? " selected" : "");
+        allOpt.setAttribute("data-value", "");
+        allOpt.textContent = allLabel;
+        dd.appendChild(allOpt);
+        groups.forEach(function (g) {
+          var val = "BẢNG " + g;
+          var label = currentLang === "vi" ? "Bảng " + g : "Group " + g;
+          var div = document.createElement("div");
+          div.className = "cs-option" + (currentVal === val ? " selected" : "");
+          div.setAttribute("data-value", val);
+          div.textContent = label;
+          dd.appendChild(div);
+        });
+        dd.querySelectorAll(".cs-option").forEach(function (opt) {
+          opt.addEventListener("click", function () {
+            var val = this.getAttribute("data-value");
+            document.getElementById("groupFilter").value = val;
+            document.getElementById("groupSelectLabel").textContent =
+              this.textContent;
+            dd.querySelectorAll(".cs-option").forEach(function (o) {
+              o.classList.remove("selected");
+            });
+            this.classList.add("selected");
+            closeGroupDropdown();
+            render();
+          });
+        });
       }
       var ROUND_LABELS_VI = {
         group: "Vòng bảng",
@@ -1610,7 +1837,8 @@
           : ROUND_LABELS_EN[r] || r;
       }
       function getGroupLabel(g) {
-        return currentLang === "en" ? g.replace("BẢNG", "GROUP") : g;
+        if (currentLang === "en") return g.replace("BẢNG ", "Group ");
+        return g.replace("BẢNG ", "Bảng ");
       }
       function getDayLabel(d) {
         return currentLang === "vi" ? d : EN_DAYS_MAP[d] || d;
@@ -1653,6 +1881,16 @@
           away: "CZECH REPUBLIC",
           group: "BẢNG A",
           round: "group",
+          result: {
+            homeScore: 2,
+            awayScore: 1,
+            ht: "0 - 0",
+            goals: [
+              { team: "away", player: "L. Krejci", min: "59'" },
+              { team: "home", player: "Hwang In-Beom", min: "67'" },
+              { team: "home", player: "Oh Hyeon-Gyu", min: "80'" },
+            ],
+          },
         },
         {
           id: 3,
@@ -2067,6 +2305,7 @@
             .classList.toggle("active", currentLang === "en");
           applyI18n();
           rebuildDateFilter();
+          rebuildGroupFilter();
           renderChips();
           renderTeamList(document.getElementById("teamSearchInput").value);
           render();
@@ -2544,8 +2783,62 @@
       document.getElementById("dateFilter").addEventListener("change", render);
       document.getElementById("groupFilter").addEventListener("change", render);
 
+      // ===== CUSTOM SELECT DROPDOWN LOGIC =====
+      var dateDropOpen = false;
+      var groupDropOpen = false;
+
+      function openDateDropdown() {
+        dateDropOpen = true;
+        document.getElementById("dateSelectDropdown").classList.add("open");
+        document.getElementById("dateSelectTrigger").classList.add("open");
+      }
+      function closeDateDropdown() {
+        dateDropOpen = false;
+        document.getElementById("dateSelectDropdown").classList.remove("open");
+        document.getElementById("dateSelectTrigger").classList.remove("open");
+      }
+      function openGroupDropdown() {
+        groupDropOpen = true;
+        document.getElementById("groupSelectDropdown").classList.add("open");
+        document.getElementById("groupSelectTrigger").classList.add("open");
+      }
+      function closeGroupDropdown() {
+        groupDropOpen = false;
+        document.getElementById("groupSelectDropdown").classList.remove("open");
+        document.getElementById("groupSelectTrigger").classList.remove("open");
+      }
+      document
+        .getElementById("dateSelectTrigger")
+        .addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (groupDropOpen) closeGroupDropdown();
+          if (dateDropOpen) closeDateDropdown();
+          else openDateDropdown();
+        });
+      document
+        .getElementById("groupSelectTrigger")
+        .addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (dateDropOpen) closeDateDropdown();
+          if (groupDropOpen) closeGroupDropdown();
+          else openGroupDropdown();
+        });
+      document.addEventListener("click", function (e) {
+        if (
+          dateDropOpen &&
+          !document.getElementById("dateSelectWrapper").contains(e.target)
+        )
+          closeDateDropdown();
+        if (
+          groupDropOpen &&
+          !document.getElementById("groupSelectWrapper").contains(e.target)
+        )
+          closeGroupDropdown();
+      });
+
       // Init
       rebuildDateFilter();
+      rebuildGroupFilter();
       renderTeamList("");
       render();
 
