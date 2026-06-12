@@ -1418,10 +1418,16 @@
         if (dateDropOpen) closeDateDropdown();
         if (groupDropOpen) closeGroupDropdown(); else openGroupDropdown();
       });
-      document.addEventListener("click", function(e) {
+      // Dùng mousedown thay click để đóng dropdown trước khi focus chuyển đi
+      document.addEventListener("mousedown", function(e) {
         if (dateDropOpen && !document.getElementById("dateSelectWrapper").contains(e.target)) closeDateDropdown();
         if (groupDropOpen && !document.getElementById("groupSelectWrapper").contains(e.target)) closeGroupDropdown();
       });
+      // Hỗ trợ touch (mobile)
+      document.addEventListener("touchstart", function(e) {
+        if (dateDropOpen && !document.getElementById("dateSelectWrapper").contains(e.target)) closeDateDropdown();
+        if (groupDropOpen && !document.getElementById("groupSelectWrapper").contains(e.target)) closeGroupDropdown();
+      }, { passive: true });
 
       // Init
       rebuildDateFilter();
@@ -1514,3 +1520,59 @@
         if (sticky) sticky.classList.toggle("scrolled", window.scrollY > 10);
       });
     
+      // ─────────────────────────────────────────────
+      // SECTION: Google Sheets Visitor Tracking
+      // ─────────────────────────────────────────────
+      (function() {
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzmNwUHPtIQv2qocRoXCum-HlLaJqUGtcvF-z6y8jM3IiSfJrW4GheoRcC6gKnMGTtT/exec';
+
+        // Không ghi log nếu là chủ sở hữu
+        try { if (localStorage.getItem(COUNTER_OWNER_KEY)) return; } catch(e) {}
+
+        const ua = navigator.userAgent;
+        const isMobile = /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        const isTablet = /iPad|Tablet|(Android(?!.*Mobile))/i.test(ua);
+        const deviceType = isTablet ? '📋 Tablet' : (isMobile ? '📱 Mobile' : '💻 Desktop');
+
+        let os = 'Không rõ';
+        if (/Windows NT 10/.test(ua))                             os = 'Windows 10/11';
+        else if (/Windows NT/.test(ua))                           os = 'Windows';
+        else if (/Mac OS X/.test(ua) && !/iPhone|iPad/.test(ua)) os = 'macOS';
+        else if (/iPhone/.test(ua))                               os = 'iOS (iPhone)';
+        else if (/iPad/.test(ua))                                 os = 'iOS (iPad)';
+        else if (/Android/.test(ua)) { const av = ua.match(/Android ([\d.]+)/); os = 'Android' + (av ? ' '+av[1] : ''); }
+        else if (/CrOS/.test(ua))                                 os = 'Chrome OS';
+        else if (/Linux/.test(ua))                                os = 'Linux';
+
+        let browser = 'Khác', bv = '';
+        if      (/Edg\//.test(ua))          { browser = 'Edge';       const m = ua.match(/Edg\/([\d]+)/);            bv = m ? 'v'+m[1] : ''; }
+        else if (/OPR\//.test(ua))          { browser = 'Opera';      const m = ua.match(/OPR\/([\d]+)/);            bv = m ? 'v'+m[1] : ''; }
+        else if (/SamsungBrowser/.test(ua)) { browser = 'Samsung';    const m = ua.match(/SamsungBrowser\/([\d]+)/); bv = m ? 'v'+m[1] : ''; }
+        else if (/CriOS/.test(ua))          { browser = 'Chrome iOS'; const m = ua.match(/CriOS\/([\d]+)/);          bv = m ? 'v'+m[1] : ''; }
+        else if (/FxiOS/.test(ua))          { browser = 'Firefox iOS'; }
+        else if (/Chrome/.test(ua))         { browser = 'Chrome';     const m = ua.match(/Chrome\/([\d]+)/);         bv = m ? 'v'+m[1] : ''; }
+        else if (/Firefox/.test(ua))        { browser = 'Firefox';    const m = ua.match(/Firefox\/([\d]+)/);        bv = m ? 'v'+m[1] : ''; }
+        else if (/Safari/.test(ua))         { browser = 'Safari';     const m = ua.match(/Version\/([\d]+)/);        bv = m ? 'v'+m[1] : ''; }
+
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '---';
+        const off = -(new Date().getTimezoneOffset());
+        const tzLabel = (off >= 0 ? 'UTC+' : 'UTC') + (off/60).toFixed(1).replace('.0','');
+
+        const now = new Date();
+        const p = n => n < 10 ? '0'+n : ''+n;
+
+        fetch(SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            timestamp: now.toISOString(),
+            date: now.getFullYear()+'-'+p(now.getMonth()+1)+'-'+p(now.getDate()),
+            time: p(now.getHours())+':'+p(now.getMinutes())+':'+p(now.getSeconds()),
+            deviceType,
+            os,
+            browser: browser + (bv ? ' '+bv : ''),
+            tz: tzLabel + ' (' + tz + ')'
+          })
+        }).catch(() => {});  // Im lặng nếu lỗi, không ảnh hưởng trang
+      })();
