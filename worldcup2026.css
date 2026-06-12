@@ -1,9 +1,4 @@
-/* ═══════════════════════════════════════════════
-   World Cup 2026 – Stylesheet
-   Sections:
-════════════════════════════════════════════════ */
-
-*,
+      *,
       *::before,
       *::after {
         box-sizing: border-box;
@@ -1119,6 +1114,8 @@
       .ai-toast.error   { border-left: 4px solid #ef4444; }
       .ai-toast.info    { border-left: 4px solid #3b82f6; }
 
+
+
       /* VIEW COUNTER */
       .view-counter {
         display: flex;
@@ -1144,4 +1141,3 @@
         letter-spacing: 0.3px;
       }
 
-    
