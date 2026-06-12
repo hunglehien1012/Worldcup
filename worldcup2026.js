@@ -1,34 +1,18 @@
-// ═══════════════════════════════════════════════
-      // World Cup 2026 – Schedule & Results
-      // ═══════════════════════════════════════════════
-      // Sections:
-      //   1. Utilities (time conversion, date helpers)
-      //   2. Team data (FLAGS, VN_NAMES, EN_NAMES)
-      //   3. Match Data (DATA array)
-      //   4. Language & Theme
-      //   5. Team Multi-Select Filter
-      //   6. Match Card Expand State
-      //   7. Render
-      //   8. Custom Select Dropdowns
-      //   9. Auto-Update (worldcup26.ir)
-      //  10. View Counter
-      //  11. Init
-      // ═══════════════════════════════════════════════
-      const SVG_SUN =
+      var SVG_SUN =
         '<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>';
-      const SVG_MOON =
+      var SVG_MOON =
         '<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008"/>';
-      const VN_OFFSET_MIN = 420,
+      var VN_OFFSET_MIN = 420,
         PDT_OFFSET_MIN = -420;
 
       function vnTimeToPDT(t) {
-        let p = t.split(":"),
+        var p = t.split(":"),
           h = +p[0],
           m = +p[1];
-        let pdt =
+        var pdt =
           (((h * 60 + m - VN_OFFSET_MIN + PDT_OFFSET_MIN) % 1440) + 1440) %
           1440;
-        let ph = Math.floor(pdt / 60),
+        var ph = Math.floor(pdt / 60),
           pm = pdt % 60,
           ap = ph >= 12 ? "PM" : "AM";
         ph = ph % 12 || 12;
@@ -37,18 +21,18 @@
 
       // Returns day offset when converting VN time to PDT: -1, 0, or +1
       function pdtDayOffset(t) {
-        let p = t.split(":"),
+        var p = t.split(":"),
           h = +p[0],
           m = +p[1];
-        let utcMin = h * 60 + m - VN_OFFSET_MIN;
-        let pdtMin = utcMin + PDT_OFFSET_MIN;
+        var utcMin = h * 60 + m - VN_OFFSET_MIN;
+        var pdtMin = utcMin + PDT_OFFSET_MIN;
         if (pdtMin < 0) return -1;
         if (pdtMin >= 1440) return 1;
         return 0;
       }
 
       // Add days to a DD/MM date string, returns {date:'DD/MM', day:vnDayName}
-      const DATE_SEQUENCE = [
+      var DATE_SEQUENCE = [
         { date: "11/06", day: "Thứ Năm" },
         { date: "12/06", day: "Thứ Sáu" },
         { date: "13/06", day: "Thứ Bảy" },
@@ -68,216 +52,25 @@
         { date: "27/06", day: "Thứ Bảy" },
       ];
       function shiftDate(dateStr, offset) {
-        let idx = DATE_SEQUENCE.findIndex(function (d) {
+        var idx = DATE_SEQUENCE.findIndex(function (d) {
           return d.date === dateStr;
         });
-        let newIdx = idx + offset;
+        var newIdx = idx + offset;
         if (newIdx < 0 || newIdx >= DATE_SEQUENCE.length)
           return { date: dateStr, day: "?" };
         return DATE_SEQUENCE[newIdx];
       }
       function vnTimeToAMPM(t) {
-        let p = t.split(":"),
+        var p = t.split(":"),
           h = +p[0],
           m = +p[1];
-        let ap = h >= 12 ? "CH" : "SA",
+        var ap = h >= 12 ? "CH" : "SA",
           h12 = h % 12 || 12;
         return h12 + ":" + (m < 10 ? "0" : "") + m + " " + ap;
       }
 
-      const VN_DAYS_MAP = {
-        "Thứ Năm": "Thứ Năm",
-        "Thứ Sáu": "Thứ Sáu",
-        "Thứ Bảy": "Thứ Bảy",
-        "Chủ Nhật": "Chủ Nhật",
-        "Thứ Hai": "Thứ Hai",
-        "Thứ Ba": "Thứ Ba",
-        "Thứ Tư": "Thứ Tư",
-      };
-      const EN_DAYS_MAP = {
-        "Thứ Hai": "Monday",
-        "Thứ Ba": "Tuesday",
-        "Thứ Tư": "Wednesday",
-        "Thứ Năm": "Thursday",
-        "Thứ Sáu": "Friday",
-        "Thứ Bảy": "Saturday",
-        "Chủ Nhật": "Sunday",
-      };
-      const EN_DAY_SHORT = {
-        "Thứ Hai": "Mon",
-        "Thứ Ba": "Tue",
-        "Thứ Tư": "Wed",
-        "Thứ Năm": "Thu",
-        "Thứ Sáu": "Fri",
-        "Thứ Bảy": "Sat",
-        "Chủ Nhật": "Sun",
-      };
-
-      function rebuildDateFilter() {
-        let seen = {},
-          order = [];
-        DATA.forEach(function (m) {
-          let dispDate = getMatchDisplayDate(m);
-          if (!seen[dispDate]) {
-            seen[dispDate] = true;
-            let ds = DATE_SEQUENCE.find(function (d) {
-              return d.date === dispDate;
-            });
-            order.push({ date: dispDate, dayVN: ds ? ds.day : "" });
-          }
-        });
-        order.sort(function (a, b) {
-          let ai = DATE_SEQUENCE.findIndex(function (d) {
-            return d.date === a.date;
-          });
-          let bi = DATE_SEQUENCE.findIndex(function (d) {
-            return d.date === b.date;
-          });
-          return ai - bi;
-        });
-        let sel = document.getElementById("dateFilter");
-        let prev = sel.value;
-        let allLabel = currentLang === "vi" ? "Tất cả ngày" : "All dates";
-        sel.innerHTML = '<option value="">' + allLabel + "</option>";
-        order.forEach(function (o) {
-          let label =
-            currentLang === "vi"
-              ? o.dayVN + " " + o.date
-              : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
-          let opt = document.createElement("option");
-          opt.value = o.date;
-          opt.textContent = label;
-          sel.appendChild(opt);
-        });
-        if (prev) sel.value = prev;
-        // Rebuild custom date dropdown
-        let currentVal = sel.value;
-        let currentText = currentVal
-          ? (function() {
-              let o = order.find(function(x){ return x.date === currentVal; });
-              if (!o) return allLabel;
-              return currentLang === "vi" ? o.dayVN + " " + o.date : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
-            })()
-          : allLabel;
-        document.getElementById("dateSelectLabel").textContent = currentText;
-        let dd = document.getElementById("dateSelectDropdown");
-        dd.innerHTML = "";
-        let allOpt = document.createElement("div");
-        allOpt.className = "cs-option" + (currentVal === "" ? " selected" : "");
-        allOpt.setAttribute("data-value", "");
-        allOpt.textContent = allLabel;
-        dd.appendChild(allOpt);
-        order.forEach(function (o) {
-          let label = currentLang === "vi"
-            ? o.dayVN + " " + o.date
-            : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
-          let div = document.createElement("div");
-          div.className = "cs-option" + (currentVal === o.date ? " selected" : "");
-          div.setAttribute("data-value", o.date);
-          div.textContent = label;
-          dd.appendChild(div);
-        });
-        // Attach click handlers
-        dd.querySelectorAll(".cs-option").forEach(function(opt) {
-          opt.addEventListener("click", function() {
-            let val = this.getAttribute("data-value");
-            document.getElementById("dateFilter").value = val;
-            document.getElementById("dateSelectLabel").textContent = this.textContent;
-            dd.querySelectorAll(".cs-option").forEach(function(o){ o.classList.remove("selected"); });
-            this.classList.add("selected");
-            closeDateDropdown();
-            render();
-          });
-        });
-      }
-
-      function rebuildGroupFilter() {
-        let groups = ["A","B","C","D","E","F","G","H","I","J","K","L"];
-        let allLabel = currentLang === "vi" ? "Tất cả bảng" : "All groups";
-        let currentVal = document.getElementById("groupFilter").value;
-        let currentText = currentVal
-          ? (currentLang === "vi" ? currentVal.replace("BẢNG ","Bảng ") : currentVal.replace("BẢNG ","Group "))
-          : allLabel;
-        document.getElementById("groupSelectLabel").textContent = currentText;
-        let dd = document.getElementById("groupSelectDropdown");
-        dd.innerHTML = "";
-        let allOpt = document.createElement("div");
-        allOpt.className = "cs-option" + (currentVal === "" ? " selected" : "");
-        allOpt.setAttribute("data-value", "");
-        allOpt.textContent = allLabel;
-        dd.appendChild(allOpt);
-        groups.forEach(function(g) {
-          let val = "BẢNG " + g;
-          let label = currentLang === "vi" ? "Bảng " + g : "Group " + g;
-          let div = document.createElement("div");
-          div.className = "cs-option" + (currentVal === val ? " selected" : "");
-          div.setAttribute("data-value", val);
-          div.textContent = label;
-          dd.appendChild(div);
-        });
-        dd.querySelectorAll(".cs-option").forEach(function(opt) {
-          opt.addEventListener("click", function() {
-            let val = this.getAttribute("data-value");
-            document.getElementById("groupFilter").value = val;
-            document.getElementById("groupSelectLabel").textContent = this.textContent;
-            dd.querySelectorAll(".cs-option").forEach(function(o){ o.classList.remove("selected"); });
-            this.classList.add("selected");
-            closeGroupDropdown();
-            render();
-          });
-        });
-      }
-      const ROUND_LABELS_VI = {
-        group: "Vòng bảng",
-        "round-of-32": "Vòng 1/16",
-        "round-of-16": "Vòng 1/8",
-        quarter: "Tứ kết",
-        semi: "Bán kết",
-        third: "Tranh hạng Ba",
-        final: "Chung kết",
-      };
-      const ROUND_LABELS_EN = {
-        group: "Group Stage",
-        "round-of-32": "Round of 32",
-        "round-of-16": "Round of 16",
-        quarter: "Quarter-final",
-        semi: "Semi-final",
-        third: "3rd Place",
-        final: "Final",
-      };
-      const ROUND_KNOCKOUT = {
-        "round-of-32": true,
-        "round-of-16": true,
-        quarter: true,
-        semi: true,
-        third: true,
-        final: true,
-      };
-
-      function removeAccents(s) {
-        return s
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/đ/g, "d")
-          .replace(/Đ/g, "D");
-      }
-      function getTeamName(k) {
-        return currentLang === "vi" ? (VN_NAMES[k] || k) : (EN_NAMES[k] || k);
-      }
-      function getRoundLabel(r) {
-        return currentLang === "vi"
-          ? ROUND_LABELS_VI[r] || r
-          : ROUND_LABELS_EN[r] || r;
-      }
-      function getGroupLabel(g) {
-        if (currentLang === "en") return g.replace("BẢNG ", "Group ");
-        return g.replace("BẢNG ", "Bảng ");
-      }
-      function getDayLabel(d) {
-        return currentLang === "vi" ? d : EN_DAYS_MAP[d] || d;
-      }
-
-            const FLAGS = {
+      // ===== FLAGS =====
+      var FLAGS = {
         MEXICO: "🇲🇽",
         "SOUTH AFRICA": "🇿🇦",
         "SOUTH KOREA": "🇰🇷",
@@ -330,7 +123,7 @@
         UZBEKISTAN: "🇺🇿",
         ECUADOR: "🇪🇨",
       };
-      const VN_NAMES = {
+      var VN_NAMES = {
         MEXICO: "Mexico",
         "SOUTH AFRICA": "Nam Phi",
         "SOUTH KOREA": "Hàn Quốc",
@@ -383,7 +176,7 @@
         UZBEKISTAN: "Uzbekistan",
         ECUADOR: "Ecuador",
       };
-      const EN_NAMES = {
+      var EN_NAMES = {
         MEXICO: "Mexico",
         "SOUTH AFRICA": "South Africa",
         "SOUTH KOREA": "South Korea",
@@ -437,12 +230,201 @@
         ECUADOR: "Ecuador",
       };
 
+      var VN_DAYS_MAP = {
+        "Thứ Năm": "Thứ Năm",
+        "Thứ Sáu": "Thứ Sáu",
+        "Thứ Bảy": "Thứ Bảy",
+        "Chủ Nhật": "Chủ Nhật",
+        "Thứ Hai": "Thứ Hai",
+        "Thứ Ba": "Thứ Ba",
+        "Thứ Tư": "Thứ Tư",
+      };
+      var EN_DAYS_MAP = {
+        "Thứ Hai": "Monday",
+        "Thứ Ba": "Tuesday",
+        "Thứ Tư": "Wednesday",
+        "Thứ Năm": "Thursday",
+        "Thứ Sáu": "Friday",
+        "Thứ Bảy": "Saturday",
+        "Chủ Nhật": "Sunday",
+      };
+      var EN_DAY_SHORT = {
+        "Thứ Hai": "Mon",
+        "Thứ Ba": "Tue",
+        "Thứ Tư": "Wed",
+        "Thứ Năm": "Thu",
+        "Thứ Sáu": "Fri",
+        "Thứ Bảy": "Sat",
+        "Chủ Nhật": "Sun",
+      };
 
-      // ─────────────────────────────────────────────
-      // SECTION: Match Data
-      // result: { homeScore, awayScore, ht, goals:[{team, player, min}], reds:[...] }
-      // ─────────────────────────────────────────────
-      const DATA = [
+      function rebuildDateFilter() {
+        var seen = {},
+          order = [];
+        DATA.forEach(function (m) {
+          var dispDate = getMatchDisplayDate(m);
+          if (!seen[dispDate]) {
+            seen[dispDate] = true;
+            var ds = DATE_SEQUENCE.find(function (d) {
+              return d.date === dispDate;
+            });
+            order.push({ date: dispDate, dayVN: ds ? ds.day : "" });
+          }
+        });
+        order.sort(function (a, b) {
+          var ai = DATE_SEQUENCE.findIndex(function (d) {
+            return d.date === a.date;
+          });
+          var bi = DATE_SEQUENCE.findIndex(function (d) {
+            return d.date === b.date;
+          });
+          return ai - bi;
+        });
+        var sel = document.getElementById("dateFilter");
+        var prev = sel.value;
+        var allLabel = currentLang === "vi" ? "Tất cả ngày" : "All dates";
+        sel.innerHTML = '<option value="">' + allLabel + "</option>";
+        order.forEach(function (o) {
+          var label =
+            currentLang === "vi"
+              ? o.dayVN + " " + o.date
+              : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+          var opt = document.createElement("option");
+          opt.value = o.date;
+          opt.textContent = label;
+          sel.appendChild(opt);
+        });
+        if (prev) sel.value = prev;
+        // Rebuild custom date dropdown
+        var currentVal = sel.value;
+        var currentText = currentVal
+          ? (function() {
+              var o = order.find(function(x){ return x.date === currentVal; });
+              if (!o) return allLabel;
+              return currentLang === "vi" ? o.dayVN + " " + o.date : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+            })()
+          : allLabel;
+        document.getElementById("dateSelectLabel").textContent = currentText;
+        var dd = document.getElementById("dateSelectDropdown");
+        dd.innerHTML = "";
+        var allOpt = document.createElement("div");
+        allOpt.className = "cs-option" + (currentVal === "" ? " selected" : "");
+        allOpt.setAttribute("data-value", "");
+        allOpt.textContent = allLabel;
+        dd.appendChild(allOpt);
+        order.forEach(function (o) {
+          var label = currentLang === "vi"
+            ? o.dayVN + " " + o.date
+            : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+          var div = document.createElement("div");
+          div.className = "cs-option" + (currentVal === o.date ? " selected" : "");
+          div.setAttribute("data-value", o.date);
+          div.textContent = label;
+          dd.appendChild(div);
+        });
+        // Attach click handlers
+        dd.querySelectorAll(".cs-option").forEach(function(opt) {
+          opt.addEventListener("click", function() {
+            var val = this.getAttribute("data-value");
+            document.getElementById("dateFilter").value = val;
+            document.getElementById("dateSelectLabel").textContent = this.textContent;
+            dd.querySelectorAll(".cs-option").forEach(function(o){ o.classList.remove("selected"); });
+            this.classList.add("selected");
+            closeDateDropdown();
+            render();
+          });
+        });
+      }
+
+      function rebuildGroupFilter() {
+        var groups = ["A","B","C","D","E","F","G","H","I","J","K","L"];
+        var allLabel = currentLang === "vi" ? "Tất cả bảng" : "All groups";
+        var currentVal = document.getElementById("groupFilter").value;
+        var currentText = currentVal
+          ? (currentLang === "vi" ? currentVal.replace("BẢNG ","Bảng ") : currentVal.replace("BẢNG ","Group "))
+          : allLabel;
+        document.getElementById("groupSelectLabel").textContent = currentText;
+        var dd = document.getElementById("groupSelectDropdown");
+        dd.innerHTML = "";
+        var allOpt = document.createElement("div");
+        allOpt.className = "cs-option" + (currentVal === "" ? " selected" : "");
+        allOpt.setAttribute("data-value", "");
+        allOpt.textContent = allLabel;
+        dd.appendChild(allOpt);
+        groups.forEach(function(g) {
+          var val = "BẢNG " + g;
+          var label = currentLang === "vi" ? "Bảng " + g : "Group " + g;
+          var div = document.createElement("div");
+          div.className = "cs-option" + (currentVal === val ? " selected" : "");
+          div.setAttribute("data-value", val);
+          div.textContent = label;
+          dd.appendChild(div);
+        });
+        dd.querySelectorAll(".cs-option").forEach(function(opt) {
+          opt.addEventListener("click", function() {
+            var val = this.getAttribute("data-value");
+            document.getElementById("groupFilter").value = val;
+            document.getElementById("groupSelectLabel").textContent = this.textContent;
+            dd.querySelectorAll(".cs-option").forEach(function(o){ o.classList.remove("selected"); });
+            this.classList.add("selected");
+            closeGroupDropdown();
+            render();
+          });
+        });
+      }
+      var ROUND_LABELS_VI = {
+        group: "Vòng bảng",
+        "round-of-32": "Vòng 1/16",
+        "round-of-16": "Vòng 1/8",
+        quarter: "Tứ kết",
+        semi: "Bán kết",
+        third: "Tranh hạng Ba",
+        final: "Chung kết",
+      };
+      var ROUND_LABELS_EN = {
+        group: "Group Stage",
+        "round-of-32": "Round of 32",
+        "round-of-16": "Round of 16",
+        quarter: "Quarter-final",
+        semi: "Semi-final",
+        third: "3rd Place",
+        final: "Final",
+      };
+      var ROUND_KNOCKOUT = {
+        "round-of-32": true,
+        "round-of-16": true,
+        quarter: true,
+        semi: true,
+        third: true,
+        final: true,
+      };
+
+      function removeAccents(s) {
+        return s
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/đ/g, "d")
+          .replace(/Đ/g, "D");
+      }
+      function getTeamName(k) {
+        return currentLang === "vi" ? VN_NAMES[k] || k : EN_NAMES[k] || k;
+      }
+      function getRoundLabel(r) {
+        return currentLang === "vi"
+          ? ROUND_LABELS_VI[r] || r
+          : ROUND_LABELS_EN[r] || r;
+      }
+      function getGroupLabel(g) {
+        if (currentLang === "en") return g.replace("BẢNG ", "Group ");
+        return g.replace("BẢNG ", "Bảng ");
+      }
+      function getDayLabel(d) {
+        return currentLang === "vi" ? d : EN_DAYS_MAP[d] || d;
+      }
+
+      // ===== MATCH DATA (corrected per image) =====
+      // result: { homeScore, awayScore, goals:[{team:'home'|'away', player, min}], reds:[{team, player, min}] }
+      var DATA = [
         // --- 12/06 Lượt 1 ---
         {
           id: 1,
@@ -871,14 +853,12 @@
         },
       ];
 
-      // ─────────────────────────────────────────────
-      // SECTION: Language & Theme
-      // ─────────────────────────────────────────────
-      let currentLang = "vi";
+      // ===== LANG & THEME =====
+      var currentLang = "vi";
 
-      let htmlEl = document.documentElement;
-      let toggleIcon = document.getElementById("toggleIcon");
-      let currentTheme = "light";
+      var htmlEl = document.documentElement;
+      var toggleIcon = document.getElementById("toggleIcon");
+      var currentTheme = "light";
       function applyTheme(t) {
         currentTheme = t;
         htmlEl.setAttribute("data-theme", t);
@@ -910,7 +890,7 @@
         });
       function applyI18n() {
         document.querySelectorAll(".i18n").forEach(function (el) {
-          let v = el.getAttribute("data-" + currentLang);
+          var v = el.getAttribute("data-" + currentLang);
           if (v !== null) el.textContent = v;
         });
         document.getElementById("headerTitle").textContent =
@@ -929,15 +909,13 @@
           currentLang === "vi" ? "— Lịch thi đấu —" : "— Match Schedule —";
       }
 
-      // ─────────────────────────────────────────────
-      // SECTION: Team Multi-Select Filter
-      // ─────────────────────────────────────────────
-      let selectedTeams = [];
-      const ALL_TEAMS = Object.keys(FLAGS).sort(function (a, b) {
-        return ((VN_NAMES[a] || a)).localeCompare((VN_NAMES[b] || b), "vi");
+      // ===== TEAM MULTI-SELECT =====
+      var selectedTeams = [];
+      var ALL_TEAMS = Object.keys(FLAGS).sort(function (a, b) {
+        return (VN_NAMES[a] || a).localeCompare(VN_NAMES[b] || b, "vi");
       });
-      let dropdownOpen = false;
-      let _skipClose = false;
+      var dropdownOpen = false;
+      var _skipClose = false;
       function openDropdown() {
         dropdownOpen = true;
         document.getElementById("teamDropdown").classList.add("open");
@@ -1002,7 +980,7 @@
       }
       function toggleTeam(k) {
         _skipClose = true;
-        let i = selectedTeams.indexOf(k);
+        var i = selectedTeams.indexOf(k);
         if (i === -1) selectedTeams.push(k);
         else selectedTeams.splice(i, 1);
         updateClearLabelBtn();
@@ -1019,7 +997,7 @@
         render();
       }
       function renderChips() {
-        let el = document.getElementById("teamChips");
+        var el = document.getElementById("teamChips");
         if (!selectedTeams.length) {
           el.innerHTML =
             '<span class="trigger-placeholder">' +
@@ -1031,7 +1009,7 @@
           .map(function (k) {
             return (
               '<span class="team-chip"><span class="chip-flag">' +
-              ((FLAGS[k] || "🏳") || "🏳") +
+              (FLAGS[k] || "🏳") +
               "</span><span>" +
               getTeamName(k) +
               '</span><span class="chip-remove" data-key="' +
@@ -1048,12 +1026,12 @@
         });
       }
       function renderTeamList(q) {
-        let ql = q.trim().toLowerCase(),
+        var ql = q.trim().toLowerCase(),
           qna = removeAccents(ql);
-        let f = ALL_TEAMS.filter(function (k) {
+        var f = ALL_TEAMS.filter(function (k) {
           if (!ql) return true;
-          let vn = VN_NAMES[k] || "",
-            en = (EN_NAMES[k] || k);
+          var vn = VN_NAMES[k] || "",
+            en = EN_NAMES[k] || k;
           return (
             vn.toLowerCase().indexOf(ql) !== -1 ||
             en.toLowerCase().indexOf(ql) !== -1 ||
@@ -1061,7 +1039,7 @@
             removeAccents(en.toLowerCase()).indexOf(qna) !== -1
           );
         });
-        let el = document.getElementById("teamList");
+        var el = document.getElementById("teamList");
         if (!f.length) {
           el.innerHTML =
             '<div class="team-option-none">' +
@@ -1073,14 +1051,14 @@
         }
         el.innerHTML = f
           .map(function (k) {
-            let s = selectedTeams.indexOf(k) !== -1;
+            var s = selectedTeams.indexOf(k) !== -1;
             return (
               '<div class="team-option' +
               (s ? " selected" : "") +
               '" data-key="' +
               k +
               '"><span class="opt-flag">' +
-              ((FLAGS[k] || "🏳") || "🏳") +
+              (FLAGS[k] || "🏳") +
               '</span><span class="opt-name">' +
               getTeamName(k) +
               '</span><span class="opt-check"></span></div>'
@@ -1094,25 +1072,21 @@
         });
       }
 
-      // ─────────────────────────────────────────────
-      // SECTION: Match Card Expand State
-      // ─────────────────────────────────────────────
-      let expandedId = null;
+      // ===== EXPAND STATE =====
+      var expandedId = null;
 
-      // ─────────────────────────────────────────────
-      // SECTION: Render
-      // ─────────────────────────────────────────────
+      // ===== RENDER =====
       function getMatchDisplayDate(m) {
         // Returns the date string that this match appears under in the current lang/tz
         if (currentLang === "en") {
-          let off = pdtDayOffset(m.time);
+          var off = pdtDayOffset(m.time);
           if (off !== 0) return shiftDate(m.date, off).date;
         }
         return m.date;
       }
 
       function getFiltered() {
-        let d = document.getElementById("dateFilter").value,
+        var d = document.getElementById("dateFilter").value,
           g = document.getElementById("groupFilter").value;
         return DATA.filter(function (m) {
           if (d && getMatchDisplayDate(m) !== d) return false;
@@ -1128,20 +1102,20 @@
       }
 
       function buildResultDetail(m) {
-        let r = m.result;
+        var r = m.result;
         if (!r) return "";
 
-        let homeN = getTeamName(m.home),
+        var homeN = getTeamName(m.home),
           awayN = getTeamName(m.away);
-        let finishedLabel = currentLang === "vi" ? "Kết thúc" : "Full Time";
-        let htLabel = currentLang === "vi" ? "Hiệp một:" : "HT:";
+        var finishedLabel = currentLang === "vi" ? "Kết thúc" : "Full Time";
+        var htLabel = currentLang === "vi" ? "Hiệp một:" : "HT:";
 
         // Hero: status badge + score box + HT
-        let htHtml = "";
+        var htHtml = "";
         if (r.ht !== undefined) {
           htHtml = '<div class="rd-ht">' + htLabel + " " + r.ht + "</div>";
         }
-        let hero =
+        var hero =
           '<div class="rd-hero">' +
           '<div class="rd-team-name">' +
           homeN +
@@ -1163,7 +1137,7 @@
           "</div>";
 
         // Events: interleave home/away goals and reds in one unified list
-        let allEvents = [];
+        var allEvents = [];
         (r.goals || []).forEach(function (g) {
           allEvents.push({
             team: g.team,
@@ -1186,9 +1160,9 @@
           return a.sort - b.sort;
         });
 
-        let evRows = "";
+        var evRows = "";
         allEvents.forEach(function (ev) {
-          let txt =
+          var txt =
             '<span class="rd-event-icon">' +
             ev.icon +
             "</span>" +
@@ -1205,7 +1179,7 @@
           }
         });
 
-        let events = evRows
+        var events = evRows
           ? '<div class="rd-events">' + evRows + "</div>"
           : "";
         return (
@@ -1221,20 +1195,20 @@
       }
 
       function matchCard(m) {
-        let hf = (FLAGS[m.home] || "🏳") || "🏳",
-          af = (FLAGS[m.away] || "🏳") || "🏳";
-        let homeN = getTeamName(m.home),
+        var hf = FLAGS[m.home] || "🏳",
+          af = FLAGS[m.away] || "🏳";
+        var homeN = getTeamName(m.home),
           awayN = getTeamName(m.away);
-        let primaryTime =
+        var primaryTime =
           currentLang === "vi" ? vnTimeToAMPM(m.time) : vnTimeToPDT(m.time);
-        let isKnockout = !!ROUND_KNOCKOUT[m.round];
-        let roundBadge =
+        var isKnockout = !!ROUND_KNOCKOUT[m.round];
+        var roundBadge =
           '<span class="round-badge' +
           (isKnockout ? " knockout" : "") +
           '">' +
           getRoundLabel(m.round) +
           "</span>";
-        let badgeHtml =
+        var badgeHtml =
           m.round === "group"
             ? '<span class="group-badge">' +
               getGroupLabel(m.group) +
@@ -1242,10 +1216,10 @@
               roundBadge
             : roundBadge;
 
-        let centerHtml,
+        var centerHtml,
           hasResult = !!m.result;
         if (hasResult) {
-          let hint =
+          var hint =
             currentLang === "vi" ? "Nhấn để xem chi tiết" : "Tap for details";
           centerHtml =
             '<div style="text-align:center;">' +
@@ -1292,9 +1266,9 @@
       }
 
       function render() {
-        let filtered = getFiltered();
-        let sched = document.getElementById("schedule");
-        let days = {},
+        var filtered = getFiltered();
+        var sched = document.getElementById("schedule");
+        var days = {},
           teams = {},
           groups = {};
         filtered.forEach(function (m) {
@@ -1319,15 +1293,15 @@
             "</div>";
           return;
         }
-        let byDate = {},
+        var byDate = {},
           dateOrder = [];
         filtered.forEach(function (m) {
-          let useDate = m.date,
+          var useDate = m.date,
             useDay = m.day;
           if (currentLang === "en") {
-            let off = pdtDayOffset(m.time);
+            var off = pdtDayOffset(m.time);
             if (off !== 0) {
-              let shifted = shiftDate(m.date, off);
+              var shifted = shiftDate(m.date, off);
               useDate = shifted.date;
               useDay = shifted.day;
             }
@@ -1340,17 +1314,17 @@
         });
         // Sort dateOrder chronologically
         dateOrder.sort(function (a, b) {
-          let ai = DATE_SEQUENCE.findIndex(function (d) {
+          var ai = DATE_SEQUENCE.findIndex(function (d) {
             return d.date === a;
           });
-          let bi = DATE_SEQUENCE.findIndex(function (d) {
+          var bi = DATE_SEQUENCE.findIndex(function (d) {
             return d.date === b;
           });
           return ai - bi;
         });
         sched.innerHTML = dateOrder
           .map(function (date) {
-            let block = byDate[date];
+            var block = byDate[date];
             return (
               '<div class="day-block"><div class="day-header"><span class="day-label">' +
               getDayLabel(block.day) +
@@ -1368,14 +1342,14 @@
           .querySelectorAll(".match-card.has-result")
           .forEach(function (card) {
             card.addEventListener("click", function () {
-              let id = parseInt(this.getAttribute("data-id"), 10);
-              let detail = this.querySelector(".result-detail");
+              var id = parseInt(this.getAttribute("data-id"), 10);
+              var detail = this.querySelector(".result-detail");
               if (expandedId === id) {
                 expandedId = null;
                 if (detail) detail.classList.remove("open");
               } else {
                 // close previous
-                let prev = sched.querySelector(".result-detail.open");
+                var prev = sched.querySelector(".result-detail.open");
                 if (prev) prev.classList.remove("open");
                 expandedId = id;
                 if (detail) detail.classList.add("open");
@@ -1387,27 +1361,30 @@
       document.getElementById("dateFilter").addEventListener("change", render);
       document.getElementById("groupFilter").addEventListener("change", render);
 
-      // ─────────────────────────────────────────────
-      // SECTION: Custom Select Dropdowns (Date & Group)
-      // ─────────────────────────────────────────────
-      let dateDropOpen = false;
-      let groupDropOpen = false;
+      // ===== CUSTOM SELECT DROPDOWN LOGIC =====
+      var dateDropOpen = false;
+      var groupDropOpen = false;
 
-      // Generic open/close for custom select dropdowns
-      function openCustomSelect(prefix) {
-        window["_" + prefix + "Open"] = true;
-        document.getElementById(prefix + "SelectDropdown").classList.add("open");
-        document.getElementById(prefix + "SelectTrigger").classList.add("open");
+      function openDateDropdown() {
+        dateDropOpen = true;
+        document.getElementById("dateSelectDropdown").classList.add("open");
+        document.getElementById("dateSelectTrigger").classList.add("open");
       }
-      function closeCustomSelect(prefix) {
-        window["_" + prefix + "Open"] = false;
-        document.getElementById(prefix + "SelectDropdown").classList.remove("open");
-        document.getElementById(prefix + "SelectTrigger").classList.remove("open");
+      function closeDateDropdown() {
+        dateDropOpen = false;
+        document.getElementById("dateSelectDropdown").classList.remove("open");
+        document.getElementById("dateSelectTrigger").classList.remove("open");
       }
-      function openDateDropdown()  { openCustomSelect("date"); }
-      function closeDateDropdown() { closeCustomSelect("date"); }
-      function openGroupDropdown()  { openCustomSelect("group"); }
-      function closeGroupDropdown() { closeCustomSelect("group"); }
+      function openGroupDropdown() {
+        groupDropOpen = true;
+        document.getElementById("groupSelectDropdown").classList.add("open");
+        document.getElementById("groupSelectTrigger").classList.add("open");
+      }
+      function closeGroupDropdown() {
+        groupDropOpen = false;
+        document.getElementById("groupSelectDropdown").classList.remove("open");
+        document.getElementById("groupSelectTrigger").classList.remove("open");
+      }
       document.getElementById("dateSelectTrigger").addEventListener("click", function(e) {
         e.stopPropagation();
         if (groupDropOpen) closeGroupDropdown();
@@ -1435,12 +1412,11 @@
       renderTeamList("");
       render();
 
-      // ─────────────────────────────────────────────
-      // SECTION: View Counter
-      // ─────────────────────────────────────────────
-      const COUNTER_LS_KEY   = 'wc2026_last_view';   // timestamp lần xem cuối
-      const COUNTER_OWNER_KEY = 'wc2026_is_owner';   // flag chủ sở hữu
-      const COUNTER_COOLDOWN  = 60 * 60 * 1000;      // 1 tiếng (ms)
+
+      // ===== VIEW COUNTER (counterapi.dev) =====
+      var COUNTER_LS_KEY   = 'wc2026_last_view';   // timestamp lần xem cuối
+      var COUNTER_OWNER_KEY = 'wc2026_is_owner';   // flag chủ sở hữu
+      var COUNTER_COOLDOWN  = 60 * 60 * 1000;      // 1 tiếng (ms)
 
       function formatCount(count) {
         if (count >= 1000000) return (count / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -1450,38 +1426,38 @@
 
       async function fetchCountOnly() {
         // Chỉ đọc, không tăng (dùng endpoint /info hoặc /up nhưng đọc count hiện tại)
-        let r = await fetch('https://api.counterapi.dev/v1/hunglehien1012/worldcup2026/');
+        var r = await fetch('https://api.counterapi.dev/v1/hunglehien1012/worldcup2026');
         if (!r.ok) throw new Error();
         return (await r.json()).count || 0;
       }
 
       async function fetchAndIncrement() {
-        let r = await fetch('https://api.counterapi.dev/v1/hunglehien1012/worldcup2026/up');
+        var r = await fetch('https://api.counterapi.dev/v1/hunglehien1012/worldcup2026/up');
         if (!r.ok) throw new Error();
         return (await r.json()).count || 0;
       }
 
       async function initViewCounter() {
-        let numEl   = document.getElementById('viewCountNum');
-        let labelEl = document.getElementById('viewCountLabel');
+        var numEl   = document.getElementById('viewCountNum');
+        var labelEl = document.getElementById('viewCountLabel');
         try {
-          let isOwner = false;
-          let shouldCount = false;
+          var isOwner = false;
+          var shouldCount = false;
 
           try { isOwner = !!localStorage.getItem(COUNTER_OWNER_KEY); } catch(e) {}
 
           if (isOwner) {
             // Chủ sở hữu: chỉ đọc số, không tăng
-            let count = await fetchCountOnly();
+            var count = await fetchCountOnly();
             numEl.textContent = formatCount(count);
           } else {
             // Kiểm tra cooldown 1 tiếng
-            let lastView = 0;
+            var lastView = 0;
             try { lastView = parseInt(localStorage.getItem(COUNTER_LS_KEY) || '0'); } catch(e) {}
-            let now = Date.now();
+            var now = Date.now();
             shouldCount = (now - lastView) >= COUNTER_COOLDOWN;
 
-            let count;
+            var count;
             if (shouldCount) {
               count = await fetchAndIncrement();
               try { localStorage.setItem(COUNTER_LS_KEY, now.toString()); } catch(e) {}
@@ -1514,52 +1490,45 @@
 
       initViewCounter();
 
-      // Sticky shadow on scroll
-      window.addEventListener("scroll", function () {
-        let sticky = document.querySelector(".sticky-top");
-        if (sticky) sticky.classList.toggle("scrolled", window.scrollY > 10);
-      });
-    
-      // ─────────────────────────────────────────────
-      // SECTION: Google Sheets Visitor Tracking
-      // ─────────────────────────────────────────────
+      // ===== GOOGLE SHEETS VISITOR TRACKING =====
       (function() {
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzmNwUHPtIQv2qocRoXCum-HlLaJqUGtcvF-z6y8jM3IiSfJrW4GheoRcC6gKnMGTtT/exec';
+        var SHEET_URL = 'https://script.google.com/macros/s/AKfycbzmNwUHPtIQv2qocRoXCum-HlLaJqUGtcvF-z6y8jM3IiSfJrW4GheoRcC6gKnMGTtT/exec';
+        var OWNER_KEY = 'wc2026_is_owner';
 
         // Không ghi log nếu là chủ sở hữu
-        try { if (localStorage.getItem(COUNTER_OWNER_KEY)) return; } catch(e) {}
+        try { if (localStorage.getItem(OWNER_KEY)) return; } catch(e) {}
 
-        const ua = navigator.userAgent;
-        const isMobile = /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-        const isTablet = /iPad|Tablet|(Android(?!.*Mobile))/i.test(ua);
-        const deviceType = isTablet ? '📋 Tablet' : (isMobile ? '📱 Mobile' : '💻 Desktop');
+        var ua = navigator.userAgent;
+        var isMobile = /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        var isTablet = /iPad|Tablet|(Android(?!.*Mobile))/i.test(ua);
+        var deviceType = isTablet ? '📋 Tablet' : (isMobile ? '📱 Mobile' : '💻 Desktop');
 
-        let os = 'Không rõ';
-        if (/Windows NT 10/.test(ua))                             os = 'Windows 10/11';
-        else if (/Windows NT/.test(ua))                           os = 'Windows';
+        var os = 'Không rõ';
+        if (/Windows NT 10/.test(ua)) os = 'Windows 10/11';
+        else if (/Windows NT/.test(ua)) os = 'Windows';
         else if (/Mac OS X/.test(ua) && !/iPhone|iPad/.test(ua)) os = 'macOS';
-        else if (/iPhone/.test(ua))                               os = 'iOS (iPhone)';
-        else if (/iPad/.test(ua))                                 os = 'iOS (iPad)';
-        else if (/Android/.test(ua)) { const av = ua.match(/Android ([\d.]+)/); os = 'Android' + (av ? ' '+av[1] : ''); }
-        else if (/CrOS/.test(ua))                                 os = 'Chrome OS';
-        else if (/Linux/.test(ua))                                os = 'Linux';
+        else if (/iPhone/.test(ua)) os = 'iOS (iPhone)';
+        else if (/iPad/.test(ua)) os = 'iOS (iPad)';
+        else if (/Android/.test(ua)) { var av = ua.match(/Android ([\d.]+)/); os = 'Android' + (av ? ' '+av[1] : ''); }
+        else if (/CrOS/.test(ua)) os = 'Chrome OS';
+        else if (/Linux/.test(ua)) os = 'Linux';
 
-        let browser = 'Khác', bv = '';
-        if      (/Edg\//.test(ua))          { browser = 'Edge';       const m = ua.match(/Edg\/([\d]+)/);            bv = m ? 'v'+m[1] : ''; }
-        else if (/OPR\//.test(ua))          { browser = 'Opera';      const m = ua.match(/OPR\/([\d]+)/);            bv = m ? 'v'+m[1] : ''; }
-        else if (/SamsungBrowser/.test(ua)) { browser = 'Samsung';    const m = ua.match(/SamsungBrowser\/([\d]+)/); bv = m ? 'v'+m[1] : ''; }
-        else if (/CriOS/.test(ua))          { browser = 'Chrome iOS'; const m = ua.match(/CriOS\/([\d]+)/);          bv = m ? 'v'+m[1] : ''; }
-        else if (/FxiOS/.test(ua))          { browser = 'Firefox iOS'; }
-        else if (/Chrome/.test(ua))         { browser = 'Chrome';     const m = ua.match(/Chrome\/([\d]+)/);         bv = m ? 'v'+m[1] : ''; }
-        else if (/Firefox/.test(ua))        { browser = 'Firefox';    const m = ua.match(/Firefox\/([\d]+)/);        bv = m ? 'v'+m[1] : ''; }
-        else if (/Safari/.test(ua))         { browser = 'Safari';     const m = ua.match(/Version\/([\d]+)/);        bv = m ? 'v'+m[1] : ''; }
+        var browser = 'Khác', bv = '';
+        if (/Edg\//.test(ua))            { browser = 'Edge';    var m = ua.match(/Edg\/([\d]+)/);           bv = m ? 'v'+m[1] : ''; }
+        else if (/OPR\//.test(ua))       { browser = 'Opera';   var m = ua.match(/OPR\/([\d]+)/);           bv = m ? 'v'+m[1] : ''; }
+        else if (/SamsungBrowser/.test(ua)){ browser='Samsung'; var m = ua.match(/SamsungBrowser\/([\d]+)/);bv = m ? 'v'+m[1] : ''; }
+        else if (/CriOS/.test(ua))       { browser='Chrome iOS';var m = ua.match(/CriOS\/([\d]+)/);         bv = m ? 'v'+m[1] : ''; }
+        else if (/FxiOS/.test(ua))       { browser='Firefox iOS'; }
+        else if (/Chrome/.test(ua))      { browser = 'Chrome';  var m = ua.match(/Chrome\/([\d]+)/);        bv = m ? 'v'+m[1] : ''; }
+        else if (/Firefox/.test(ua))     { browser = 'Firefox'; var m = ua.match(/Firefox\/([\d]+)/);       bv = m ? 'v'+m[1] : ''; }
+        else if (/Safari/.test(ua))      { browser = 'Safari';  var m = ua.match(/Version\/([\d]+)/);       bv = m ? 'v'+m[1] : ''; }
 
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '---';
-        const off = -(new Date().getTimezoneOffset());
-        const tzLabel = (off >= 0 ? 'UTC+' : 'UTC') + (off/60).toFixed(1).replace('.0','');
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '---';
+        var off = -(new Date().getTimezoneOffset());
+        var tzLabel = (off >= 0 ? 'UTC+' : 'UTC') + (off/60).toFixed(1).replace('.0','');
 
-        const now = new Date();
-        const p = n => n < 10 ? '0'+n : ''+n;
+        var now = new Date();
+        function p(n){ return n<10?'0'+n:''+n; }
 
         fetch(SHEET_URL, {
           method: 'POST',
@@ -1569,10 +1538,16 @@
             timestamp: now.toISOString(),
             date: now.getFullYear()+'-'+p(now.getMonth()+1)+'-'+p(now.getDate()),
             time: p(now.getHours())+':'+p(now.getMinutes())+':'+p(now.getSeconds()),
-            deviceType,
-            os,
+            deviceType: deviceType,
+            os: os,
             browser: browser + (bv ? ' '+bv : ''),
             tz: tzLabel + ' (' + tz + ')'
           })
-        }).catch(() => {});  // Im lặng nếu lỗi, không ảnh hưởng trang
+        }).catch(function(){});  // Im lặng nếu lỗi, không ảnh hưởng trang
       })();
+
+      // Sticky shadow on scroll
+      window.addEventListener("scroll", function () {
+        var sticky = document.querySelector(".sticky-top");
+        if (sticky) sticky.classList.toggle("scrolled", window.scrollY > 10);
+      });
