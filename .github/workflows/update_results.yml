@@ -1,11 +1,11 @@
 name: Cập nhật kết quả World Cup
 
 on:
-  # Chạy tự động mỗi 30 phút (11/06 - 20/07/2026)
+  # Chạy mỗi 30 phút trong mùa giải (11/06 - 19/07/2026)
   schedule:
     - cron: '*/30 * * * *'
 
-  # Cho phép chạy thủ công từ tab Actions trên GitHub
+  # Cho phép chạy thủ công từ tab Actions
   workflow_dispatch:
 
 jobs:
@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,8 +22,6 @@ jobs:
           python-version: '3.11'
 
       - name: Chạy script cập nhật kết quả
-        env:
-          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: python update_results.py
 
       - name: Commit và push nếu có thay đổi
@@ -33,10 +29,9 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add worldcup2026.html
-          # Chỉ commit nếu file thực sự thay đổi
           if git diff --staged --quiet; then
-            echo "Không có thay đổi, bỏ qua commit."
+            echo "Không có thay đổi, bỏ qua."
           else
-            git commit -m "🤖 Cập nhật kết quả tự động $(date +'%d/%m/%Y %H:%M') UTC"
+            git commit -m "🤖 Cập nhật kết quả $(date +'%d/%m/%Y %H:%M') UTC"
             git push
           fi
