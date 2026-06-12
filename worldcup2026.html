@@ -151,17 +151,6 @@
                 >
               </div>
               <button class="clear-label-btn" id="clearLabelBtn">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M18 6l-12 12" />
-                  <path d="M6 6l12 12" />
-                </svg>
                 <span class="i18n" data-vi="Xóa tất cả" data-en="Clear all"
                   >Xóa tất cả</span
                 >
@@ -201,7 +190,6 @@
                 </div>
                 <div class="team-list" id="teamList"></div>
                 <button class="clear-all-btn" id="clearAllBtn">
-                  ✕
                   <span
                     class="i18n"
                     data-vi="Xóa tất cả lựa chọn"
@@ -244,13 +232,18 @@
       </div>
       <!-- /stats -->
 
-      <div
-        class="week-label i18n"
-        id="weekLabel"
-        data-vi="— Lịch thi đấu —"
-        data-en="— Match Schedule —"
-      >
-        — Lịch thi đấu —
+      <div class="schedule-header">
+        <button class="hide-finished-btn" id="hideFinishedBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+            <path d="M21 12c-2.4 4-5.4 6-9 6c-3.6 0-6.6-2-9-6c2.4-4 5.4-6 9-6c3.6 0 6.6 2 9 6"/>
+          </svg>
+          <span id="hideFinishedLabel">Ẩn trận đã kết thúc</span>
+        </button>
+        <div class="week-label i18n" id="weekLabel" data-vi="— Lịch thi đấu —" data-en="— Match Schedule —">
+          — Lịch thi đấu —
+        </div>
+        <div class="schedule-header-spacer"></div>
       </div>
       <div id="schedule"></div>
 
