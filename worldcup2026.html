@@ -12,7 +12,6 @@
         margin: 0;
         padding: 0;
       }
-
       :root {
         --bg-page: #f0f2f5;
         --bg-card: #ffffff;
@@ -75,7 +74,6 @@
         --icon-toggle: #ffd700;
         --accent: #e05050;
       }
-
       body {
         font-family: "Segoe UI", Arial, sans-serif;
         background: var(--bg-page);
@@ -93,12 +91,12 @@
         width: 100%;
       }
 
-      /* ===== HEADER ===== */
+      /* HEADER */
       .header {
         background: linear-gradient(
           135deg,
-          var(--bg-header-from) 0%,
-          var(--bg-header-to) 100%
+          var(--bg-header-from),
+          var(--bg-header-to)
         );
         border-radius: 12px;
         padding: 14px 16px;
@@ -152,7 +150,7 @@
         flex-shrink: 0;
       }
 
-      /* ===== LANG/TZ TOGGLE ===== */
+      /* LANG TOGGLE */
       .lang-tz-toggle {
         display: flex;
         align-items: center;
@@ -188,7 +186,7 @@
         line-height: 1;
       }
 
-      /* ===== THEME TOGGLE ===== */
+      /* THEME TOGGLE */
       .theme-toggle {
         flex-shrink: 0;
         cursor: pointer;
@@ -233,7 +231,7 @@
         background: rgba(255, 255, 255, 0.1);
       }
 
-      /* ===== FILTERS ===== */
+      /* FILTERS */
       .filters {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -266,8 +264,6 @@
         flex-shrink: 0;
         transition: stroke 0.25s;
       }
-
-      /* Label row for team filter: label left, clear-icon right */
       .team-filter-label-row {
         display: flex;
         align-items: center;
@@ -319,7 +315,6 @@
         height: 12px;
         stroke: var(--accent);
       }
-
       .filter-group select,
       .filter-group input {
         padding: 10px 12px;
@@ -355,7 +350,7 @@
         color: var(--text-muted);
       }
 
-      /* ===== TEAM MULTI-SELECT WIDGET ===== */
+      /* TEAM MULTI-SELECT */
       .team-select-wrapper {
         position: relative;
       }
@@ -432,7 +427,6 @@
       .trigger-chevron.open {
         transform: rotate(180deg);
       }
-
       .team-dropdown {
         position: absolute;
         top: calc(100% + 4px);
@@ -559,7 +553,7 @@
         background: var(--bg-card-top);
       }
 
-      /* ===== STATS ===== */
+      /* STATS */
       .stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -590,7 +584,6 @@
         line-height: 1.3;
         transition: color 0.25s;
       }
-
       .week-label {
         font-size: 11px;
         color: var(--text-muted);
@@ -601,7 +594,7 @@
         transition: color 0.25s;
       }
 
-      /* ===== SCHEDULE CARDS ===== */
+      /* MATCH CARDS */
       .day-block {
         margin-bottom: 14px;
       }
@@ -624,12 +617,12 @@
         color: var(--text-muted);
         transition: color 0.25s;
       }
-
       .matches {
         display: flex;
         flex-direction: column;
         gap: 7px;
       }
+
       .match-card {
         background: var(--bg-card);
         border: 1px solid var(--border-card);
@@ -642,6 +635,13 @@
       .match-card:hover {
         border-color: var(--border-focus);
       }
+      .match-card.has-result {
+        cursor: pointer;
+      }
+      .match-card.has-result:hover {
+        border-color: var(--accent);
+      }
+
       .card-top {
         display: flex;
         justify-content: space-between;
@@ -668,19 +668,6 @@
         border: 1px solid var(--border-time);
         letter-spacing: 0.5px;
         transition: all 0.25s;
-      }
-      /* Secondary time label (for the other timezone) */
-      .match-time-alt {
-        font-size: 10px;
-        font-weight: 600;
-        color: var(--text-muted);
-        padding: 2px 7px;
-        border-radius: 4px;
-        border: 1px solid var(--border-main);
-        background: var(--bg-page);
-        letter-spacing: 0.3px;
-        transition: all 0.25s;
-        white-space: nowrap;
       }
       .card-top-right {
         display: flex;
@@ -724,9 +711,11 @@
         background: #2a0808;
         border-color: #6a1010;
       }
+
+      /* Card body: VS mode vs Score mode */
       .card-body {
         display: grid;
-        grid-template-columns: 1fr 38px 1fr;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
         padding: 10px 12px;
         gap: 4px;
@@ -766,6 +755,152 @@
         transition: color 0.25s;
       }
 
+      /* Score display */
+      .score-block {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .score-num {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+        transition: color 0.25s;
+        min-width: 18px;
+        text-align: center;
+      }
+      .score-dash {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+      .result-hint {
+        font-size: 10px;
+        color: var(--text-muted);
+        text-align: center;
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+      }
+      .result-hint svg {
+        width: 10px;
+        height: 10px;
+        stroke: var(--text-muted);
+      }
+
+      /* RESULT DETAIL PANEL */
+      .result-detail {
+        display: none;
+        border-top: 1px solid var(--border-top);
+        background: var(--bg-card-top);
+        transition: background 0.25s;
+      }
+      .result-detail.open {
+        display: block;
+      }
+
+      .rd-hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px 8px;
+        gap: 8px;
+      }
+      .rd-team-name {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--text-team);
+        text-align: center;
+        flex: 1;
+        transition: color 0.25s;
+      }
+      .rd-score-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+      }
+      .rd-score-main {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-card);
+        border-radius: 12px;
+        padding: 6px 18px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .rd-score-num {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+        min-width: 22px;
+        text-align: center;
+        transition: color 0.25s;
+      }
+      .rd-score-sep {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+      .rd-ht {
+        font-size: 11px;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      .rd-status-badge {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        background: #22c55e;
+        color: #fff;
+        padding: 2px 10px;
+        border-radius: 20px;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+      }
+
+      .rd-events {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px 0;
+        padding: 6px 14px 12px;
+      }
+      .rd-event-home,
+      .rd-event-away {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 4px;
+        font-size: 12px;
+        color: var(--text-primary);
+        transition: color 0.25s;
+      }
+      .rd-event-home {
+        justify-content: flex-start;
+      }
+      .rd-event-away {
+        justify-content: flex-end;
+      }
+      .rd-event-icon {
+        font-size: 13px;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .rd-event-text {
+        font-weight: 500;
+      }
+      .rd-event-min {
+        color: var(--text-muted);
+        font-size: 11px;
+      }
+
       .empty {
         text-align: center;
         padding: 3rem 1rem;
@@ -781,7 +916,6 @@
         margin: 0 auto 10px;
         transition: stroke 0.25s;
       }
-
       .footer {
         text-align: center;
         margin-top: 1.5rem;
@@ -854,6 +988,9 @@
         .team-name {
           font-size: 13px;
         }
+        .score-num {
+          font-size: 26px;
+        }
       }
     </style>
   </head>
@@ -863,33 +1000,19 @@
         <div class="logo-circle">FIFA<br />2026</div>
         <div class="header-text">
           <h1 id="headerTitle">LỊCH THI ĐẤU WORLD CUP 2026</h1>
-          <p id="headerTz">Giờ Việt Nam 🇻🇳 &nbsp;(UTC+7)</p>
+          <p id="headerTz">Giờ Việt Nam 🇻🇳 &nbsp;</p>
           <div class="hosts">CANADA · MEXICO · USA</div>
         </div>
         <div class="header-controls">
-          <!-- Lang/TZ Toggle -->
-          <div
-            class="lang-tz-toggle"
-            id="langTzToggle"
-            role="button"
-            aria-label="Chuyển đổi ngôn ngữ và múi giờ"
-          >
+          <div class="lang-tz-toggle" id="langTzToggle">
             <div class="lang-tz-btn active" id="btnVN">
-              <span class="flag-icon">🇻🇳</span>
-              <span>VI</span>
+              <span class="flag-icon">🇻🇳</span><span>VI</span>
             </div>
             <div class="lang-tz-btn" id="btnUS">
-              <span class="flag-icon">🇺🇸</span>
-              <span>EN</span>
+              <span class="flag-icon">🇺🇸</span><span>EN</span>
             </div>
           </div>
-          <!-- Theme Toggle -->
-          <div
-            class="theme-toggle"
-            id="themeToggle"
-            role="button"
-            aria-label="Toggle dark/light mode"
-          >
+          <div class="theme-toggle" id="themeToggle">
             <div class="toggle-track">
               <div class="toggle-knob">
                 <svg
@@ -924,13 +1047,9 @@
               stroke-linejoin="round"
             >
               <path
-                d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12"
+                d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7"
               />
-              <path d="M16 3v4" />
-              <path d="M8 3v4" />
-              <path d="M4 11h16" />
-              <path d="M11 15h1" />
-              <path d="M12 15v3" />
+              <path d="M16 3v4M8 3v4M4 11h16M11 15h1M12 15v3" />
             </svg>
             <span class="i18n" data-vi="Ngày thi đấu" data-en="Match Date"
               >Ngày thi đấu</span
@@ -948,58 +1067,90 @@
             <option
               value="12/06"
               class="i18n"
-              data-vi="Thứ Năm 12/06"
-              data-en="Thu 12/06"
+              data-vi="Thứ Sáu 12/06"
+              data-en="Fri 12/06"
             >
-              Thứ Năm 12/06
+              Thứ Sáu 12/06
             </option>
             <option
               value="13/06"
               class="i18n"
-              data-vi="Thứ Sáu 13/06"
-              data-en="Fri 13/06"
+              data-vi="Thứ Bảy 13/06"
+              data-en="Sat 13/06"
             >
-              Thứ Sáu 13/06
+              Thứ Bảy 13/06
             </option>
             <option
               value="14/06"
               class="i18n"
-              data-vi="Thứ Bảy 14/06"
-              data-en="Sat 14/06"
+              data-vi="Chủ Nhật 14/06"
+              data-en="Sun 14/06"
             >
-              Thứ Bảy 14/06
+              Chủ Nhật 14/06
             </option>
             <option
               value="15/06"
               class="i18n"
-              data-vi="Chủ Nhật 15/06"
-              data-en="Sun 15/06"
+              data-vi="Thứ Hai 15/06"
+              data-en="Mon 15/06"
             >
-              Chủ Nhật 15/06
+              Thứ Hai 15/06
             </option>
             <option
               value="16/06"
               class="i18n"
-              data-vi="Thứ Hai 16/06"
-              data-en="Mon 16/06"
+              data-vi="Thứ Ba 16/06"
+              data-en="Tue 16/06"
             >
-              Thứ Hai 16/06
+              Thứ Ba 16/06
             </option>
             <option
               value="17/06"
               class="i18n"
-              data-vi="Thứ Ba 17/06"
-              data-en="Tue 17/06"
+              data-vi="Thứ Tư 17/06"
+              data-en="Wed 17/06"
             >
-              Thứ Ba 17/06
+              Thứ Tư 17/06
             </option>
             <option
               value="18/06"
               class="i18n"
-              data-vi="Thứ Tư 18/06"
-              data-en="Wed 18/06"
+              data-vi="Thứ Năm 18/06"
+              data-en="Thu 18/06"
             >
-              Thứ Tư 18/06
+              Thứ Năm 18/06
+            </option>
+            <option
+              value="19/06"
+              class="i18n"
+              data-vi="Thứ Sáu 19/06"
+              data-en="Fri 19/06"
+            >
+              Thứ Sáu 19/06
+            </option>
+            <option
+              value="20/06"
+              class="i18n"
+              data-vi="Thứ Bảy 20/06"
+              data-en="Sat 20/06"
+            >
+              Thứ Bảy 20/06
+            </option>
+            <option
+              value="21/06"
+              class="i18n"
+              data-vi="Chủ Nhật 21/06"
+              data-en="Sun 21/06"
+            >
+              Chủ Nhật 21/06
+            </option>
+            <option
+              value="22/06"
+              class="i18n"
+              data-vi="Thứ Hai 22/06"
+              data-en="Mon 22/06"
+            >
+              Thứ Hai 22/06
             </option>
           </select>
         </div>
@@ -1014,10 +1165,10 @@
               stroke-linejoin="round"
             >
               <path
-                d="M8 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -8"
+                d="M8 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V6"
               />
               <path
-                d="M4 10a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -8"
+                d="M4 10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"
               />
             </svg>
             <span class="i18n" data-vi="Bảng đấu" data-en="Group"
@@ -1033,90 +1184,20 @@
             >
               Tất cả bảng
             </option>
-            <option
-              value="BẢNG A"
-              class="i18n"
-              data-vi="Bảng A"
-              data-en="Group A"
-            >
-              Bảng A
-            </option>
-            <option
-              value="BẢNG B"
-              class="i18n"
-              data-vi="Bảng B"
-              data-en="Group B"
-            >
-              Bảng B
-            </option>
-            <option
-              value="BẢNG C"
-              class="i18n"
-              data-vi="Bảng C"
-              data-en="Group C"
-            >
-              Bảng C
-            </option>
-            <option
-              value="BẢNG D"
-              class="i18n"
-              data-vi="Bảng D"
-              data-en="Group D"
-            >
-              Bảng D
-            </option>
-            <option
-              value="BẢNG E"
-              class="i18n"
-              data-vi="Bảng E"
-              data-en="Group E"
-            >
-              Bảng E
-            </option>
-            <option
-              value="BẢNG F"
-              class="i18n"
-              data-vi="Bảng F"
-              data-en="Group F"
-            >
-              Bảng F
-            </option>
-            <option
-              value="BẢNG G"
-              class="i18n"
-              data-vi="Bảng G"
-              data-en="Group G"
-            >
-              Bảng G
-            </option>
-            <option
-              value="BẢNG H"
-              class="i18n"
-              data-vi="Bảng H"
-              data-en="Group H"
-            >
-              Bảng H
-            </option>
-            <option
-              value="BẢNG I"
-              class="i18n"
-              data-vi="Bảng I"
-              data-en="Group I"
-            >
-              Bảng I
-            </option>
-            <option
-              value="BẢNG J"
-              class="i18n"
-              data-vi="Bảng J"
-              data-en="Group J"
-            >
-              Bảng J
-            </option>
+            <option value="BẢNG A">Bảng A / Group A</option>
+            <option value="BẢNG B">Bảng B / Group B</option>
+            <option value="BẢNG C">Bảng C / Group C</option>
+            <option value="BẢNG D">Bảng D / Group D</option>
+            <option value="BẢNG E">Bảng E / Group E</option>
+            <option value="BẢNG F">Bảng F / Group F</option>
+            <option value="BẢNG G">Bảng G / Group G</option>
+            <option value="BẢNG H">Bảng H / Group H</option>
+            <option value="BẢNG I">Bảng I / Group I</option>
+            <option value="BẢNG J">Bảng J / Group J</option>
+            <option value="BẢNG K">Bảng K / Group K</option>
+            <option value="BẢNG L">Bảng L / Group L</option>
           </select>
         </div>
-
-        <!-- MULTI-SELECT TEAM FILTER -->
         <div class="filter-group full" id="teamFilterGroup">
           <div class="team-filter-label-row">
             <div class="team-filter-label-left">
@@ -1129,7 +1210,7 @@
                 stroke-linejoin="round"
               >
                 <path
-                  d="M15 4l6 2v5h-3v8a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1v-8h-3v-5l6 -2a3 3 0 0 0 6 0"
+                  d="M15 4l6 2v5h-3v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8H3v-5l6-2a3 3 0 0 0 6 0"
                 />
               </svg>
               <span
@@ -1139,11 +1220,7 @@
                 >Lọc theo đội bóng</span
               >
             </div>
-            <button
-              class="clear-label-btn"
-              id="clearLabelBtn"
-              title="Xóa tất cả đội đã chọn"
-            >
+            <button class="clear-label-btn" id="clearLabelBtn">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -1163,11 +1240,7 @@
           <div class="team-select-wrapper" id="teamSelectWrapper">
             <div class="team-select-trigger" id="teamSelectTrigger">
               <div class="team-chips" id="teamChips">
-                <span
-                  class="trigger-placeholder i18n"
-                  id="triggerPlaceholder"
-                  data-vi="Chọn đội bóng..."
-                  data-en="Select teams..."
+                <span class="trigger-placeholder" id="triggerPlaceholder"
                   >Chọn đội bóng...</span
                 >
               </div>
@@ -1213,25 +1286,25 @@
 
       <div class="stats">
         <div class="stat">
-          <div class="num" id="statMatches">20</div>
+          <div class="num" id="statMatches">48</div>
           <div class="lbl i18n" data-vi="Trận đấu" data-en="Matches">
             Trận đấu
           </div>
         </div>
         <div class="stat">
-          <div class="num" id="statDays">7</div>
+          <div class="num" id="statDays">9</div>
           <div class="lbl i18n" data-vi="Ngày thi đấu" data-en="Match Days">
             Ngày thi đấu
           </div>
         </div>
         <div class="stat">
-          <div class="num" id="statGroups">10</div>
+          <div class="num" id="statGroups">12</div>
           <div class="lbl i18n" data-vi="Bảng đấu" data-en="Groups">
             Bảng đấu
           </div>
         </div>
         <div class="stat">
-          <div class="num" id="statTeams">40</div>
+          <div class="num" id="statTeams">48</div>
           <div class="lbl i18n" data-vi="Đội bóng" data-en="Teams">
             Đội bóng
           </div>
@@ -1241,10 +1314,10 @@
       <div
         class="week-label i18n"
         id="weekLabel"
-        data-vi="— Trong tuần này —"
-        data-en="— This week —"
+        data-vi="— Lịch thi đấu —"
+        data-en="— Match Schedule —"
       >
-        — Trong tuần này —
+        — Lịch thi đấu —
       </div>
       <div id="schedule"></div>
 
@@ -1257,60 +1330,37 @@
           nhất.</span
         ><br />
         <span class="i18n" data-vi="Nguồn:" data-en="Source:">Nguồn:</span>
-        <span>Hung Lehien</span>
+        <span>Brian Le</span>
       </div>
     </div>
+
     <script>
       var SVG_SUN =
         '<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>';
       var SVG_MOON =
         '<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008"/>';
+      var VN_OFFSET_MIN = 420,
+        PDT_OFFSET_MIN = -420;
 
-      // ===== LANGUAGE / TIMEZONE =====
-      // 'vi' = Vietnamese, giờ VN (UTC+7)
-      // 'en' = English, giờ California PDT (UTC-7) — 14h sau VN
-      var currentLang = "vi";
-
-      // UTC+7 offset in minutes = +420
-      // PDT (California summer) = UTC-7, offset = -420
-      // Difference: VN = CA + 14h  =>  CA = VN - 14h
-      var VN_OFFSET_MIN = 420; // UTC+7
-      var PDT_OFFSET_MIN = -420; // UTC-7
-
-      function vnTimeToPDT(timeStr) {
-        // timeStr: "HH:MM" (VN local, UTC+7)
-        var parts = timeStr.split(":");
-        var h = parseInt(parts[0], 10);
-        var m = parseInt(parts[1], 10);
-        // Convert to UTC minutes, then to PDT
-        var utcMin = h * 60 + m - VN_OFFSET_MIN;
-        var pdtMin = utcMin + PDT_OFFSET_MIN;
-        // Normalize to 0-1439
-        pdtMin = ((pdtMin % 1440) + 1440) % 1440;
-        var ph = Math.floor(pdtMin / 60);
-        var pm = pdtMin % 60;
-        var ampm = ph >= 12 ? "PM" : "AM";
-        ph = ph % 12;
-        if (ph === 0) ph = 12;
-        return ph + ":" + (pm < 10 ? "0" : "") + pm + " " + ampm;
+      function vnTimeToPDT(t) {
+        var p = t.split(":"),
+          h = +p[0],
+          m = +p[1];
+        var pdt =
+          (((h * 60 + m - VN_OFFSET_MIN + PDT_OFFSET_MIN) % 1440) + 1440) %
+          1440;
+        var ph = Math.floor(pdt / 60),
+          pm = pdt % 60,
+          ap = ph >= 12 ? "PM" : "AM";
+        ph = ph % 12 || 12;
+        return ph + ":" + (pm < 10 ? "0" : "") + pm + " " + ap;
       }
 
-      function vnTimeToAMPM(timeStr) {
-        // Convert "HH:MM" (24h) to 12h AM/PM format
-        var parts = timeStr.split(":");
-        var h = parseInt(parts[0], 10);
-        var m = parseInt(parts[1], 10);
-        var ampm = h >= 12 ? "CH" : "SA";
-        var h12 = h % 12;
-        if (h12 === 0) h12 = 12;
-        return h12 + ":" + (m < 10 ? "0" : "") + m + " " + ampm;
-      }
-
-      // Day offset when converting VN -> PDT (for cross-day display)
-      function dayOffsetVnToPDT(timeStr) {
-        var parts = timeStr.split(":");
-        var h = parseInt(parts[0], 10);
-        var m = parseInt(parts[1], 10);
+      // Returns day offset when converting VN time to PDT: -1, 0, or +1
+      function pdtDayOffset(t) {
+        var p = t.split(":"),
+          h = +p[0],
+          m = +p[1];
         var utcMin = h * 60 + m - VN_OFFSET_MIN;
         var pdtMin = utcMin + PDT_OFFSET_MIN;
         if (pdtMin < 0) return -1;
@@ -1318,7 +1368,45 @@
         return 0;
       }
 
-      // FLAGS
+      // Add days to a DD/MM date string, returns {date:'DD/MM', day:vnDayName}
+      var DATE_SEQUENCE = [
+        { date: "11/06", day: "Thứ Năm" },
+        { date: "12/06", day: "Thứ Sáu" },
+        { date: "13/06", day: "Thứ Bảy" },
+        { date: "14/06", day: "Chủ Nhật" },
+        { date: "15/06", day: "Thứ Hai" },
+        { date: "16/06", day: "Thứ Ba" },
+        { date: "17/06", day: "Thứ Tư" },
+        { date: "18/06", day: "Thứ Năm" },
+        { date: "19/06", day: "Thứ Sáu" },
+        { date: "20/06", day: "Thứ Bảy" },
+        { date: "21/06", day: "Chủ Nhật" },
+        { date: "22/06", day: "Thứ Hai" },
+        { date: "23/06", day: "Thứ Ba" },
+        { date: "24/06", day: "Thứ Tư" },
+        { date: "25/06", day: "Thứ Năm" },
+        { date: "26/06", day: "Thứ Sáu" },
+        { date: "27/06", day: "Thứ Bảy" },
+      ];
+      function shiftDate(dateStr, offset) {
+        var idx = DATE_SEQUENCE.findIndex(function (d) {
+          return d.date === dateStr;
+        });
+        var newIdx = idx + offset;
+        if (newIdx < 0 || newIdx >= DATE_SEQUENCE.length)
+          return { date: dateStr, day: "?" };
+        return DATE_SEQUENCE[newIdx];
+      }
+      function vnTimeToAMPM(t) {
+        var p = t.split(":"),
+          h = +p[0],
+          m = +p[1];
+        var ap = h >= 12 ? "CH" : "SA",
+          h12 = h % 12 || 12;
+        return h12 + ":" + (m < 10 ? "0" : "") + m + " " + ap;
+      }
+
+      // ===== FLAGS =====
       var FLAGS = {
         MEXICO: "🇲🇽",
         "SOUTH AFRICA": "🇿🇦",
@@ -1360,9 +1448,18 @@
         PANAMA: "🇵🇦",
         POLAND: "🇵🇱",
         "IVORY COAST": "🇨🇮",
+        HAITI: "🇭🇹",
+        SCOTLAND: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        CURACAO: "🇨🇼",
+        SWEDEN: "🇸🇪",
+        "CAPE VERDE": "🇨🇻",
+        "NEW ZEALAND": "🇳🇿",
+        IRAQ: "🇮🇶",
+        JORDAN: "🇯🇴",
+        "DR CONGO": "🇨🇩",
+        UZBEKISTAN: "🇺🇿",
+        ECUADOR: "🇪🇨",
       };
-
-      // Vietnamese names
       var VN_NAMES = {
         MEXICO: "Mexico",
         "SOUTH AFRICA": "Nam Phi",
@@ -1404,9 +1501,18 @@
         PANAMA: "Panama",
         POLAND: "Ba Lan",
         "IVORY COAST": "Bờ Biển Ngà",
+        HAITI: "Haiti",
+        SCOTLAND: "Scotland",
+        CURACAO: "Curacao",
+        SWEDEN: "Thụy Điển",
+        "CAPE VERDE": "Cabo Verde",
+        "NEW ZEALAND": "New Zealand",
+        IRAQ: "Iraq",
+        JORDAN: "Jordan",
+        "DR CONGO": "CHDC Congo",
+        UZBEKISTAN: "Uzbekistan",
+        ECUADOR: "Ecuador",
       };
-
-      // English display names (title-case)
       var EN_NAMES = {
         MEXICO: "Mexico",
         "SOUTH AFRICA": "South Africa",
@@ -1448,16 +1554,20 @@
         PANAMA: "Panama",
         POLAND: "Poland",
         "IVORY COAST": "Ivory Coast",
+        HAITI: "Haiti",
+        SCOTLAND: "Scotland",
+        CURACAO: "Curaçao",
+        SWEDEN: "Sweden",
+        "CAPE VERDE": "Cape Verde",
+        "NEW ZEALAND": "New Zealand",
+        IRAQ: "Iraq",
+        JORDAN: "Jordan",
+        "DR CONGO": "DR Congo",
+        UZBEKISTAN: "Uzbekistan",
+        ECUADOR: "Ecuador",
       };
 
-      function getTeamName(key) {
-        return currentLang === "vi"
-          ? VN_NAMES[key] || key
-          : EN_NAMES[key] || key;
-      }
-
-      // Vietnamese day names
-      var VN_DAYS = {
+      var VN_DAYS_MAP = {
         "Thứ Năm": "Thứ Năm",
         "Thứ Sáu": "Thứ Sáu",
         "Thứ Bảy": "Thứ Bảy",
@@ -1467,216 +1577,14 @@
         "Thứ Tư": "Thứ Tư",
       };
       var EN_DAYS_MAP = {
+        "Thứ Hai": "Monday",
+        "Thứ Ba": "Tuesday",
+        "Thứ Tư": "Wednesday",
         "Thứ Năm": "Thursday",
         "Thứ Sáu": "Friday",
         "Thứ Bảy": "Saturday",
         "Chủ Nhật": "Sunday",
-        "Thứ Hai": "Monday",
-        "Thứ Ba": "Tuesday",
-        "Thứ Tư": "Wednesday",
       };
-      var EN_DAYS_SHORT = {
-        Thursday: "Thu",
-        Friday: "Fri",
-        Saturday: "Sat",
-        Sunday: "Sun",
-        Monday: "Mon",
-        Tuesday: "Tue",
-        Wednesday: "Wed",
-      };
-
-      function removeAccents(str) {
-        return str
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/đ/g, "d")
-          .replace(/Đ/g, "D");
-      }
-
-      // Match data
-      var DATA = [
-        {
-          day: "Thứ Năm",
-          date: "12/06",
-          time: "02:00",
-          home: "MEXICO",
-          away: "SOUTH AFRICA",
-          group: "BẢNG A",
-          round: "group",
-        },
-        {
-          day: "Thứ Năm",
-          date: "12/06",
-          time: "09:00",
-          home: "SOUTH KOREA",
-          away: "CZECH REPUBLIC",
-          group: "BẢNG A",
-          round: "group",
-        },
-        {
-          day: "Thứ Sáu",
-          date: "13/06",
-          time: "02:00",
-          home: "CANADA",
-          away: "BOSNIA & HERZEGOVINA",
-          group: "BẢNG B",
-          round: "group",
-        },
-        {
-          day: "Thứ Sáu",
-          date: "13/06",
-          time: "09:00",
-          home: "UNITED STATES",
-          away: "PARAGUAY",
-          group: "BẢNG B",
-          round: "group",
-        },
-        {
-          day: "Thứ Sáu",
-          date: "13/06",
-          time: "11:00",
-          home: "AUSTRALIA",
-          away: "TÜRKİYE",
-          group: "BẢNG C",
-          round: "group",
-        },
-        {
-          day: "Thứ Bảy",
-          date: "14/06",
-          time: "02:00",
-          home: "ARGENTINA",
-          away: "ALGERIA",
-          group: "BẢNG C",
-          round: "group",
-        },
-        {
-          day: "Thứ Bảy",
-          date: "14/06",
-          time: "05:00",
-          home: "GERMANY",
-          away: "JAPAN",
-          group: "BẢNG D",
-          round: "group",
-        },
-        {
-          day: "Thứ Bảy",
-          date: "14/06",
-          time: "08:00",
-          home: "BELGIUM",
-          away: "EGYPT",
-          group: "BẢNG D",
-          round: "group",
-        },
-        {
-          day: "Chủ Nhật",
-          date: "15/06",
-          time: "02:00",
-          home: "SPAIN",
-          away: "IRAN",
-          group: "BẢNG E",
-          round: "group",
-        },
-        {
-          day: "Chủ Nhật",
-          date: "15/06",
-          time: "05:00",
-          home: "FRANCE",
-          away: "SENEGAL",
-          group: "BẢNG E",
-          round: "group",
-        },
-        {
-          day: "Chủ Nhật",
-          date: "15/06",
-          time: "08:00",
-          home: "BRAZIL",
-          away: "MOROCCO",
-          group: "BẢNG F",
-          round: "group",
-        },
-        {
-          day: "Thứ Hai",
-          date: "16/06",
-          time: "02:00",
-          home: "ENGLAND",
-          away: "CROATIA",
-          group: "BẢNG F",
-          round: "group",
-        },
-        {
-          day: "Thứ Hai",
-          date: "16/06",
-          time: "05:00",
-          home: "PORTUGAL",
-          away: "GHANA",
-          group: "BẢNG G",
-          round: "group",
-        },
-        {
-          day: "Thứ Hai",
-          date: "16/06",
-          time: "08:00",
-          home: "NETHERLANDS",
-          away: "TUNISIA",
-          group: "BẢNG G",
-          round: "group",
-        },
-        {
-          day: "Thứ Ba",
-          date: "17/06",
-          time: "02:00",
-          home: "COLOMBIA",
-          away: "QATAR",
-          group: "BẢNG H",
-          round: "group",
-        },
-        {
-          day: "Thứ Ba",
-          date: "17/06",
-          time: "05:00",
-          home: "URUGUAY",
-          away: "SAUDI ARABIA",
-          group: "BẢNG H",
-          round: "group",
-        },
-        {
-          day: "Thứ Ba",
-          date: "17/06",
-          time: "08:00",
-          home: "SWITZERLAND",
-          away: "AUSTRIA",
-          group: "BẢNG I",
-          round: "group",
-        },
-        {
-          day: "Thứ Tư",
-          date: "18/06",
-          time: "02:00",
-          home: "ITALY",
-          away: "NORWAY",
-          group: "BẢNG I",
-          round: "group",
-        },
-        {
-          day: "Thứ Tư",
-          date: "18/06",
-          time: "05:00",
-          home: "DENMARK",
-          away: "PANAMA",
-          group: "BẢNG J",
-          round: "group",
-        },
-        {
-          day: "Thứ Tư",
-          date: "18/06",
-          time: "08:00",
-          home: "POLAND",
-          away: "IVORY COAST",
-          group: "BẢNG J",
-          round: "group",
-        },
-      ];
-
       var ROUND_LABELS_VI = {
         group: "Vòng bảng",
         "round-of-32": "Vòng 1/16",
@@ -1704,26 +1612,459 @@
         final: true,
       };
 
-      function getRoundLabel(round) {
-        return currentLang === "vi"
-          ? ROUND_LABELS_VI[round] || round
-          : ROUND_LABELS_EN[round] || round;
+      function removeAccents(s) {
+        return s
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/đ/g, "d")
+          .replace(/Đ/g, "D");
       }
-      function getGroupLabel(group) {
-        // "BẢNG A" -> vi: "BẢNG A" / en: "GROUP A"
-        if (currentLang === "en") return group.replace("BẢNG", "GROUP");
-        return group;
+      function getTeamName(k) {
+        return currentLang === "vi" ? VN_NAMES[k] || k : EN_NAMES[k] || k;
+      }
+      function getRoundLabel(r) {
+        return currentLang === "vi"
+          ? ROUND_LABELS_VI[r] || r
+          : ROUND_LABELS_EN[r] || r;
+      }
+      function getGroupLabel(g) {
+        return currentLang === "en" ? g.replace("BẢNG", "GROUP") : g;
+      }
+      function getDayLabel(d) {
+        return currentLang === "vi" ? d : EN_DAYS_MAP[d] || d;
       }
 
-      // ===== THEME =====
+      // ===== MATCH DATA (corrected per image) =====
+      // result: { homeScore, awayScore, goals:[{team:'home'|'away', player, min}], reds:[{team, player, min}] }
+      var DATA = [
+        // --- 12/06 Lượt 1 ---
+        {
+          id: 1,
+          day: "Thứ Sáu",
+          date: "12/06",
+          time: "02:00",
+          home: "MEXICO",
+          away: "SOUTH AFRICA",
+          group: "BẢNG A",
+          round: "group",
+          result: {
+            homeScore: 2,
+            awayScore: 0,
+            ht: "1 - 0",
+            goals: [
+              { team: "home", player: "J. Quiñones", min: "9'" },
+              { team: "home", player: "R. Jiménez", min: "67'" },
+            ],
+            reds: [
+              { team: "home", player: "C. Montes", min: "90'" },
+              { team: "away", player: "Y. Sithole", min: "49'" },
+              { team: "away", player: "T. Zwane", min: "84'" },
+            ],
+          },
+        },
+        {
+          id: 2,
+          day: "Thứ Sáu",
+          date: "12/06",
+          time: "09:00",
+          home: "SOUTH KOREA",
+          away: "CZECH REPUBLIC",
+          group: "BẢNG A",
+          round: "group",
+        },
+        {
+          id: 3,
+          day: "Thứ Bảy",
+          date: "13/06",
+          time: "02:00",
+          home: "CANADA",
+          away: "BOSNIA & HERZEGOVINA",
+          group: "BẢNG B",
+          round: "group",
+        },
+        {
+          id: 4,
+          day: "Thứ Bảy",
+          date: "13/06",
+          time: "08:00",
+          home: "UNITED STATES",
+          away: "PARAGUAY",
+          group: "BẢNG D",
+          round: "group",
+        },
+        {
+          id: 5,
+          day: "Chủ Nhật",
+          date: "14/06",
+          time: "02:00",
+          home: "QATAR",
+          away: "SWITZERLAND",
+          group: "BẢNG B",
+          round: "group",
+        },
+        {
+          id: 6,
+          day: "Chủ Nhật",
+          date: "14/06",
+          time: "05:00",
+          home: "BRAZIL",
+          away: "MOROCCO",
+          group: "BẢNG C",
+          round: "group",
+        },
+        {
+          id: 7,
+          day: "Chủ Nhật",
+          date: "14/06",
+          time: "08:00",
+          home: "HAITI",
+          away: "SCOTLAND",
+          group: "BẢNG C",
+          round: "group",
+        },
+        {
+          id: 8,
+          day: "Chủ Nhật",
+          date: "14/06",
+          time: "11:00",
+          home: "AUSTRALIA",
+          away: "TÜRKİYE",
+          group: "BẢNG D",
+          round: "group",
+        },
+        {
+          id: 9,
+          day: "Thứ Hai",
+          date: "15/06",
+          time: "00:00",
+          home: "GERMANY",
+          away: "CURACAO",
+          group: "BẢNG E",
+          round: "group",
+        },
+        {
+          id: 10,
+          day: "Thứ Hai",
+          date: "15/06",
+          time: "03:00",
+          home: "NETHERLANDS",
+          away: "JAPAN",
+          group: "BẢNG F",
+          round: "group",
+        },
+        {
+          id: 11,
+          day: "Thứ Hai",
+          date: "15/06",
+          time: "06:00",
+          home: "IVORY COAST",
+          away: "ECUADOR",
+          group: "BẢNG E",
+          round: "group",
+        },
+        {
+          id: 12,
+          day: "Thứ Hai",
+          date: "15/06",
+          time: "09:00",
+          home: "SWEDEN",
+          away: "TUNISIA",
+          group: "BẢNG F",
+          round: "group",
+        },
+        {
+          id: 13,
+          day: "Thứ Hai",
+          date: "15/06",
+          time: "23:00",
+          home: "SPAIN",
+          away: "CAPE VERDE",
+          group: "BẢNG H",
+          round: "group",
+        },
+        {
+          id: 14,
+          day: "Thứ Ba",
+          date: "16/06",
+          time: "02:00",
+          home: "BELGIUM",
+          away: "EGYPT",
+          group: "BẢNG G",
+          round: "group",
+        },
+        {
+          id: 15,
+          day: "Thứ Ba",
+          date: "16/06",
+          time: "05:00",
+          home: "SAUDI ARABIA",
+          away: "URUGUAY",
+          group: "BẢNG H",
+          round: "group",
+        },
+        {
+          id: 16,
+          day: "Thứ Ba",
+          date: "16/06",
+          time: "08:00",
+          home: "IRAN",
+          away: "NEW ZEALAND",
+          group: "BẢNG G",
+          round: "group",
+        },
+        {
+          id: 17,
+          day: "Thứ Tư",
+          date: "17/06",
+          time: "02:00",
+          home: "FRANCE",
+          away: "SENEGAL",
+          group: "BẢNG I",
+          round: "group",
+        },
+        {
+          id: 18,
+          day: "Thứ Tư",
+          date: "17/06",
+          time: "05:00",
+          home: "IRAQ",
+          away: "NORWAY",
+          group: "BẢNG I",
+          round: "group",
+        },
+        {
+          id: 19,
+          day: "Thứ Tư",
+          date: "17/06",
+          time: "08:00",
+          home: "ARGENTINA",
+          away: "ALGERIA",
+          group: "BẢNG J",
+          round: "group",
+        },
+        {
+          id: 20,
+          day: "Thứ Tư",
+          date: "17/06",
+          time: "11:00",
+          home: "AUSTRIA",
+          away: "JORDAN",
+          group: "BẢNG J",
+          round: "group",
+        },
+        {
+          id: 21,
+          day: "Thứ Năm",
+          date: "18/06",
+          time: "00:00",
+          home: "PORTUGAL",
+          away: "DR CONGO",
+          group: "BẢNG K",
+          round: "group",
+        },
+        {
+          id: 22,
+          day: "Thứ Năm",
+          date: "18/06",
+          time: "03:00",
+          home: "ENGLAND",
+          away: "CROATIA",
+          group: "BẢNG L",
+          round: "group",
+        },
+        {
+          id: 23,
+          day: "Thứ Năm",
+          date: "18/06",
+          time: "06:00",
+          home: "GHANA",
+          away: "PANAMA",
+          group: "BẢNG L",
+          round: "group",
+        },
+        {
+          id: 24,
+          day: "Thứ Năm",
+          date: "18/06",
+          time: "09:00",
+          home: "UZBEKISTAN",
+          away: "COLOMBIA",
+          group: "BẢNG K",
+          round: "group",
+        },
+        // --- Lượt 2 ---
+        {
+          id: 25,
+          day: "Thứ Năm",
+          date: "18/06",
+          time: "23:00",
+          home: "CZECH REPUBLIC",
+          away: "SOUTH AFRICA",
+          group: "BẢNG A",
+          round: "group",
+        },
+        {
+          id: 26,
+          day: "Thứ Sáu",
+          date: "19/06",
+          time: "02:00",
+          home: "SWITZERLAND",
+          away: "BOSNIA & HERZEGOVINA",
+          group: "BẢNG B",
+          round: "group",
+        },
+        {
+          id: 27,
+          day: "Thứ Sáu",
+          date: "19/06",
+          time: "05:00",
+          home: "CANADA",
+          away: "QATAR",
+          group: "BẢNG B",
+          round: "group",
+        },
+        {
+          id: 28,
+          day: "Thứ Sáu",
+          date: "19/06",
+          time: "08:00",
+          home: "MEXICO",
+          away: "SOUTH KOREA",
+          group: "BẢNG A",
+          round: "group",
+        },
+        {
+          id: 29,
+          day: "Thứ Bảy",
+          date: "20/06",
+          time: "02:00",
+          home: "UNITED STATES",
+          away: "AUSTRALIA",
+          group: "BẢNG C",
+          round: "group",
+        },
+        {
+          id: 30,
+          day: "Thứ Bảy",
+          date: "20/06",
+          time: "05:00",
+          home: "SCOTLAND",
+          away: "MOROCCO",
+          group: "BẢNG D",
+          round: "group",
+        },
+        {
+          id: 31,
+          day: "Thứ Bảy",
+          date: "20/06",
+          time: "07:30",
+          home: "BRAZIL",
+          away: "HAITI",
+          group: "BẢNG D",
+          round: "group",
+        },
+        {
+          id: 32,
+          day: "Thứ Bảy",
+          date: "20/06",
+          time: "10:00",
+          home: "TÜRKİYE",
+          away: "PARAGUAY",
+          group: "BẢNG C",
+          round: "group",
+        },
+        {
+          id: 33,
+          day: "Chủ Nhật",
+          date: "21/06",
+          time: "00:00",
+          home: "NETHERLANDS",
+          away: "SWEDEN",
+          group: "BẢNG F",
+          round: "group",
+        },
+        {
+          id: 34,
+          day: "Chủ Nhật",
+          date: "21/06",
+          time: "03:00",
+          home: "GERMANY",
+          away: "IVORY COAST",
+          group: "BẢNG E",
+          round: "group",
+        },
+        {
+          id: 35,
+          day: "Chủ Nhật",
+          date: "21/06",
+          time: "07:00",
+          home: "ECUADOR",
+          away: "CURACAO",
+          group: "BẢNG E",
+          round: "group",
+        },
+        {
+          id: 36,
+          day: "Chủ Nhật",
+          date: "21/06",
+          time: "11:00",
+          home: "TUNISIA",
+          away: "JAPAN",
+          group: "BẢNG F",
+          round: "group",
+        },
+        {
+          id: 37,
+          day: "Chủ Nhật",
+          date: "21/06",
+          time: "23:00",
+          home: "SPAIN",
+          away: "SAUDI ARABIA",
+          group: "BẢNG G",
+          round: "group",
+        },
+        {
+          id: 38,
+          day: "Thứ Hai",
+          date: "22/06",
+          time: "02:00",
+          home: "BELGIUM",
+          away: "IRAN",
+          group: "BẢNG H",
+          round: "group",
+        },
+        {
+          id: 39,
+          day: "Thứ Hai",
+          date: "22/06",
+          time: "05:00",
+          home: "URUGUAY",
+          away: "CAPE VERDE",
+          group: "BẢNG G",
+          round: "group",
+        },
+        {
+          id: 40,
+          day: "Thứ Hai",
+          date: "22/06",
+          time: "08:00",
+          home: "NEW ZEALAND",
+          away: "EGYPT",
+          group: "BẢNG H",
+          round: "group",
+        },
+      ];
+
+      // ===== LANG & THEME =====
+      var currentLang = "vi";
+
       var htmlEl = document.documentElement;
       var toggleIcon = document.getElementById("toggleIcon");
       var currentTheme = "light";
-
-      function applyTheme(theme) {
-        currentTheme = theme;
-        htmlEl.setAttribute("data-theme", theme);
-        toggleIcon.innerHTML = theme === "dark" ? SVG_MOON : SVG_SUN;
+      function applyTheme(t) {
+        currentTheme = t;
+        htmlEl.setAttribute("data-theme", t);
+        toggleIcon.innerHTML = t === "dark" ? SVG_MOON : SVG_SUN;
       }
       applyTheme("light");
       document
@@ -1732,7 +2073,6 @@
           applyTheme(currentTheme === "dark" ? "light" : "dark");
         });
 
-      // ===== LANGUAGE/TZ TOGGLE =====
       document
         .getElementById("langTzToggle")
         .addEventListener("click", function () {
@@ -1748,43 +2088,33 @@
           renderTeamList(document.getElementById("teamSearchInput").value);
           render();
         });
-
       function applyI18n() {
-        var lang = currentLang;
-        // Update all .i18n elements
         document.querySelectorAll(".i18n").forEach(function (el) {
-          var val = el.getAttribute("data-" + lang);
-          if (val !== null) el.textContent = val;
+          var v = el.getAttribute("data-" + currentLang);
+          if (v !== null) el.textContent = v;
         });
-        // Header
         document.getElementById("headerTitle").textContent =
-          lang === "vi"
+          currentLang === "vi"
             ? "LỊCH THI ĐẤU WORLD CUP 2026"
             : "FIFA WORLD CUP 2026 SCHEDULE";
         document.getElementById("headerTz").innerHTML =
-          lang === "vi"
+          currentLang === "vi"
             ? "Giờ Việt Nam 🇻🇳 &nbsp;(UTC+7)"
-            : "California Time 🇺🇸 &nbsp;(PDT, UTC−7)";
-        // Team search placeholder
+            : "California Time 🇺🇸 &nbsp;";
         document.getElementById("teamSearchInput").placeholder =
-          lang === "vi"
-            ? "Đội (tiếng Việt hoặc tiếng Anh)..."
-            : "Search by (English or Vietnamese)...";
-        // Week label (also in DOM with .i18n, but set explicitly too)
+          currentLang === "vi"
+            ? "Tìm đội (tiếng Việt hoặc tiếng Anh)..."
+            : "Search team (English or Vietnamese)...";
         document.getElementById("weekLabel").textContent =
-          lang === "vi" ? "— Trong tuần này —" : "— This week —";
+          currentLang === "vi" ? "— Lịch thi đấu —" : "— Match Schedule —";
       }
 
-      // ===== MULTI-SELECT TEAM STATE =====
+      // ===== TEAM MULTI-SELECT =====
       var selectedTeams = [];
-
       var ALL_TEAMS = Object.keys(FLAGS).sort(function (a, b) {
-        return VN_NAMES[a].localeCompare(VN_NAMES[b], "vi");
+        return (VN_NAMES[a] || a).localeCompare(VN_NAMES[b] || b, "vi");
       });
-
-      // ===== DROPDOWN LOGIC =====
       var dropdownOpen = false;
-
       function openDropdown() {
         dropdownOpen = true;
         document.getElementById("teamDropdown").classList.add("open");
@@ -1796,14 +2126,12 @@
           document.getElementById("teamSearchInput").focus();
         }, 50);
       }
-
       function closeDropdown() {
         dropdownOpen = false;
         document.getElementById("teamDropdown").classList.remove("open");
         document.getElementById("teamSelectTrigger").classList.remove("open");
         document.getElementById("triggerChevron").classList.remove("open");
       }
-
       document
         .getElementById("teamSelectTrigger")
         .addEventListener("click", function (e) {
@@ -1811,19 +2139,16 @@
           if (dropdownOpen) closeDropdown();
           else openDropdown();
         });
-
       document.addEventListener("click", function (e) {
         if (!dropdownOpen) return;
         if (!document.getElementById("teamSelectWrapper").contains(e.target))
           closeDropdown();
       });
-
       document
         .getElementById("teamSearchInput")
         .addEventListener("input", function () {
           renderTeamList(this.value);
         });
-
       function clearAll() {
         selectedTeams = [];
         updateClearLabelBtn();
@@ -1831,7 +2156,6 @@
         renderTeamList(document.getElementById("teamSearchInput").value);
         render();
       }
-
       document
         .getElementById("clearAllBtn")
         .addEventListener("click", clearAll);
@@ -1841,215 +2165,291 @@
           e.stopPropagation();
           clearAll();
         });
-
       function updateClearLabelBtn() {
-        var btn = document.getElementById("clearLabelBtn");
-        if (selectedTeams.length > 0) {
-          btn.classList.add("visible");
-        } else {
-          btn.classList.remove("visible");
-        }
+        document
+          .getElementById("clearLabelBtn")
+          .classList.toggle("visible", selectedTeams.length > 0);
       }
-
-      function toggleTeam(key) {
-        var idx = selectedTeams.indexOf(key);
-        if (idx === -1) selectedTeams.push(key);
-        else selectedTeams.splice(idx, 1);
+      function toggleTeam(k) {
+        var i = selectedTeams.indexOf(k);
+        if (i === -1) selectedTeams.push(k);
+        else selectedTeams.splice(i, 1);
         updateClearLabelBtn();
         renderChips();
         renderTeamList(document.getElementById("teamSearchInput").value);
         render();
       }
-
-      function removeTeam(key) {
+      function removeTeam(k) {
         selectedTeams = selectedTeams.filter(function (t) {
-          return t !== key;
+          return t !== k;
         });
         updateClearLabelBtn();
         renderChips();
         render();
       }
-
       function renderChips() {
-        var chipsEl = document.getElementById("teamChips");
-        if (selectedTeams.length === 0) {
-          var ph =
-            currentLang === "vi" ? "Chọn đội bóng..." : "Select teams...";
-          chipsEl.innerHTML =
-            '<span class="trigger-placeholder i18n" id="triggerPlaceholder" data-vi="Chọn đội bóng..." data-en="Select teams...">' +
-            ph +
+        var el = document.getElementById("teamChips");
+        if (!selectedTeams.length) {
+          el.innerHTML =
+            '<span class="trigger-placeholder">' +
+            (currentLang === "vi" ? "Chọn đội bóng..." : "Select teams...") +
             "</span>";
           return;
         }
-        var html2 = selectedTeams
-          .map(function (key) {
+        el.innerHTML = selectedTeams
+          .map(function (k) {
             return (
-              '<span class="team-chip">' +
-              '<span class="chip-flag">' +
-              (FLAGS[key] || "🏳") +
-              "</span>" +
-              "<span>" +
-              getTeamName(key) +
-              "</span>" +
-              '<span class="chip-remove" data-key="' +
-              key +
-              '">×</span>' +
-              "</span>"
+              '<span class="team-chip"><span class="chip-flag">' +
+              (FLAGS[k] || "🏳") +
+              "</span><span>" +
+              getTeamName(k) +
+              '</span><span class="chip-remove" data-key="' +
+              k +
+              '">×</span></span>'
             );
           })
           .join("");
-        chipsEl.innerHTML = html2;
-        chipsEl.querySelectorAll(".chip-remove").forEach(function (el) {
-          el.addEventListener("click", function (e) {
-            e.stopPropagation();
+        el.querySelectorAll(".chip-remove").forEach(function (e) {
+          e.addEventListener("click", function (ev) {
+            ev.stopPropagation();
             removeTeam(this.getAttribute("data-key"));
           });
         });
       }
-
-      function renderTeamList(query) {
-        var q = query.trim().toLowerCase();
-        var qNoAccent = removeAccents(q);
-        var listEl = document.getElementById("teamList");
-
-        var filtered = ALL_TEAMS.filter(function (key) {
-          if (!q) return true;
-          var vn = VN_NAMES[key] || "";
-          var en = EN_NAMES[key] || key;
+      function renderTeamList(q) {
+        var ql = q.trim().toLowerCase(),
+          qna = removeAccents(ql);
+        var f = ALL_TEAMS.filter(function (k) {
+          if (!ql) return true;
+          var vn = VN_NAMES[k] || "",
+            en = EN_NAMES[k] || k;
           return (
-            vn.toLowerCase().indexOf(q) !== -1 ||
-            en.toLowerCase().indexOf(q) !== -1 ||
-            removeAccents(vn.toLowerCase()).indexOf(qNoAccent) !== -1 ||
-            removeAccents(en.toLowerCase()).indexOf(qNoAccent) !== -1
+            vn.toLowerCase().indexOf(ql) !== -1 ||
+            en.toLowerCase().indexOf(ql) !== -1 ||
+            removeAccents(vn.toLowerCase()).indexOf(qna) !== -1 ||
+            removeAccents(en.toLowerCase()).indexOf(qna) !== -1
           );
         });
-
-        if (!filtered.length) {
-          var noResult =
-            currentLang === "vi" ? "Không tìm thấy đội bóng" : "No team found";
-          listEl.innerHTML =
-            '<div class="team-option-none">' + noResult + "</div>";
+        var el = document.getElementById("teamList");
+        if (!f.length) {
+          el.innerHTML =
+            '<div class="team-option-none">' +
+            (currentLang === "vi"
+              ? "Không tìm thấy đội bóng"
+              : "No team found") +
+            "</div>";
           return;
         }
-
-        listEl.innerHTML = filtered
-          .map(function (key) {
-            var isSel = selectedTeams.indexOf(key) !== -1;
+        el.innerHTML = f
+          .map(function (k) {
+            var s = selectedTeams.indexOf(k) !== -1;
             return (
               '<div class="team-option' +
-              (isSel ? " selected" : "") +
+              (s ? " selected" : "") +
               '" data-key="' +
-              key +
-              '">' +
-              '<span class="opt-flag">' +
-              (FLAGS[key] || "🏳") +
-              "</span>" +
-              '<span class="opt-name">' +
-              getTeamName(key) +
-              "</span>" +
-              '<span class="opt-check"></span>' +
-              "</div>"
+              k +
+              '"><span class="opt-flag">' +
+              (FLAGS[k] || "🏳") +
+              '</span><span class="opt-name">' +
+              getTeamName(k) +
+              '</span><span class="opt-check"></span></div>'
             );
           })
           .join("");
-
-        listEl.querySelectorAll(".team-option").forEach(function (el) {
-          el.addEventListener("click", function () {
+        el.querySelectorAll(".team-option").forEach(function (e) {
+          e.addEventListener("click", function () {
             toggleTeam(this.getAttribute("data-key"));
           });
         });
       }
 
-      // ===== FILTER & RENDER =====
+      // ===== EXPAND STATE =====
+      var expandedId = null;
+
+      // ===== RENDER =====
       function getFiltered() {
-        var d = document.getElementById("dateFilter").value;
-        var g = document.getElementById("groupFilter").value;
+        var d = document.getElementById("dateFilter").value,
+          g = document.getElementById("groupFilter").value;
         return DATA.filter(function (m) {
           if (d && m.date !== d) return false;
           if (g && m.group !== g) return false;
-          if (selectedTeams.length > 0) {
-            if (
-              selectedTeams.indexOf(m.home) === -1 &&
-              selectedTeams.indexOf(m.away) === -1
-            )
-              return false;
-          }
+          if (
+            selectedTeams.length > 0 &&
+            selectedTeams.indexOf(m.home) === -1 &&
+            selectedTeams.indexOf(m.away) === -1
+          )
+            return false;
           return true;
         });
       }
 
-      function matchCard(m) {
-        var hf = FLAGS[m.home] || "🏳";
-        var af = FLAGS[m.away] || "🏳";
-        var homeN = getTeamName(m.home);
-        var awayN = getTeamName(m.away);
+      function buildResultDetail(m) {
+        var r = m.result;
+        if (!r) return "";
 
-        // Times — each mode shows only its own timezone, no secondary label
-        var primaryTime;
-        if (currentLang === "vi") {
-          primaryTime = vnTimeToAMPM(m.time);
-        } else {
-          primaryTime = vnTimeToPDT(m.time);
+        var homeN = getTeamName(m.home),
+          awayN = getTeamName(m.away);
+        var finishedLabel = currentLang === "vi" ? "Kết thúc" : "Full Time";
+        var htLabel = currentLang === "vi" ? "Hiệp một:" : "HT:";
+
+        // Hero: status badge + score box + HT
+        var htHtml = "";
+        if (r.ht !== undefined) {
+          htHtml = '<div class="rd-ht">' + htLabel + " " + r.ht + "</div>";
         }
+        var hero =
+          '<div class="rd-hero">' +
+          '<div class="rd-team-name">' +
+          homeN +
+          "</div>" +
+          '<div class="rd-score-box">' +
+          '<div class="rd-status-badge">' +
+          finishedLabel +
+          "</div>" +
+          '<div class="rd-score-main"><span class="rd-score-num">' +
+          r.homeScore +
+          '</span><span class="rd-score-sep">-</span><span class="rd-score-num">' +
+          r.awayScore +
+          "</span></div>" +
+          htHtml +
+          "</div>" +
+          '<div class="rd-team-name">' +
+          awayN +
+          "</div>" +
+          "</div>";
 
-        // Round/group badges
+        // Events: interleave home/away goals and reds in one unified list
+        var allEvents = [];
+        (r.goals || []).forEach(function (g) {
+          allEvents.push({
+            team: g.team,
+            icon: "⚽",
+            player: g.player,
+            min: g.min,
+            sort: parseInt(g.min),
+          });
+        });
+        (r.reds || []).forEach(function (g) {
+          allEvents.push({
+            team: g.team,
+            icon: "🟥",
+            player: g.player,
+            min: g.min,
+            sort: parseInt(g.min),
+          });
+        });
+        allEvents.sort(function (a, b) {
+          return a.sort - b.sort;
+        });
+
+        var evRows = "";
+        allEvents.forEach(function (ev) {
+          var txt =
+            '<span class="rd-event-icon">' +
+            ev.icon +
+            "</span>" +
+            '<span class="rd-event-text">' +
+            ev.player +
+            "</span>" +
+            '<span class="rd-event-min">(' +
+            ev.min +
+            ")</span>";
+          if (ev.team === "home") {
+            evRows += '<div class="rd-event-home">' + txt + "</div><div></div>";
+          } else {
+            evRows += '<div></div><div class="rd-event-away">' + txt + "</div>";
+          }
+        });
+
+        var events = evRows
+          ? '<div class="rd-events">' + evRows + "</div>"
+          : "";
+        return (
+          '<div class="result-detail' +
+          (expandedId === m.id ? " open" : "") +
+          '" id="detail-' +
+          m.id +
+          '">' +
+          hero +
+          events +
+          "</div>"
+        );
+      }
+
+      function matchCard(m) {
+        var hf = FLAGS[m.home] || "🏳",
+          af = FLAGS[m.away] || "🏳";
+        var homeN = getTeamName(m.home),
+          awayN = getTeamName(m.away);
+        var primaryTime =
+          currentLang === "vi" ? vnTimeToAMPM(m.time) : vnTimeToPDT(m.time);
         var isKnockout = !!ROUND_KNOCKOUT[m.round];
-        var roundText = getRoundLabel(m.round);
         var roundBadge =
           '<span class="round-badge' +
           (isKnockout ? " knockout" : "") +
           '">' +
-          roundText +
+          getRoundLabel(m.round) +
           "</span>";
-        var badgeHtml;
-        if (m.round === "group") {
-          badgeHtml =
-            '<span class="group-badge">' +
-            getGroupLabel(m.group) +
-            "</span>" +
-            roundBadge;
+        var badgeHtml =
+          m.round === "group"
+            ? '<span class="group-badge">' +
+              getGroupLabel(m.group) +
+              "</span>" +
+              roundBadge
+            : roundBadge;
+
+        var centerHtml,
+          hasResult = !!m.result;
+        if (hasResult) {
+          var hint =
+            currentLang === "vi" ? "Nhấn để xem chi tiết" : "Tap for details";
+          centerHtml =
+            '<div style="text-align:center;">' +
+            '<div class="score-block" style="justify-content:center;"><span class="score-num">' +
+            m.result.homeScore +
+            '</span><span class="score-dash">-</span><span class="score-num">' +
+            m.result.awayScore +
+            "</span></div>" +
+            '<div class="result-hint"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01"/><circle cx="12" cy="12" r="9"/></svg>' +
+            hint +
+            "</div>" +
+            "</div>";
         } else {
-          badgeHtml = roundBadge;
+          centerHtml = '<div class="vs">VS</div>';
         }
 
         return (
-          '<div class="match-card">' +
-          '<div class="card-top">' +
-          '<div class="card-top-left">' +
-          '<span class="match-time">' +
+          '<div class="match-card' +
+          (hasResult ? " has-result" : "") +
+          '" data-id="' +
+          m.id +
+          '">' +
+          '<div class="card-top"><div class="card-top-left"><span class="match-time">' +
           primaryTime +
-          "</span>" +
-          "</div>" +
-          '<div class="card-top-right">' +
+          '</span></div><div class="card-top-right">' +
           badgeHtml +
-          "</div>" +
-          "</div>" +
+          "</div></div>" +
           '<div class="card-body">' +
           '<div class="team team-left"><span class="team-name">' +
           homeN +
           '</span><span class="flag">' +
           hf +
           "</span></div>" +
-          '<div class="vs">VS</div>' +
+          centerHtml +
           '<div class="team team-right"><span class="flag">' +
           af +
           '</span><span class="team-name">' +
           awayN +
           "</span></div>" +
-          "</div></div>"
+          "</div>" +
+          buildResultDetail(m) +
+          "</div>"
         );
-      }
-
-      function getDayLabel(vnDay) {
-        if (currentLang === "vi") return vnDay;
-        var en = EN_DAYS_MAP[vnDay] || vnDay;
-        return en;
       }
 
       function render() {
         var filtered = getFiltered();
         var sched = document.getElementById("schedule");
-
         var days = {},
           teams = {},
           groups = {};
@@ -2066,48 +2466,78 @@
           Object.keys(groups).length;
         document.getElementById("statTeams").textContent =
           Object.keys(teams).length;
-
         if (!filtered.length) {
-          var emptyMsg =
-            currentLang === "vi"
-              ? "Không tìm thấy trận đấu phù hợp.<br>Thử thay đổi bộ lọc khác."
-              : "No matches found.<br>Try changing your filters.";
           sched.innerHTML =
-            '<div class="empty">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.039 5.062a7 7 0 0 0 9.91 9.89m1.584 -2.434a7 7 0 0 0 -9.038 -9.057"/><path d="M3 3l18 18"/></svg>' +
-            emptyMsg +
+            '<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.039 5.062a7 7 0 0 0 9.91 9.89m1.584 -2.434a7 7 0 0 0 -9.038 -9.057"/><path d="M3 3l18 18"/></svg>' +
+            (currentLang === "vi"
+              ? "Không tìm thấy trận đấu phù hợp.<br>Thử thay đổi bộ lọc khác."
+              : "No matches found.<br>Try changing your filters.") +
             "</div>";
           return;
         }
-
-        var byDate = {};
-        var dateOrder = [];
+        var byDate = {},
+          dateOrder = [];
         filtered.forEach(function (m) {
-          if (!byDate[m.date]) {
-            byDate[m.date] = { day: m.day, matches: [] };
-            dateOrder.push(m.date);
+          var useDate = m.date,
+            useDay = m.day;
+          if (currentLang === "en") {
+            var off = pdtDayOffset(m.time);
+            if (off !== 0) {
+              var shifted = shiftDate(m.date, off);
+              useDate = shifted.date;
+              useDay = shifted.day;
+            }
           }
-          byDate[m.date].matches.push(m);
+          if (!byDate[useDate]) {
+            byDate[useDate] = { day: useDay, matches: [] };
+            dateOrder.push(useDate);
+          }
+          byDate[useDate].matches.push(m);
         });
-
+        // Sort dateOrder chronologically
+        dateOrder.sort(function (a, b) {
+          var ai = DATE_SEQUENCE.findIndex(function (d) {
+            return d.date === a;
+          });
+          var bi = DATE_SEQUENCE.findIndex(function (d) {
+            return d.date === b;
+          });
+          return ai - bi;
+        });
         sched.innerHTML = dateOrder
           .map(function (date) {
             var block = byDate[date];
-            var dayLabel = getDayLabel(block.day);
             return (
-              '<div class="day-block">' +
-              '<div class="day-header"><span class="day-label">' +
-              dayLabel +
+              '<div class="day-block"><div class="day-header"><span class="day-label">' +
+              getDayLabel(block.day) +
               '</span><span class="day-date">' +
               date +
-              "/2026</span></div>" +
-              '<div class="matches">' +
+              '/2026</span></div><div class="matches">' +
               block.matches.map(matchCard).join("") +
-              "</div>" +
-              "</div>"
+              "</div></div>"
             );
           })
           .join("");
+
+        // Click handlers for cards with results
+        sched
+          .querySelectorAll(".match-card.has-result")
+          .forEach(function (card) {
+            card.addEventListener("click", function () {
+              var id = parseInt(this.getAttribute("data-id"), 10);
+              var detail = this.querySelector(".result-detail");
+              if (expandedId === id) {
+                expandedId = null;
+                if (detail) detail.classList.remove("open");
+              } else {
+                // close previous
+                var prev = sched.querySelector(".result-detail.open");
+                if (prev) prev.classList.remove("open");
+                expandedId = id;
+                if (detail) detail.classList.add("open");
+              }
+            });
+          });
       }
 
       document.getElementById("dateFilter").addEventListener("change", render);
