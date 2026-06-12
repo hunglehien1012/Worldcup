@@ -1,179 +1,253 @@
 #!/usr/bin/env python3
 """
-Tự động lấy kết quả từ API-Football và cập nhật vào worldcup2026.html
-Chạy bởi GitHub Actions mỗi 30 phút trong suốt giải đấu.
+Lấy kết quả World Cup 2026 từ worldcup26.ir (miễn phí, không cần key, realtime)
+và cập nhật vào worldcup2026.html
+Chạy bởi GitHub Actions mỗi 30 phút.
 """
 
-import os
 import re
 import json
 import urllib.request
 
-API_KEY  = os.environ.get("APIFOOTBALL_KEY", "")
-HTML_FILE = "worldcup2026.html"
+SOURCE_URL = "https://worldcup26.ir/get/games"
+HTML_FILE  = "worldcup2026.html"
 
+# Map tên đội API -> key trong HTML
 TEAM_MAP = {
-    "MEXICO": ["Mexico"],
-    "SOUTH AFRICA": ["South Africa"],
-    "SOUTH KOREA": ["South Korea", "Korea Republic"],
-    "CZECH REPUBLIC": ["Czech Republic", "Czechia"],
-    "CANADA": ["Canada"],
-    "BOSNIA & HERZEGOVINA": ["Bosnia", "Bosnia and Herzegovina", "Bosnia & Herzegovina"],
-    "UNITED STATES": ["United States", "USA"],
-    "PARAGUAY": ["Paraguay"],
-    "AUSTRALIA": ["Australia"],
-    "TÜRKİYE": ["Turkey", "Türkiye"],
-    "ARGENTINA": ["Argentina"],
-    "ALGERIA": ["Algeria"],
-    "GERMANY": ["Germany"],
-    "JAPAN": ["Japan"],
-    "BELGIUM": ["Belgium"],
-    "EGYPT": ["Egypt"],
-    "SPAIN": ["Spain"],
-    "IRAN": ["Iran"],
-    "FRANCE": ["France"],
-    "SENEGAL": ["Senegal"],
-    "BRAZIL": ["Brazil"],
-    "MOROCCO": ["Morocco"],
-    "ENGLAND": ["England"],
-    "CROATIA": ["Croatia"],
-    "PORTUGAL": ["Portugal"],
-    "GHANA": ["Ghana"],
-    "NETHERLANDS": ["Netherlands", "Holland"],
-    "TUNISIA": ["Tunisia"],
-    "COLOMBIA": ["Colombia"],
-    "QATAR": ["Qatar"],
-    "URUGUAY": ["Uruguay"],
-    "SAUDI ARABIA": ["Saudi Arabia"],
-    "SWITZERLAND": ["Switzerland"],
-    "AUSTRIA": ["Austria"],
-    "ITALY": ["Italy"],
-    "NORWAY": ["Norway"],
-    "DENMARK": ["Denmark"],
-    "PANAMA": ["Panama"],
-    "POLAND": ["Poland"],
-    "IVORY COAST": ["Ivory Coast", "Cote d'Ivoire"],
-    "HAITI": ["Haiti"],
-    "SCOTLAND": ["Scotland"],
-    "CURACAO": ["Curacao", "Curaçao"],
-    "SWEDEN": ["Sweden"],
-    "CAPE VERDE": ["Cape Verde"],
-    "NEW ZEALAND": ["New Zealand"],
-    "IRAQ": ["Iraq"],
-    "JORDAN": ["Jordan"],
-    "DR CONGO": ["DR Congo", "Congo DR"],
-    "UZBEKISTAN": ["Uzbekistan"],
-    "ECUADOR": ["Ecuador"],
+    "Mexico":                 "MEXICO",
+    "South Africa":           "SOUTH AFRICA",
+    "South Korea":            "SOUTH KOREA",
+    "Korea Republic":         "SOUTH KOREA",
+    "Czech Republic":         "CZECH REPUBLIC",
+    "Czechia":                "CZECH REPUBLIC",
+    "Canada":                 "CANADA",
+    "Bosnia & Herzegovina":   "BOSNIA & HERZEGOVINA",
+    "Bosnia and Herzegovina": "BOSNIA & HERZEGOVINA",
+    "Bosnia-Herzegovina":     "BOSNIA & HERZEGOVINA",
+    "United States":          "UNITED STATES",
+    "USA":                    "UNITED STATES",
+    "Paraguay":               "PARAGUAY",
+    "Australia":              "AUSTRALIA",
+    "Turkey":                 "TÜRKİYE",
+    "Türkiye":                "TÜRKİYE",
+    "Argentina":              "ARGENTINA",
+    "Algeria":                "ALGERIA",
+    "Germany":                "GERMANY",
+    "Japan":                  "JAPAN",
+    "Belgium":                "BELGIUM",
+    "Egypt":                  "EGYPT",
+    "Spain":                  "SPAIN",
+    "Iran":                   "IRAN",
+    "France":                 "FRANCE",
+    "Senegal":                "SENEGAL",
+    "Brazil":                 "BRAZIL",
+    "Morocco":                "MOROCCO",
+    "England":                "ENGLAND",
+    "Croatia":                "CROATIA",
+    "Portugal":               "PORTUGAL",
+    "Ghana":                  "GHANA",
+    "Netherlands":            "NETHERLANDS",
+    "Tunisia":                "TUNISIA",
+    "Colombia":               "COLOMBIA",
+    "Qatar":                  "QATAR",
+    "Uruguay":                "URUGUAY",
+    "Saudi Arabia":           "SAUDI ARABIA",
+    "Switzerland":            "SWITZERLAND",
+    "Austria":                "AUSTRIA",
+    "Italy":                  "ITALY",
+    "Norway":                 "NORWAY",
+    "Denmark":                "DENMARK",
+    "Panama":                 "PANAMA",
+    "Poland":                 "POLAND",
+    "Ivory Coast":            "IVORY COAST",
+    "Cote d'Ivoire":          "IVORY COAST",
+    "Haiti":                  "HAITI",
+    "Scotland":               "SCOTLAND",
+    "Curacao":                "CURACAO",
+    "Curaçao":                "CURACAO",
+    "Sweden":                 "SWEDEN",
+    "Cape Verde":             "CAPE VERDE",
+    "New Zealand":            "NEW ZEALAND",
+    "Iraq":                   "IRAQ",
+    "Irak":                   "IRAQ",
+    "Jordan":                 "JORDAN",
+    "DR Congo":               "DR CONGO",
+    "Congo DR":               "DR CONGO",
+    "Uzbekistan":             "UZBEKISTAN",
+    "Ecuador":                "ECUADOR",
 }
 
-FINISHED = {"FT", "AET", "PEN", "AWD", "WO"}
-
-
-def api_get(url):
-    req = urllib.request.Request(url, headers={"x-apisports-key": API_KEY})
-    with urllib.request.urlopen(req, timeout=20) as resp:
-        return json.loads(resp.read().decode())
-
-
-def team_matches(api_name, our_key):
-    variants = TEAM_MAP.get(our_key, [our_key])
-    api_lower = api_name.lower()
-    return any(v.lower() == api_lower or v.lower() in api_lower for v in variants)
-
-
-def find_fixture(fixtures, home_key, away_key):
-    for f in fixtures:
-        if team_matches(f["teams"]["home"]["name"], home_key) and \
-           team_matches(f["teams"]["away"]["name"], away_key):
-            return f
-    return None
-
-
-def shorten_name(full_name):
-    parts = full_name.strip().split()
-    if len(parts) > 1:
-        return parts[0][0] + ". " + " ".join(parts[1:])
-    return full_name
-
-
-def parse_events(events, home_team_id):
-    goals, reds = [], []
-    for ev in events:
-        side   = "home" if ev["team"]["id"] == home_team_id else "away"
-        elapsed = ev["time"]["elapsed"]
-        extra   = ev["time"].get("extra")
-        suffix  = ("+" + str(extra)) if extra else ""
-        min_str = str(elapsed) + suffix + "'"
-        player  = (ev.get("player") or {}).get("name") or "?"
-        short   = shorten_name(player)
-        t, d    = ev.get("type", ""), ev.get("detail", "")
-        if t == "Goal" and d != "Missed Penalty":
-            goals.append({"team": side, "player": short, "min": min_str})
-        elif t == "Card" and d in ("Red Card", "Yellow-Red Card"):
-            reds.append({"team": side, "player": short, "min": min_str})
-    return goals, reds
-
-
-def escape_js(s):
-    return s.replace("\\", "\\\\").replace('"', '\\"').replace("'", "\\'")
-
-
-def result_to_js(result):
-    def ev_js(lst):
-        return ", ".join(
-            '{{ team: "{}", player: "{}", min: "{}" }}'.format(
-                g["team"], escape_js(g["player"]), escape_js(g["min"])
-            )
-            for g in lst
-        )
-    ht = result.get("ht")
-    ht_part = 'ht: "{}", '.format(ht) if ht else ""
-    return (
-        '{{ homeScore: {}, awayScore: {}, {}goals: [{}], reds: [{}] }}'.format(
-            result["homeScore"], result["awayScore"],
-            ht_part,
-            ev_js(result.get("goals", [])),
-            ev_js(result.get("reds", []))
-        )
-    )
-
+def normalize(name):
+    name = name.strip()
+    # Thử exact match trước
+    if name in TEAM_MAP:
+        return TEAM_MAP[name]
+    # Thử case-insensitive
+    for k, v in TEAM_MAP.items():
+        if k.lower() == name.lower():
+            return v
+    return name.upper()
 
 def find_obj_end(text, start):
-    """Tìm vị trí kết thúc của JS object bắt đầu từ `start`."""
     depth = 0
     for i, ch in enumerate(text[start:]):
-        if ch == '{':
-            depth += 1
+        if ch == '{': depth += 1
         elif ch == '}':
             depth -= 1
             if depth == 0:
                 return start + i + 1
     return len(text)
 
+def escape_js(s):
+    return s.replace('\\', '\\\\').replace('"', '\\"')
+
+def result_to_js(home_score, away_score, ht=None, goals=None, reds=None):
+    def ev_js(lst):
+        return ", ".join(
+            '{{ team: "{}", player: "{}", min: "{}" }}'.format(
+                g["team"], escape_js(g["player"]), escape_js(g["min"])
+            ) for g in (lst or [])
+        )
+    ht_part = 'ht: "{}", '.format(ht) if ht else ""
+    return (
+        '{{ homeScore: {}, awayScore: {}, {}goals: [{}], reds: [{}] }}'.format(
+            home_score, away_score, ht_part,
+            ev_js(goals or []), ev_js(reds or [])
+        )
+    )
+
+def parse_goals(match, home_key, away_key):
+    """Parse danh sách bàn thắng nếu API trả về."""
+    goals = []
+    # worldcup26.ir trả về scorers trong field "scorers" hoặc "goals"
+    for field in ("scorers", "goals", "events"):
+        items = match.get(field, [])
+        if not items:
+            continue
+        for item in items:
+            # Tìm team side
+            team_name = item.get("team") or item.get("team_name") or ""
+            side = "home" if normalize(team_name) == home_key else "away"
+            player = item.get("player") or item.get("name") or item.get("player_name") or "?"
+            # Rút gọn tên
+            parts = player.strip().split()
+            short = (parts[0][0] + ". " + " ".join(parts[1:])) if len(parts) > 1 else player
+            minute = str(item.get("minute") or item.get("time") or item.get("min") or "?")
+            if not minute.endswith("'"):
+                minute += "'"
+            event_type = (item.get("type") or item.get("event_type") or "goal").lower()
+            if "goal" in event_type and "missed" not in event_type and "own" not in event_type:
+                goals.append({"team": side, "player": short, "min": minute})
+            elif "own" in event_type:
+                # Own goal tính cho đội đối
+                goals.append({"team": "away" if side == "home" else "home",
+                              "player": short + " (OG)", "min": minute})
+        if goals:
+            break
+    return goals
 
 def main():
-    if not API_KEY:
-        print("APIFOOTBALL_KEY chưa được set")
-        raise SystemExit(1)
+    print("Tải dữ liệu từ worldcup26.ir...")
+    req = urllib.request.Request(
+        SOURCE_URL,
+        headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"}
+    )
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        raw = resp.read().decode()
 
-    print("Đọc file HTML...")
+    data = json.loads(raw)
+
+    # worldcup26.ir trả về list hoặc object có key "games"/"matches"
+    if isinstance(data, list):
+        matches = data
+    else:
+        matches = (data.get("games") or data.get("matches") or
+                   data.get("data") or [])
+
+    print(f"Tải được {len(matches)} trận")
+
+    # Xây dict kết quả: (home_key, away_key) -> info
+    results = {}
+    for m in matches:
+        # Lấy tên đội - API có thể dùng nhiều field khác nhau
+        home_raw = (m.get("home_team") or m.get("team1") or
+                    m.get("home") or {})
+        away_raw = (m.get("away_team") or m.get("team2") or
+                    m.get("away") or {})
+
+        # home_raw có thể là dict {"name":...} hoặc string
+        if isinstance(home_raw, dict):
+            home_name = (home_raw.get("name_en") or home_raw.get("name") or
+                         home_raw.get("en") or "")
+        else:
+            home_name = str(home_raw)
+
+        if isinstance(away_raw, dict):
+            away_name = (away_raw.get("name_en") or away_raw.get("name") or
+                         away_raw.get("en") or "")
+        else:
+            away_name = str(away_raw)
+
+        if not home_name or not away_name:
+            continue
+
+        home_key = normalize(home_name)
+        away_key = normalize(away_name)
+
+        # Kiểm tra trận đã kết thúc
+        status = (m.get("status") or m.get("state") or "").upper()
+        finished = status in ("FT", "FINISHED", "FULL_TIME", "FULLTIME",
+                              "AET", "PEN", "ENDED", "COMPLETED", "3")
+
+        # Điểm số
+        score = m.get("score") or m.get("result") or {}
+        if isinstance(score, dict):
+            home_score = score.get("home") or score.get("ft", [None, None])[0]
+            away_score = score.get("away") or score.get("ft", [None, None])[-1]
+            ht_raw = score.get("ht") or score.get("halftime")
+        else:
+            home_score = m.get("home_score") or m.get("score_home")
+            away_score = m.get("away_score") or m.get("score_away")
+            ht_raw = None
+
+        # Thử field trực tiếp nếu score rỗng
+        if home_score is None:
+            home_score = m.get("home_score") or m.get("goals_home")
+        if away_score is None:
+            away_score = m.get("away_score") or m.get("goals_away")
+
+        if not finished or home_score is None or away_score is None:
+            continue
+
+        # Half-time
+        if isinstance(ht_raw, list) and len(ht_raw) == 2:
+            ht_str = f"{ht_raw[0]} - {ht_raw[1]}"
+        elif isinstance(ht_raw, dict):
+            ht_str = f"{ht_raw.get('home', 0)} - {ht_raw.get('away', 0)}"
+        else:
+            ht_str = None
+
+        goals = parse_goals(m, home_key, away_key)
+
+        results[(home_key, away_key)] = {
+            "homeScore": int(home_score),
+            "awayScore": int(away_score),
+            "ht": ht_str,
+            "goals": goals,
+        }
+
+    print(f"Có {len(results)} trận đã kết thúc")
+
+    if not results:
+        print("Không có kết quả mới.")
+        return
+
     with open(HTML_FILE, "r", encoding="utf-8") as f:
         html = f.read()
 
-    print("Lấy fixtures từ API-Football...")
-    resp = api_get("https://v3.football.api-sports.io/fixtures?league=1&season=2026")
-    if resp.get("errors"):
-        print("Lỗi API:", resp["errors"])
-        raise SystemExit(1)
-
-    all_fixtures = resp.get("response", [])
-    print(f"Tải được {len(all_fixtures)} fixtures")
-
-    # Xác định vùng DATA array trong HTML
     data_start = html.find("var DATA = [")
     data_end   = find_obj_end(html, html.find("[", data_start)) + 1
 
-    # Tìm từng match object chưa có result
     item_re = re.compile(
         r'\{\s*\n\s*id:\s*(\d+),.*?'
         r'home:\s*"([^"]+)".*?'
@@ -183,10 +257,7 @@ def main():
     )
 
     updated = 0
-    search_from = data_start
-
     for m in item_re.finditer(html, data_start, data_end):
-        match_id = int(m.group(1))
         home_key = m.group(2).strip()
         away_key = m.group(3).strip()
 
@@ -195,67 +266,37 @@ def main():
         obj_text  = html[obj_start:obj_end]
 
         if "result:" in obj_text:
-            continue  # đã có kết quả
-
-        fixture = find_fixture(all_fixtures, home_key, away_key)
-        if not fixture:
-            print(f"  Không tìm thấy fixture: {home_key} vs {away_key}")
             continue
 
-        status = fixture["fixture"]["status"]["short"]
-        if status not in FINISHED:
-            print(f"  Chưa kết thúc ({status}): {home_key} vs {away_key}")
+        key = (home_key, away_key)
+        if key not in results:
             continue
 
-        # Lấy events
-        fid      = fixture["fixture"]["id"]
-        ev_resp  = api_get(f"https://v3.football.api-sports.io/fixtures/events?fixture={fid}")
-        goals, reds = parse_events(ev_resp.get("response", []), fixture["teams"]["home"]["id"])
-
-        ht_h = fixture["score"]["halftime"]["home"]
-        ht_a = fixture["score"]["halftime"]["away"]
-        ht   = (str(ht_h) + " - " + str(ht_a)) if ht_h is not None else None
-
-        result = {
-            "homeScore": fixture["goals"]["home"],
-            "awayScore": fixture["goals"]["away"],
-            "ht": ht, "goals": goals, "reds": reds,
-        }
-
-        print(f"  {home_key} {result['homeScore']}-{result['awayScore']} {away_key}"
-              + (f" (HT: {ht})" if ht else ""))
-
-        # Chèn result: trước dấu } đóng cuối obj
-        result_js   = result_to_js(result)
-        # Tìm indent của dòng round
-        round_match = re.search(r'(\s+)round:\s*"[^"]+"', obj_text)
-        indent      = round_match.group(1) if round_match else "          "
-        new_obj     = re.sub(
-            r'(round:\s*"[^"]+"),(?\s*)\n(\s*\})',
-            lambda x: x.group(0).rstrip("}").rstrip() +
-                      f',\n{indent}result: {result_js},\n' +
-                      x.group(2) + "}",
-            obj_text, count=1
+        r = results[key]
+        result_js = result_to_js(
+            r["homeScore"], r["awayScore"],
+            r.get("ht"), r.get("goals", [])
         )
 
-        # Fallback đơn giản nếu regex phức tạp không match
-        if new_obj == obj_text:
-            close_pos = obj_text.rfind("}")
-            new_obj = (obj_text[:close_pos].rstrip() +
-                       f',\n          result: {result_js},\n        ' + "}")
+        print(f"  ✅ {home_key} {r['homeScore']}-{r['awayScore']} {away_key}"
+              + (f" (HT: {r['ht']})" if r.get("ht") else ""))
 
-        html = html[:obj_start] + new_obj + html[obj_end:]
-        # Cập nhật data_end vì html đã thay đổi độ dài
+        close_pos = obj_text.rfind("}")
+        new_obj = (
+            obj_text[:close_pos].rstrip()
+            + f',\n          result: {result_js},\n        }}'
+        )
+
+        html     = html[:obj_start] + new_obj + html[obj_end:]
         data_end += len(new_obj) - len(obj_text)
-        updated += 1
+        updated  += 1
 
     if updated:
         with open(HTML_FILE, "w", encoding="utf-8") as f:
             f.write(html)
-        print(f"\nĐã cập nhật {updated} trận vào {HTML_FILE}")
+        print(f"\n🎉 Đã cập nhật {updated} trận vào {HTML_FILE}")
     else:
         print("\nKhông có trận mới cần cập nhật.")
-
 
 if __name__ == "__main__":
     main()
