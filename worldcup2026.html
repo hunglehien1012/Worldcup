@@ -379,10 +379,7 @@
         cursor: pointer;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
-        transition:
-          border-color 0.2s,
-          background 0.25s,
-          color 0.25s;
+        transition: border-color 0.2s, background 0.25s, color 0.25s;
         gap: 8px;
       }
       .custom-select-trigger:hover {
@@ -414,7 +411,7 @@
         background: var(--bg-card);
         border: 1px solid var(--border-card);
         border-radius: 10px;
-        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+        box-shadow: 0 8px 28px rgba(0,0,0,0.14);
         overflow: hidden;
         max-height: 280px;
         overflow-y: auto;
@@ -422,16 +419,9 @@
       .custom-select-dropdown.open {
         display: block;
       }
-      .custom-select-dropdown::-webkit-scrollbar {
-        width: 4px;
-      }
-      .custom-select-dropdown::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .custom-select-dropdown::-webkit-scrollbar-thumb {
-        background: var(--border-main);
-        border-radius: 2px;
-      }
+      .custom-select-dropdown::-webkit-scrollbar { width: 4px; }
+      .custom-select-dropdown::-webkit-scrollbar-track { background: transparent; }
+      .custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--border-main); border-radius: 2px; }
       .cs-option {
         display: flex;
         align-items: center;
@@ -440,10 +430,7 @@
         color: var(--text-primary);
         cursor: pointer;
         border-left: 3px solid transparent;
-        transition:
-          background 0.15s,
-          border-color 0.15s,
-          color 0.15s;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
         background: transparent;
       }
       .cs-option:hover {
@@ -1103,6 +1090,64 @@
           font-size: 26px;
         }
       }
+
+      /* TOAST NOTIFICATION */
+      .ai-toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: #1e293b;
+        color: #f1f5f9;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+        z-index: 9999;
+        max-width: 360px;
+        text-align: center;
+        transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
+        opacity: 0;
+        pointer-events: none;
+        white-space: pre-line;
+        line-height: 1.5;
+      }
+      .ai-toast.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+      .ai-toast.success { border-left: 4px solid #22c55e; }
+      .ai-toast.error   { border-left: 4px solid #ef4444; }
+      .ai-toast.info    { border-left: 4px solid #3b82f6; }
+
+
+
+      /* VIEW COUNTER */
+      .view-counter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 14px;
+        color: var(--text-muted);
+        font-size: 13px;
+        transition: color 0.25s;
+      }
+      .view-counter svg {
+        width: 15px; height: 15px;
+        stroke: var(--text-muted);
+        flex-shrink: 0;
+        transition: stroke 0.25s;
+      }
+      .view-counter-num {
+        font-weight: 700;
+        color: var(--text-primary);
+        font-size: 14px;
+        transition: color 0.25s;
+        letter-spacing: 0.3px;
+      }
+
     </style>
   </head>
   <body>
@@ -1116,6 +1161,7 @@
             <div class="hosts">CANADA · MEXICO · USA</div>
           </div>
           <div class="header-controls">
+
             <div class="lang-tz-toggle" id="langTzToggle">
               <div class="lang-tz-btn active" id="btnVN">
                 <span class="flag-icon">🇻🇳</span><span>VI</span>
@@ -1167,26 +1213,14 @@
                 >Ngày thi đấu</span
               >
             </label>
-            <select id="dateFilter" style="display: none">
+            <select id="dateFilter" style="display:none">
               <option value="">Tất cả ngày</option>
             </select>
             <div class="custom-select-wrapper" id="dateSelectWrapper">
               <div class="custom-select-trigger" id="dateSelectTrigger">
                 <span class="cs-label" id="dateSelectLabel">Tất cả ngày</span>
                 <span class="cs-chevron">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                 </span>
               </div>
               <div class="custom-select-dropdown" id="dateSelectDropdown"></div>
@@ -1213,7 +1247,7 @@
                 >Bảng đấu</span
               >
             </label>
-            <select id="groupFilter" style="display: none">
+            <select id="groupFilter" style="display:none">
               <option value="">Tất cả bảng</option>
               <option value="BẢNG A">Bảng A</option>
               <option value="BẢNG B">Bảng B</option>
@@ -1232,25 +1266,10 @@
               <div class="custom-select-trigger" id="groupSelectTrigger">
                 <span class="cs-label" id="groupSelectLabel">Tất cả bảng</span>
                 <span class="cs-chevron">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                 </span>
               </div>
-              <div
-                class="custom-select-dropdown"
-                id="groupSelectDropdown"
-              ></div>
+              <div class="custom-select-dropdown" id="groupSelectDropdown"></div>
             </div>
           </div>
           <div class="filter-group full" id="teamFilterGroup">
@@ -1390,8 +1409,22 @@
         <span class="i18n" data-vi="Nguồn:" data-en="Source:">Nguồn:</span>
         <span>Brian Le</span>
       </div>
+
+      <div class="view-counter">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+          <path d="M21 12c-2.4 4-5.4 6-9 6c-3.6 0-6.6-2-9-6c2.4-4 5.4-6 9-6c3.6 0 6.6 2 9 6"/>
+        </svg>
+        <span class="view-counter-num" id="viewCountNum">...</span>
+        <span id="viewCountLabel">lượt xem</span>
+      </div>
+
     </div>
 
+
+
+    <!-- TOAST -->
+    <div class="ai-toast" id="aiToast"></div>
     <script>
       var SVG_SUN =
         '<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>';
@@ -1693,14 +1726,10 @@
         // Rebuild custom date dropdown
         var currentVal = sel.value;
         var currentText = currentVal
-          ? (function () {
-              var o = order.find(function (x) {
-                return x.date === currentVal;
-              });
+          ? (function() {
+              var o = order.find(function(x){ return x.date === currentVal; });
               if (!o) return allLabel;
-              return currentLang === "vi"
-                ? o.dayVN + " " + o.date
-                : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+              return currentLang === "vi" ? o.dayVN + " " + o.date : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
             })()
           : allLabel;
         document.getElementById("dateSelectLabel").textContent = currentText;
@@ -1712,27 +1741,22 @@
         allOpt.textContent = allLabel;
         dd.appendChild(allOpt);
         order.forEach(function (o) {
-          var label =
-            currentLang === "vi"
-              ? o.dayVN + " " + o.date
-              : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+          var label = currentLang === "vi"
+            ? o.dayVN + " " + o.date
+            : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
           var div = document.createElement("div");
-          div.className =
-            "cs-option" + (currentVal === o.date ? " selected" : "");
+          div.className = "cs-option" + (currentVal === o.date ? " selected" : "");
           div.setAttribute("data-value", o.date);
           div.textContent = label;
           dd.appendChild(div);
         });
         // Attach click handlers
-        dd.querySelectorAll(".cs-option").forEach(function (opt) {
-          opt.addEventListener("click", function () {
+        dd.querySelectorAll(".cs-option").forEach(function(opt) {
+          opt.addEventListener("click", function() {
             var val = this.getAttribute("data-value");
             document.getElementById("dateFilter").value = val;
-            document.getElementById("dateSelectLabel").textContent =
-              this.textContent;
-            dd.querySelectorAll(".cs-option").forEach(function (o) {
-              o.classList.remove("selected");
-            });
+            document.getElementById("dateSelectLabel").textContent = this.textContent;
+            dd.querySelectorAll(".cs-option").forEach(function(o){ o.classList.remove("selected"); });
             this.classList.add("selected");
             closeDateDropdown();
             render();
@@ -1741,26 +1765,11 @@
       }
 
       function rebuildGroupFilter() {
-        var groups = [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G",
-          "H",
-          "I",
-          "J",
-          "K",
-          "L",
-        ];
+        var groups = ["A","B","C","D","E","F","G","H","I","J","K","L"];
         var allLabel = currentLang === "vi" ? "Tất cả bảng" : "All groups";
         var currentVal = document.getElementById("groupFilter").value;
         var currentText = currentVal
-          ? currentLang === "vi"
-            ? currentVal.replace("BẢNG ", "Bảng ")
-            : currentVal.replace("BẢNG ", "Group ")
+          ? (currentLang === "vi" ? currentVal.replace("BẢNG ","Bảng ") : currentVal.replace("BẢNG ","Group "))
           : allLabel;
         document.getElementById("groupSelectLabel").textContent = currentText;
         var dd = document.getElementById("groupSelectDropdown");
@@ -1770,7 +1779,7 @@
         allOpt.setAttribute("data-value", "");
         allOpt.textContent = allLabel;
         dd.appendChild(allOpt);
-        groups.forEach(function (g) {
+        groups.forEach(function(g) {
           var val = "BẢNG " + g;
           var label = currentLang === "vi" ? "Bảng " + g : "Group " + g;
           var div = document.createElement("div");
@@ -1779,15 +1788,12 @@
           div.textContent = label;
           dd.appendChild(div);
         });
-        dd.querySelectorAll(".cs-option").forEach(function (opt) {
-          opt.addEventListener("click", function () {
+        dd.querySelectorAll(".cs-option").forEach(function(opt) {
+          opt.addEventListener("click", function() {
             var val = this.getAttribute("data-value");
             document.getElementById("groupFilter").value = val;
-            document.getElementById("groupSelectLabel").textContent =
-              this.textContent;
-            dd.querySelectorAll(".cs-option").forEach(function (o) {
-              o.classList.remove("selected");
-            });
+            document.getElementById("groupSelectLabel").textContent = this.textContent;
+            dd.querySelectorAll(".cs-option").forEach(function(o){ o.classList.remove("selected"); });
             this.classList.add("selected");
             closeGroupDropdown();
             render();
@@ -2807,33 +2813,19 @@
         document.getElementById("groupSelectDropdown").classList.remove("open");
         document.getElementById("groupSelectTrigger").classList.remove("open");
       }
-      document
-        .getElementById("dateSelectTrigger")
-        .addEventListener("click", function (e) {
-          e.stopPropagation();
-          if (groupDropOpen) closeGroupDropdown();
-          if (dateDropOpen) closeDateDropdown();
-          else openDateDropdown();
-        });
-      document
-        .getElementById("groupSelectTrigger")
-        .addEventListener("click", function (e) {
-          e.stopPropagation();
-          if (dateDropOpen) closeDateDropdown();
-          if (groupDropOpen) closeGroupDropdown();
-          else openGroupDropdown();
-        });
-      document.addEventListener("click", function (e) {
-        if (
-          dateDropOpen &&
-          !document.getElementById("dateSelectWrapper").contains(e.target)
-        )
-          closeDateDropdown();
-        if (
-          groupDropOpen &&
-          !document.getElementById("groupSelectWrapper").contains(e.target)
-        )
-          closeGroupDropdown();
+      document.getElementById("dateSelectTrigger").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (groupDropOpen) closeGroupDropdown();
+        if (dateDropOpen) closeDateDropdown(); else openDateDropdown();
+      });
+      document.getElementById("groupSelectTrigger").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (dateDropOpen) closeDateDropdown();
+        if (groupDropOpen) closeGroupDropdown(); else openGroupDropdown();
+      });
+      document.addEventListener("click", function(e) {
+        if (dateDropOpen && !document.getElementById("dateSelectWrapper").contains(e.target)) closeDateDropdown();
+        if (groupDropOpen && !document.getElementById("groupSelectWrapper").contains(e.target)) closeGroupDropdown();
       });
 
       // Init
@@ -2841,6 +2833,84 @@
       rebuildGroupFilter();
       renderTeamList("");
       render();
+
+
+      // ===== VIEW COUNTER (counterapi.dev) =====
+      var COUNTER_LS_KEY   = 'wc2026_last_view';   // timestamp lần xem cuối
+      var COUNTER_OWNER_KEY = 'wc2026_is_owner';   // flag chủ sở hữu
+      var COUNTER_COOLDOWN  = 60 * 60 * 1000;      // 1 tiếng (ms)
+
+      function formatCount(count) {
+        if (count >= 1000000) return (count / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (count >= 1000)    return Math.floor(count / 1000) + 'K';
+        return count.toString();
+      }
+
+      async function fetchCountOnly() {
+        // Chỉ đọc, không tăng (dùng endpoint /info hoặc /up nhưng đọc count hiện tại)
+        var r = await fetch('https://api.counterapi.dev/v1/hunglehien1012/worldcup2026');
+        if (!r.ok) throw new Error();
+        return (await r.json()).count || 0;
+      }
+
+      async function fetchAndIncrement() {
+        var r = await fetch('https://api.counterapi.dev/v1/hunglehien1012/worldcup2026/up');
+        if (!r.ok) throw new Error();
+        return (await r.json()).count || 0;
+      }
+
+      async function initViewCounter() {
+        var numEl   = document.getElementById('viewCountNum');
+        var labelEl = document.getElementById('viewCountLabel');
+        try {
+          var isOwner = false;
+          var shouldCount = false;
+
+          try { isOwner = !!localStorage.getItem(COUNTER_OWNER_KEY); } catch(e) {}
+
+          if (isOwner) {
+            // Chủ sở hữu: chỉ đọc số, không tăng
+            var count = await fetchCountOnly();
+            numEl.textContent = formatCount(count);
+          } else {
+            // Kiểm tra cooldown 1 tiếng
+            var lastView = 0;
+            try { lastView = parseInt(localStorage.getItem(COUNTER_LS_KEY) || '0'); } catch(e) {}
+            var now = Date.now();
+            shouldCount = (now - lastView) >= COUNTER_COOLDOWN;
+
+            var count;
+            if (shouldCount) {
+              count = await fetchAndIncrement();
+              try { localStorage.setItem(COUNTER_LS_KEY, now.toString()); } catch(e) {}
+            } else {
+              count = await fetchCountOnly();
+            }
+            numEl.textContent = formatCount(count);
+          }
+
+          labelEl.textContent = currentLang === 'vi' ? 'lượt xem' : 'views';
+        } catch(e) {
+          numEl.textContent = '';
+          labelEl.textContent = '';
+        }
+      }
+
+      // Hàm đánh dấu thiết bị hiện tại là chủ sở hữu (gọi từ console: setOwnerDevice())
+      window.setOwnerDevice = function() {
+        try {
+          localStorage.setItem(COUNTER_OWNER_KEY, '1');
+          console.log('%c✅ Thiết bị này đã được đánh dấu là chủ sở hữu. Lượt xem sẽ không được tính.', 'color: green; font-weight: bold');
+        } catch(e) { console.error('Không thể lưu vào localStorage'); }
+      };
+      window.removeOwnerDevice = function() {
+        try {
+          localStorage.removeItem(COUNTER_OWNER_KEY);
+          console.log('%c✅ Đã xóa flag chủ sở hữu.', 'color: orange; font-weight: bold');
+        } catch(e) {}
+      };
+
+      initViewCounter();
 
       // Sticky shadow on scroll
       window.addEventListener("scroll", function () {
