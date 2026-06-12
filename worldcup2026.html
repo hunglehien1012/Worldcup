@@ -91,6 +91,32 @@
         width: 100%;
       }
 
+      /* STICKY TOP */
+      .sticky-top {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--bg-page);
+        padding-top: 4px;
+        margin-bottom: 0;
+        transition:
+          background 0.25s,
+          box-shadow 0.25s;
+      }
+      .sticky-top.scrolled {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+      .sticky-top .header {
+        margin-bottom: 8px;
+        border-radius: 10px;
+      }
+      .sticky-top .filters {
+        margin-bottom: 8px;
+      }
+      .sticky-top .stats {
+        margin-bottom: 8px;
+      }
+
       /* HEADER */
       .header {
         background: linear-gradient(
@@ -996,211 +1022,49 @@
   </head>
   <body>
     <div class="container">
-      <div class="header">
-        <div class="logo-circle">FIFA<br />2026</div>
-        <div class="header-text">
-          <h1 id="headerTitle">LỊCH THI ĐẤU WORLD CUP 2026</h1>
-          <p id="headerTz">Giờ Việt Nam 🇻🇳 &nbsp;</p>
-          <div class="hosts">CANADA · MEXICO · USA</div>
-        </div>
-        <div class="header-controls">
-          <div class="lang-tz-toggle" id="langTzToggle">
-            <div class="lang-tz-btn active" id="btnVN">
-              <span class="flag-icon">🇻🇳</span><span>VI</span>
-            </div>
-            <div class="lang-tz-btn" id="btnUS">
-              <span class="flag-icon">🇺🇸</span><span>EN</span>
-            </div>
+      <div class="sticky-top">
+        <div class="header">
+          <div class="logo-circle">FIFA<br />2026</div>
+          <div class="header-text">
+            <h1 id="headerTitle">LỊCH THI ĐẤU WORLD CUP 2026</h1>
+            <p id="headerTz">Giờ Việt Nam 🇻🇳 &nbsp;</p>
+            <div class="hosts">CANADA · MEXICO · USA</div>
           </div>
-          <div class="theme-toggle" id="themeToggle">
-            <div class="toggle-track">
-              <div class="toggle-knob">
-                <svg
-                  id="toggleIcon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                  <path
-                    d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"
-                  />
-                </svg>
+          <div class="header-controls">
+            <div class="lang-tz-toggle" id="langTzToggle">
+              <div class="lang-tz-btn active" id="btnVN">
+                <span class="flag-icon">🇻🇳</span><span>VI</span>
+              </div>
+              <div class="lang-tz-btn" id="btnUS">
+                <span class="flag-icon">🇺🇸</span><span>EN</span>
+              </div>
+            </div>
+            <div class="theme-toggle" id="themeToggle">
+              <div class="toggle-track">
+                <div class="toggle-knob">
+                  <svg
+                    id="toggleIcon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                    <path
+                      d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="filters">
-        <div class="filter-group">
-          <label>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7"
-              />
-              <path d="M16 3v4M8 3v4M4 11h16M11 15h1M12 15v3" />
-            </svg>
-            <span class="i18n" data-vi="Ngày thi đấu" data-en="Match Date"
-              >Ngày thi đấu</span
-            >
-          </label>
-          <select id="dateFilter">
-            <option
-              value=""
-              class="i18n"
-              data-vi="Tất cả ngày"
-              data-en="All dates"
-            >
-              Tất cả ngày
-            </option>
-            <option
-              value="12/06"
-              class="i18n"
-              data-vi="Thứ Sáu 12/06"
-              data-en="Fri 12/06"
-            >
-              Thứ Sáu 12/06
-            </option>
-            <option
-              value="13/06"
-              class="i18n"
-              data-vi="Thứ Bảy 13/06"
-              data-en="Sat 13/06"
-            >
-              Thứ Bảy 13/06
-            </option>
-            <option
-              value="14/06"
-              class="i18n"
-              data-vi="Chủ Nhật 14/06"
-              data-en="Sun 14/06"
-            >
-              Chủ Nhật 14/06
-            </option>
-            <option
-              value="15/06"
-              class="i18n"
-              data-vi="Thứ Hai 15/06"
-              data-en="Mon 15/06"
-            >
-              Thứ Hai 15/06
-            </option>
-            <option
-              value="16/06"
-              class="i18n"
-              data-vi="Thứ Ba 16/06"
-              data-en="Tue 16/06"
-            >
-              Thứ Ba 16/06
-            </option>
-            <option
-              value="17/06"
-              class="i18n"
-              data-vi="Thứ Tư 17/06"
-              data-en="Wed 17/06"
-            >
-              Thứ Tư 17/06
-            </option>
-            <option
-              value="18/06"
-              class="i18n"
-              data-vi="Thứ Năm 18/06"
-              data-en="Thu 18/06"
-            >
-              Thứ Năm 18/06
-            </option>
-            <option
-              value="19/06"
-              class="i18n"
-              data-vi="Thứ Sáu 19/06"
-              data-en="Fri 19/06"
-            >
-              Thứ Sáu 19/06
-            </option>
-            <option
-              value="20/06"
-              class="i18n"
-              data-vi="Thứ Bảy 20/06"
-              data-en="Sat 20/06"
-            >
-              Thứ Bảy 20/06
-            </option>
-            <option
-              value="21/06"
-              class="i18n"
-              data-vi="Chủ Nhật 21/06"
-              data-en="Sun 21/06"
-            >
-              Chủ Nhật 21/06
-            </option>
-            <option
-              value="22/06"
-              class="i18n"
-              data-vi="Thứ Hai 22/06"
-              data-en="Mon 22/06"
-            >
-              Thứ Hai 22/06
-            </option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M8 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V6"
-              />
-              <path
-                d="M4 10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"
-              />
-            </svg>
-            <span class="i18n" data-vi="Bảng đấu" data-en="Group"
-              >Bảng đấu</span
-            >
-          </label>
-          <select id="groupFilter">
-            <option
-              value=""
-              class="i18n"
-              data-vi="Tất cả bảng"
-              data-en="All groups"
-            >
-              Tất cả bảng
-            </option>
-            <option value="BẢNG A">Bảng A / Group A</option>
-            <option value="BẢNG B">Bảng B / Group B</option>
-            <option value="BẢNG C">Bảng C / Group C</option>
-            <option value="BẢNG D">Bảng D / Group D</option>
-            <option value="BẢNG E">Bảng E / Group E</option>
-            <option value="BẢNG F">Bảng F / Group F</option>
-            <option value="BẢNG G">Bảng G / Group G</option>
-            <option value="BẢNG H">Bảng H / Group H</option>
-            <option value="BẢNG I">Bảng I / Group I</option>
-            <option value="BẢNG J">Bảng J / Group J</option>
-            <option value="BẢNG K">Bảng K / Group K</option>
-            <option value="BẢNG L">Bảng L / Group L</option>
-          </select>
-        </div>
-        <div class="filter-group full" id="teamFilterGroup">
-          <div class="team-filter-label-row">
-            <div class="team-filter-label-left">
+        <div class="filters">
+          <div class="filter-group">
+            <label>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -1210,106 +1074,177 @@
                 stroke-linejoin="round"
               >
                 <path
-                  d="M15 4l6 2v5h-3v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8H3v-5l6-2a3 3 0 0 0 6 0"
+                  d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7"
                 />
+                <path d="M16 3v4M8 3v4M4 11h16M11 15h1M12 15v3" />
               </svg>
-              <span
-                class="i18n"
-                data-vi="Lọc theo đội bóng"
-                data-en="Filter by Team"
-                >Lọc theo đội bóng</span
+              <span class="i18n" data-vi="Ngày thi đấu" data-en="Match Date"
+                >Ngày thi đấu</span
               >
-            </div>
-            <button class="clear-label-btn" id="clearLabelBtn">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M18 6l-12 12" />
-                <path d="M6 6l12 12" />
-              </svg>
-              <span class="i18n" data-vi="Xóa tất cả" data-en="Clear all"
-                >Xóa tất cả</span
-              >
-            </button>
+            </label>
+            <select id="dateFilter">
+              <option value="">Tất cả ngày</option>
+            </select>
           </div>
-          <div class="team-select-wrapper" id="teamSelectWrapper">
-            <div class="team-select-trigger" id="teamSelectTrigger">
-              <div class="team-chips" id="teamChips">
-                <span class="trigger-placeholder" id="triggerPlaceholder"
-                  >Chọn đội bóng...</span
-                >
-              </div>
+          <div class="filter-group">
+            <label>
               <svg
-                class="trigger-chevron"
-                id="triggerChevron"
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
+                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </div>
-            <div class="team-dropdown" id="teamDropdown">
-              <div class="team-search-box">
-                <input
-                  type="text"
-                  id="teamSearchInput"
-                  autocomplete="off"
-                  placeholder="Tìm đội (tiếng Việt hoặc tiếng Anh)..."
+                <path
+                  d="M8 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V6"
                 />
-              </div>
-              <div class="team-list" id="teamList"></div>
-              <button class="clear-all-btn" id="clearAllBtn">
-                ✕
+                <path
+                  d="M4 10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"
+                />
+              </svg>
+              <span class="i18n" data-vi="Bảng đấu" data-en="Group"
+                >Bảng đấu</span
+              >
+            </label>
+            <select id="groupFilter">
+              <option
+                value=""
+                class="i18n"
+                data-vi="Tất cả bảng"
+                data-en="All groups"
+              >
+                Tất cả bảng
+              </option>
+              <option value="BẢNG A">Bảng A / Group A</option>
+              <option value="BẢNG B">Bảng B / Group B</option>
+              <option value="BẢNG C">Bảng C / Group C</option>
+              <option value="BẢNG D">Bảng D / Group D</option>
+              <option value="BẢNG E">Bảng E / Group E</option>
+              <option value="BẢNG F">Bảng F / Group F</option>
+              <option value="BẢNG G">Bảng G / Group G</option>
+              <option value="BẢNG H">Bảng H / Group H</option>
+              <option value="BẢNG I">Bảng I / Group I</option>
+              <option value="BẢNG J">Bảng J / Group J</option>
+              <option value="BẢNG K">Bảng K / Group K</option>
+              <option value="BẢNG L">Bảng L / Group L</option>
+            </select>
+          </div>
+          <div class="filter-group full" id="teamFilterGroup">
+            <div class="team-filter-label-row">
+              <div class="team-filter-label-left">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M15 4l6 2v5h-3v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8H3v-5l6-2a3 3 0 0 0 6 0"
+                  />
+                </svg>
                 <span
                   class="i18n"
-                  data-vi="Xóa tất cả lựa chọn"
-                  data-en="Clear all selections"
-                  >Xóa tất cả lựa chọn</span
+                  data-vi="Lọc theo đội bóng"
+                  data-en="Filter by Team"
+                  >Lọc theo đội bóng</span
+                >
+              </div>
+              <button class="clear-label-btn" id="clearLabelBtn">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 6l-12 12" />
+                  <path d="M6 6l12 12" />
+                </svg>
+                <span class="i18n" data-vi="Xóa tất cả" data-en="Clear all"
+                  >Xóa tất cả</span
                 >
               </button>
             </div>
+            <div class="team-select-wrapper" id="teamSelectWrapper">
+              <div class="team-select-trigger" id="teamSelectTrigger">
+                <div class="team-chips" id="teamChips">
+                  <span class="trigger-placeholder" id="triggerPlaceholder"
+                    >Chọn đội bóng...</span
+                  >
+                </div>
+                <svg
+                  class="trigger-chevron"
+                  id="triggerChevron"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </div>
+              <div class="team-dropdown" id="teamDropdown">
+                <div class="team-search-box">
+                  <input
+                    type="text"
+                    id="teamSearchInput"
+                    autocomplete="off"
+                    placeholder="Tìm đội (tiếng Việt hoặc tiếng Anh)..."
+                  />
+                </div>
+                <div class="team-list" id="teamList"></div>
+                <button class="clear-all-btn" id="clearAllBtn">
+                  ✕
+                  <span
+                    class="i18n"
+                    data-vi="Xóa tất cả lựa chọn"
+                    data-en="Clear all selections"
+                    >Xóa tất cả lựa chọn</span
+                  >
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="stats">
-        <div class="stat">
-          <div class="num" id="statMatches">48</div>
-          <div class="lbl i18n" data-vi="Trận đấu" data-en="Matches">
-            Trận đấu
+        <div class="stats">
+          <div class="stat">
+            <div class="num" id="statMatches">48</div>
+            <div class="lbl i18n" data-vi="Trận đấu" data-en="Matches">
+              Trận đấu
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num" id="statDays">9</div>
+            <div class="lbl i18n" data-vi="Ngày thi đấu" data-en="Match Days">
+              Ngày thi đấu
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num" id="statGroups">12</div>
+            <div class="lbl i18n" data-vi="Bảng đấu" data-en="Groups">
+              Bảng đấu
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num" id="statTeams">48</div>
+            <div class="lbl i18n" data-vi="Đội bóng" data-en="Teams">
+              Đội bóng
+            </div>
           </div>
         </div>
-        <div class="stat">
-          <div class="num" id="statDays">9</div>
-          <div class="lbl i18n" data-vi="Ngày thi đấu" data-en="Match Days">
-            Ngày thi đấu
-          </div>
-        </div>
-        <div class="stat">
-          <div class="num" id="statGroups">12</div>
-          <div class="lbl i18n" data-vi="Bảng đấu" data-en="Groups">
-            Bảng đấu
-          </div>
-        </div>
-        <div class="stat">
-          <div class="num" id="statTeams">48</div>
-          <div class="lbl i18n" data-vi="Đội bóng" data-en="Teams">
-            Đội bóng
-          </div>
-        </div>
+        <!-- /stats -->
       </div>
+      <!-- /sticky-top -->
 
       <div
         class="week-label i18n"
@@ -1585,6 +1520,56 @@
         "Thứ Bảy": "Saturday",
         "Chủ Nhật": "Sunday",
       };
+      var EN_DAY_SHORT = {
+        "Thứ Hai": "Mon",
+        "Thứ Ba": "Tue",
+        "Thứ Tư": "Wed",
+        "Thứ Năm": "Thu",
+        "Thứ Sáu": "Fri",
+        "Thứ Bảy": "Sat",
+        "Chủ Nhật": "Sun",
+      };
+
+      function rebuildDateFilter() {
+        var seen = {},
+          order = [];
+        DATA.forEach(function (m) {
+          var dispDate = getMatchDisplayDate(m);
+          if (!seen[dispDate]) {
+            seen[dispDate] = true;
+            var ds = DATE_SEQUENCE.find(function (d) {
+              return d.date === dispDate;
+            });
+            order.push({ date: dispDate, dayVN: ds ? ds.day : "" });
+          }
+        });
+        order.sort(function (a, b) {
+          var ai = DATE_SEQUENCE.findIndex(function (d) {
+            return d.date === a.date;
+          });
+          var bi = DATE_SEQUENCE.findIndex(function (d) {
+            return d.date === b.date;
+          });
+          return ai - bi;
+        });
+        var sel = document.getElementById("dateFilter");
+        var prev = sel.value;
+        sel.innerHTML =
+          '<option value="">' +
+          (currentLang === "vi" ? "Tất cả ngày" : "All dates") +
+          "</option>";
+        order.forEach(function (o) {
+          var label =
+            currentLang === "vi"
+              ? o.dayVN + " " + o.date
+              : (EN_DAY_SHORT[o.dayVN] || "") + " " + o.date;
+          var opt = document.createElement("option");
+          opt.value = o.date;
+          opt.textContent = label;
+          sel.appendChild(opt);
+        });
+        if (prev) sel.value = prev;
+      }
       var ROUND_LABELS_VI = {
         group: "Vòng bảng",
         "round-of-32": "Vòng 1/16",
@@ -2084,6 +2069,7 @@
             .getElementById("btnUS")
             .classList.toggle("active", currentLang === "en");
           applyI18n();
+          rebuildDateFilter();
           renderChips();
           renderTeamList(document.getElementById("teamSearchInput").value);
           render();
@@ -2115,6 +2101,7 @@
         return (VN_NAMES[a] || a).localeCompare(VN_NAMES[b] || b, "vi");
       });
       var dropdownOpen = false;
+      var _skipClose = false;
       function openDropdown() {
         dropdownOpen = true;
         document.getElementById("teamDropdown").classList.add("open");
@@ -2141,6 +2128,10 @@
         });
       document.addEventListener("click", function (e) {
         if (!dropdownOpen) return;
+        if (_skipClose) {
+          _skipClose = false;
+          return;
+        }
         if (!document.getElementById("teamSelectWrapper").contains(e.target))
           closeDropdown();
       });
@@ -2158,7 +2149,10 @@
       }
       document
         .getElementById("clearAllBtn")
-        .addEventListener("click", clearAll);
+        .addEventListener("click", function (e) {
+          e.stopPropagation();
+          clearAll();
+        });
       document
         .getElementById("clearLabelBtn")
         .addEventListener("click", function (e) {
@@ -2171,6 +2165,7 @@
           .classList.toggle("visible", selectedTeams.length > 0);
       }
       function toggleTeam(k) {
+        _skipClose = true;
         var i = selectedTeams.indexOf(k);
         if (i === -1) selectedTeams.push(k);
         else selectedTeams.splice(i, 1);
@@ -2267,11 +2262,20 @@
       var expandedId = null;
 
       // ===== RENDER =====
+      function getMatchDisplayDate(m) {
+        // Returns the date string that this match appears under in the current lang/tz
+        if (currentLang === "en") {
+          var off = pdtDayOffset(m.time);
+          if (off !== 0) return shiftDate(m.date, off).date;
+        }
+        return m.date;
+      }
+
       function getFiltered() {
         var d = document.getElementById("dateFilter").value,
           g = document.getElementById("groupFilter").value;
         return DATA.filter(function (m) {
-          if (d && m.date !== d) return false;
+          if (d && getMatchDisplayDate(m) !== d) return false;
           if (g && m.group !== g) return false;
           if (
             selectedTeams.length > 0 &&
@@ -2544,8 +2548,15 @@
       document.getElementById("groupFilter").addEventListener("change", render);
 
       // Init
+      rebuildDateFilter();
       renderTeamList("");
       render();
+
+      // Sticky shadow on scroll
+      window.addEventListener("scroll", function () {
+        var sticky = document.querySelector(".sticky-top");
+        if (sticky) sticky.classList.toggle("scrolled", window.scrollY > 10);
+      });
     </script>
   </body>
 </html>
