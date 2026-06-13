@@ -494,6 +494,14 @@ var DATA = [
     away: "BOSNIA & HERZEGOVINA",
     group: "BẢNG B",
     round: "group",
+    result: {
+      homeScore: 1,
+      awayScore: 1,
+      goals: [
+        { team: "away", player: "J. Lukić", min: "21'" },
+        { team: "home", player: "C. Larin", min: "78'" },
+      ],
+    },
   },
   {
     id: 4,
