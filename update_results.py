@@ -10,7 +10,7 @@ import json
 import urllib.request
 
 SOURCE_URL = "https://worldcup26.ir/get/games"
-HTML_FILE  = "worldcup2026.html"
+HTML_FILE  = "worldcup2026.js"
 
 # Map tên đội API -> key trong HTML
 TEAM_MAP = {
