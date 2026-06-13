@@ -512,6 +512,17 @@ var DATA = [
     away: "PARAGUAY",
     group: "BẢNG D",
     round: "group",
+    result: {
+      homeScore: 4,
+      awayScore: 1,
+      goals: [
+        { team: "home", player: "D. Bobadilla (OG)", min: "7'" },
+        { team: "home", player: "F. Balogun", min: "31'" },
+        { team: "home", player: "F. Balogun", min: "45+5'" },
+        { team: "away", player: "Maurício", min: "73'" },
+        { team: "home", player: "G. Reyna", min: "90+8'" },
+      ],
+    },
   },
   {
     id: 5,
