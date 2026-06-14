@@ -69,59 +69,74 @@ function vnTimeToAMPM(t) {
 }
 
 // ===== FLAGS =====
+// Inline SVG cờ — hoạt động 100% không cần CDN, không cần internet
 var FLAGS = {
-  MEXICO: "🇲🇽",
-  "SOUTH AFRICA": "🇿🇦",
-  "SOUTH KOREA": "🇰🇷",
-  "CZECH REPUBLIC": "🇨🇿",
-  CANADA: "🇨🇦",
-  "BOSNIA & HERZEGOVINA": "🇧🇦",
-  "UNITED STATES": "🇺🇸",
-  PARAGUAY: "🇵🇾",
-  AUSTRALIA: "🇦🇺",
-  TÜRKİYE: "🇹🇷",
-  ARGENTINA: "🇦🇷",
-  ALGERIA: "🇩🇿",
-  GERMANY: "🇩🇪",
-  JAPAN: "🇯🇵",
-  BELGIUM: "🇧🇪",
-  EGYPT: "🇪🇬",
-  SPAIN: "🇪🇸",
-  IRAN: "🇮🇷",
-  FRANCE: "🇫🇷",
-  SENEGAL: "🇸🇳",
-  BRAZIL: "🇧🇷",
-  MOROCCO: "🇲🇦",
-  ENGLAND: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  CROATIA: "🇭🇷",
-  PORTUGAL: "🇵🇹",
-  GHANA: "🇬🇭",
-  NETHERLANDS: "🇳🇱",
-  TUNISIA: "🇹🇳",
-  COLOMBIA: "🇨🇴",
-  QATAR: "🇶🇦",
-  URUGUAY: "🇺🇾",
-  "SAUDI ARABIA": "🇸🇦",
-  SWITZERLAND: "🇨🇭",
-  AUSTRIA: "🇦🇹",
-  ITALY: "🇮🇹",
-  NORWAY: "🇳🇴",
-  DENMARK: "🇩🇰",
-  PANAMA: "🇵🇦",
-  POLAND: "🇵🇱",
-  "IVORY COAST": "🇨🇮",
-  HAITI: "🇭🇹",
-  SCOTLAND: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-  CURACAO: "🇨🇼",
-  SWEDEN: "🇸🇪",
-  "CAPE VERDE": "🇨🇻",
-  "NEW ZEALAND": "🇳🇿",
-  IRAQ: "🇮🇶",
-  JORDAN: "🇯🇴",
-  "DR CONGO": "🇨🇩",
-  UZBEKISTAN: "🇺🇿",
-  ECUADOR: "🇪🇨",
+  MEXICO: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#006847"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#ce1126"/></svg>',
+  "SOUTH AFRICA": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#007A4D"/><polygon points="0,0 1.2,1 0,2" fill="#FFB612"/><polygon points="0,0.2 1,1 0,1.8" fill="#000"/><rect y="0.7" width="3" height="0.6" fill="#FFB612"/><rect y="0.75" width="3" height="0.5" fill="#fff"/><rect y="0.83" width="3" height="0.34" fill="#DE3831"/></svg>',
+  "SOUTH KOREA": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#fff"/><circle cx="1.5" cy="1" r="0.45" fill="#C60C30"/><path d="M1.5,0.55 A0.45,0.45 0 0,1 1.5,1.45" fill="#003478"/></svg>',
+  "CZECH REPUBLIC": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#fff"/><rect y="1" width="3" height="1" fill="#D7141A"/><polygon points="0,0 1.5,1 0,2" fill="#11457E"/></svg>',
+  CANADA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#fff"/><rect width="0.75" height="2" fill="#FF0000"/><rect x="2.25" width="0.75" height="2" fill="#FF0000"/><polygon points="1.5,0.3 1.35,0.8 0.85,0.75 1.2,1.05 1,1.5 1.5,1.2 2,1.5 1.8,1.05 2.15,0.75 1.65,0.8" fill="#FF0000"/></svg>',
+  "BOSNIA & HERZEGOVINA": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#002395"/><polygon points="0.5,0 2.5,2 0.5,2" fill="#FBDE23"/></svg>',
+  "UNITED STATES": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10"><rect width="19" height="10" fill="#B22234"/><rect y="0.77" width="19" height="0.77" fill="#fff"/><rect y="1.54" width="19" height="0.77" fill="#B22234"/><rect y="2.31" width="19" height="0.77" fill="#fff"/><rect y="3.08" width="19" height="0.77" fill="#B22234"/><rect y="3.85" width="19" height="0.77" fill="#fff"/><rect y="4.62" width="19" height="0.77" fill="#B22234"/><rect y="5.38" width="19" height="0.77" fill="#fff"/><rect y="6.15" width="19" height="0.77" fill="#B22234"/><rect y="6.92" width="19" height="0.77" fill="#fff"/><rect y="7.69" width="19" height="0.77" fill="#B22234"/><rect y="8.46" width="19" height="0.77" fill="#fff"/><rect y="9.23" width="19" height="0.77" fill="#B22234"/><rect width="7.6" height="5.38" fill="#3C3B6E"/></svg>',
+  PARAGUAY: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#D52B1E"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><rect y="1.33" width="3" height="0.67" fill="#009B3A"/></svg>',
+  AUSTRALIA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#00008B"/><rect width="1.2" height="1" fill="#C8102E"/><rect x="0.5" width="0.2" height="1" fill="#fff"/><rect y="0.4" width="1.2" height="0.2" fill="#fff"/><rect x="0.1" y="0.1" width="1" height="0.8" fill="none" stroke="#fff" stroke-width="0.3"/></svg>',
+  TÜRKİYE: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#E30A17"/><circle cx="1.2" cy="1" r="0.4" fill="#fff"/><circle cx="1.35" cy="1" r="0.32" fill="#E30A17"/><polygon points="1.7,1 1.95,0.88 1.87,1.15 2.05,0.92 1.78,1.08 2.05,1.08 1.78,0.92 1.87,1.08 1.95,1.12 1.7,1" fill="#fff"/></svg>',
+  ARGENTINA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#74ACDF"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><circle cx="1.5" cy="1" r="0.2" fill="#F6B40E"/></svg>',
+  ALGERIA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1.5" height="2" fill="#fff"/><rect x="1.5" width="1.5" height="2" fill="#006233"/><circle cx="1.35" cy="1" r="0.35" fill="#D21034"/><circle cx="1.45" cy="1" r="0.27" fill="#fff"/></svg>',
+  GERMANY: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 3"><rect width="5" height="3" fill="#000"/><rect y="1" width="5" height="1" fill="#DD0000"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg>',
+  JAPAN: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#fff"/><circle cx="1.5" cy="1" r="0.4" fill="#BC002D"/></svg>',
+  BELGIUM: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#000"/><rect x="1" width="1" height="2" fill="#FAE042"/><rect x="2" width="1" height="2" fill="#ED2939"/></svg>',
+  EGYPT: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#CE1126"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><rect y="1.33" width="3" height="0.67" fill="#000"/><rect x="1.3" y="0.75" width="0.4" height="0.5" fill="#C09300"/></svg>',
+  SPAIN: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#AA151B"/><rect y="0.5" width="3" height="1" fill="#F1BF00"/></svg>',
+  IRAN: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#239F40"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><rect y="1.33" width="3" height="0.67" fill="#DA0000"/></svg>',
+  FRANCE: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#002395"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#ED2939"/></svg>',
+  SENEGAL: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#00853F"/><rect x="1" width="1" height="2" fill="#FDEF42"/><rect x="2" width="1" height="2" fill="#E31B23"/><polygon points="1.5,0.5 1.6,0.85 1.95,0.85 1.67,1.05 1.77,1.4 1.5,1.2 1.23,1.4 1.33,1.05 1.05,0.85 1.4,0.85" fill="#00853F"/></svg>',
+  BRAZIL: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#009C3B"/><polygon points="1.5,0.2 2.9,1 1.5,1.8 0.1,1" fill="#FEDF00"/><circle cx="1.5" cy="1" r="0.35" fill="#002776"/></svg>',
+  MOROCCO: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#C1272D"/><polygon points="1.5,0.5 1.62,0.88 2,0.88 1.69,1.1 1.81,1.5 1.5,1.28 1.19,1.5 1.31,1.1 1,0.88 1.38,0.88" fill="none" stroke="#006233" stroke-width="0.06"/></svg>',
+  ENGLAND: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#fff"/><rect x="1.3" width="0.4" height="2" fill="#CF111A"/><rect y="0.8" width="3" height="0.4" fill="#CF111A"/></svg>',
+  CROATIA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#FF0000"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><rect y="1.33" width="3" height="0.67" fill="#0000CC"/></svg>',
+  PORTUGAL: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#006600"/><rect x="1" width="2" height="2" fill="#FF0000"/><circle cx="1" cy="1" r="0.3" fill="#FFD700" stroke="#003399" stroke-width="0.05"/></svg>',
+  GHANA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#006B3F"/><rect y="0.67" width="3" height="0.67" fill="#FCD116"/><rect y="1.33" width="3" height="0.67" fill="#CE1126"/><polygon points="1.5,0.67 1.62,1.05 2,1.05 1.69,1.28 1.81,1.67 1.5,1.44 1.19,1.67 1.31,1.28 1,1.05 1.38,1.05" fill="#000"/></svg>',
+  NETHERLANDS: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#AE1C28"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><rect y="1.33" width="3" height="0.67" fill="#21468B"/></svg>',
+  TUNISIA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#E70013"/><circle cx="1.5" cy="1" r="0.5" fill="#fff"/><circle cx="1.5" cy="1" r="0.4" fill="#E70013"/><circle cx="1.4" cy="1" r="0.32" fill="#fff"/><circle cx="1.5" cy="1" r="0.25" fill="#E70013"/></svg>',
+  COLOMBIA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#FCD116"/><rect y="1" width="3" height="0.5" fill="#003087"/><rect y="1.5" width="3" height="0.5" fill="#CE1126"/></svg>',
+  QATAR: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="0.9" height="2" fill="#fff"/><polygon points="0.9,0 3,0 3,2 0.9,2 1.4,1.75 1.1,1.5 1.4,1.25 1.1,1 1.4,0.75 1.1,0.5 1.4,0.25" fill="#8D1B3D"/></svg>',
+  URUGUAY: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#fff"/><rect y="0.22" width="3" height="0.22" fill="#75AADB"/><rect y="0.67" width="3" height="0.22" fill="#75AADB"/><rect y="1.11" width="3" height="0.22" fill="#75AADB"/><rect y="1.56" width="3" height="0.22" fill="#75AADB"/><circle cx="0.6" cy="0.7" r="0.28" fill="#F4C800"/></svg>',
+  "SAUDI ARABIA": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#006C35"/><text x="1.5" y="1.2" font-size="0.6" text-anchor="middle" fill="#fff">🌴</text></svg>',
+  SWITZERLAND: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><rect width="1" height="1" fill="#FF0000"/><rect x="0.38" y="0.18" width="0.24" height="0.64" fill="#fff"/><rect x="0.18" y="0.38" width="0.64" height="0.24" fill="#fff"/></svg>',
+  AUSTRIA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#ED2939"/><rect y="0.67" width="3" height="0.67" fill="#fff"/></svg>',
+  ITALY: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>',
+  NORWAY: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 16"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg>',
+  DENMARK: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 28"><rect width="37" height="28" fill="#C60C30"/><rect x="12" width="5" height="28" fill="#fff"/><rect y="11.5" width="37" height="5" fill="#fff"/></svg>',
+  PANAMA: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 2"><rect width="2" height="1" fill="#fff"/><rect x="2" y="1" width="2" height="1" fill="#fff"/><rect x="2" width="2" height="1" fill="#D21034"/><rect y="1" width="2" height="1" fill="#0072C6"/><circle cx="1" cy="1" r="0.35" fill="#0072C6"/><circle cx="3" cy="1" r="0.35" fill="#D21034"/></svg>',
+  POLAND: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#fff"/><rect y="1" width="3" height="1" fill="#DC143C"/></svg>',
+  "IVORY COAST": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#F77F00"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#009A44"/></svg>',
+  HAITI: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#00209F"/><rect y="1" width="3" height="1" fill="#D21034"/><rect x="1.2" y="0.6" width="0.6" height="0.8" fill="#fff"/></svg>',
+  SCOTLAND: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 3"><rect width="5" height="3" fill="#005EB8"/><line x1="0" y1="0" x2="5" y2="3" stroke="#fff" stroke-width="0.7"/><line x1="5" y1="0" x2="0" y2="3" stroke="#fff" stroke-width="0.7"/></svg>',
+  CURACAO: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#002B7F"/><rect y="1.4" width="3" height="0.3" fill="#F9E814"/><circle cx="0.5" cy="0.6" r="0.15" fill="#fff"/><circle cx="0.8" cy="0.4" r="0.15" fill="#fff"/></svg>',
+  SWEDEN: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 10"><rect width="16" height="10" fill="#006AA7"/><rect x="5" width="2" height="10" fill="#FECC02"/><rect y="4" width="16" height="2" fill="#FECC02"/></svg>',
+  "CAPE VERDE": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#003893"/><rect y="1.1" width="3" height="0.25" fill="#fff"/><rect y="1.4" width="3" height="0.15" fill="#CF2027"/><rect y="1.6" width="3" height="0.25" fill="#fff"/></svg>',
+  "NEW ZEALAND": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#00247D"/><rect width="1.2" height="1" fill="#CC142B"/><rect x="0.5" width="0.2" height="1" fill="#fff"/><rect y="0.4" width="1.2" height="0.2" fill="#fff"/></svg>',
+  IRAQ: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#CE1126"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><rect y="1.33" width="3" height="0.67" fill="#000"/><text x="1.5" y="1.15" font-size="0.5" text-anchor="middle" fill="#007A3D">نصر</text></svg>',
+  JORDAN: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#007A3D"/><rect y="0.67" width="3" height="0.67" fill="#fff"/><rect y="1.33" width="3" height="0.67" fill="#000"/><polygon points="0,0 1,1 0,2" fill="#CE1126"/></svg>',
+  "DR CONGO": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#007FFF"/><line x1="0" y1="2" x2="3" y2="0" stroke="#F7D618" stroke-width="0.4"/><circle cx="0.2" cy="1.8" r="0.25" fill="#F7D618"/></svg>',
+  UZBEKISTAN: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#1EB53A"/><rect y="0.6" width="3" height="0.8" fill="#fff"/><rect y="0.67" width="3" height="0.07" fill="#CE1126"/><rect y="1.27" width="3" height="0.07" fill="#CE1126"/><rect width="3" height="0.6" fill="#1EBFAF"/></svg>',
+  ECUADOR: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#FFD100"/><rect y="0.5" width="3" height="0.75" fill="#034F8C"/><rect y="1.25" width="3" height="0.75" fill="#EF3340"/></svg>',
 };
+
+// Trả về thẻ SVG cờ inline — không cần CDN, hoạt động 100% mọi môi trường
+function getFlagImg(teamKey, size) {
+  var svg = FLAGS[teamKey];
+  if (!svg) return '<span style="font-size:1.2em">🏳</span>';
+  var px = size || 32;
+  var h = Math.round(px * 0.67);
+  return (
+    '<span style="display:inline-block;width:' + px + 'px;height:' + h + 'px;' +
+    'vertical-align:middle;border-radius:2px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);">' +
+    svg.replace('<svg ', '<svg style="width:100%;height:100%;" ') +
+    '</span>'
+  );
+}
 var VN_NAMES = {
   MEXICO: "Mexico",
   "SOUTH AFRICA": "Nam Phi",
@@ -533,6 +548,7 @@ var DATA = [
     away: "SWITZERLAND",
     group: "BẢNG B",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [{ team: "home", player: "M. Muheim (OG)", min: "90+4'" }, { team: "away", player: "B. Embolo", min: "17'" }] },
   },
   {
     id: 6,
@@ -543,6 +559,7 @@ var DATA = [
     away: "MOROCCO",
     group: "BẢNG C",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [{ team: "home", player: "Vinícius Jr.", min: "32'" }, { team: "away", player: "I. Saibari", min: "21'" }] },
   },
   {
     id: 7,
@@ -553,6 +570,7 @@ var DATA = [
     away: "SCOTLAND",
     group: "BẢNG C",
     round: "group",
+    result: { homeScore: 0, awayScore: 1, goals: [{ team: "away", player: "J. McGinn", min: "28'" }] },
   },
   {
     id: 8,
@@ -1036,7 +1054,7 @@ function renderChips() {
     .map(function (k) {
       return (
         '<span class="team-chip"><span class="chip-flag">' +
-        (FLAGS[k] || "🏳") +
+        getFlagImg(k, 20) +
         "</span><span>" +
         getTeamName(k) +
         '</span><span class="chip-remove" data-key="' +
@@ -1101,7 +1119,7 @@ function renderTeamList(q) {
         '" data-key="' +
         k +
         '"><span class="opt-flag">' +
-        (FLAGS[k] || "🏳") +
+        getFlagImg(k, 24) +
         '</span><span class="opt-name">' +
         getTeamName(k) +
         '</span><span class="opt-check"></span></div>'
@@ -1249,8 +1267,8 @@ function buildResultDetail(m) {
 }
 
 function matchCard(m) {
-  var hf = FLAGS[m.home] || "🏳",
-    af = FLAGS[m.away] || "🏳";
+  var hf = getFlagImg(m.home, 32),
+    af = getFlagImg(m.away, 32);
   var homeN = getTeamName(m.home),
     awayN = getTeamName(m.away);
   var primaryTime =
