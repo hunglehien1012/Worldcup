@@ -591,6 +591,7 @@ var DATA = [
     away: "CURACAO",
     group: "BẢNG E",
     round: "group",
+    result: { homeScore: 7, awayScore: 1, goals: [{ team: "home", player: "F. Nmecha", min: "6'" }, { team: "away", player: "L. Comenencia", min: "21'" }, { team: "home", player: "N. Schlotterbeck", min: "38'" }, { team: "home", player: "K. Havertz", min: "45+5' (P)" }, { team: "home", player: "J. Musiala", min: "47'" }, { team: "home", player: "N. Brown", min: "68'" }, { team: "home", player: "D. Undav", min: "78'" }, { team: "home", player: "K. Havertz", min: "88'" }], reds: [] },
   },
   {
     id: 10,
@@ -601,6 +602,7 @@ var DATA = [
     away: "JAPAN",
     group: "BẢNG F",
     round: "group",
+    result: { homeScore: 2, awayScore: 2, goals: [{ team: "home", player: "V. van Dijk", min: "51'" }, { team: "away", player: "K. Nakamura", min: "57'" }, { team: "home", player: "C. Summerville", min: "64'" }, { team: "away", player: "D. Kamada", min: "89'" }], reds: [] },
   },
   {
     id: 11,
@@ -611,6 +613,7 @@ var DATA = [
     away: "ECUADOR",
     group: "BẢNG E",
     round: "group",
+    result: { homeScore: 1, awayScore: 0, goals: [{ team: "home", player: "A. Diallo", min: "90'" }], reds: [] },
   },
   {
     id: 12,
