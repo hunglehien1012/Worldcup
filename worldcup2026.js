@@ -581,6 +581,7 @@ var DATA = [
     away: "TÜRKİYE",
     group: "BẢNG D",
     round: "group",
+    result: { homeScore: 2, awayScore: 0, goals: [{ team: "home", player: "N. Irankunda", min: "27'" }, { team: "home", player: "C. Metcalfe", min: "75'" }], reds: [] },
   },
   {
     id: 9,
