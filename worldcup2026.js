@@ -625,6 +625,7 @@ var DATA = [
     away: "TUNISIA",
     group: "BẢNG F",
     round: "group",
+    result: { homeScore: 5, awayScore: 1, goals: [{ team: "home", player: "Y. Ayari", min: "7'" }, { team: "home", player: "A. Isak", min: "30'" }, { team: "away", player: "O. Rekik", min: "43'" }, { team: "home", player: "V. Gyökeres", min: "59'" }, { team: "home", player: "M. Svanberg", min: "84'" }, { team: "home", player: "Y. Ayari", min: "90+6'" }], reds: [] },
   },
   {
     id: 13,
@@ -1238,26 +1239,25 @@ function buildResultDetail(m) {
     return a.sort - b.sort;
   });
 
-  var evRows = "";
-  allEvents.forEach(function (ev) {
-    var txt =
-      '<span class="rd-event-icon">' +
-      ev.icon +
-      "</span>" +
-      '<span class="rd-event-text">' +
-      ev.player +
-      "</span>" +
-      '<span class="rd-event-min">(' +
-      ev.min +
-      ")</span>";
-    if (ev.team === "home") {
-      evRows += '<div class="rd-event-home">' + txt + "</div><div></div>";
-    } else {
-      evRows += '<div></div><div class="rd-event-away">' + txt + "</div>";
-    }
+  function evTxt(ev) {
+    return '<div class="rd-event-row">' +
+      '<span class="rd-event-icon">' + ev.icon + "</span>" +
+      '<span class="rd-event-text">' + ev.player + "</span>" +
+      '<span class="rd-event-min">(' + ev.min + ")</span>" +
+      "</div>";
+  }
+  var homeRows = "", awayRows = "";
+  allEvents.forEach(function(ev) {
+    if (ev.team === "home") homeRows += evTxt(ev);
+    else awayRows += evTxt(ev);
   });
 
-  var events = evRows ? '<div class="rd-events">' + evRows + "</div>" : "";
+  var events = (homeRows || awayRows)
+    ? '<div class="rd-events">' +
+        '<div class="rd-events-home">' + homeRows + "</div>" +
+        '<div class="rd-events-away">' + awayRows + "</div>" +
+      "</div>"
+    : "";
   return (
     '<div class="result-detail' +
     (expandedId === m.id ? " open" : "") +
