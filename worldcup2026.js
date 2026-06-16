@@ -636,6 +636,7 @@ var DATA = [
     away: "CAPE VERDE",
     group: "BẢNG H",
     round: "group",
+    result: { homeScore: 0, awayScore: 0, goals: [], reds: [] },
   },
   {
     id: 14,
@@ -646,6 +647,7 @@ var DATA = [
     away: "EGYPT",
     group: "BẢNG G",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [{ team: "away", player: "E. Ashour", min: "20'" }, { team: "home", player: "M. Hany (OG)", min: "66'" }], reds: [] },
   },
   {
     id: 15,
@@ -656,6 +658,7 @@ var DATA = [
     away: "URUGUAY",
     group: "BẢNG H",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [{ team: "home", player: "A. Al-Amri", min: "41'" }, { team: "away", player: "M. Araújo", min: "80'" }], reds: [] },
   },
   {
     id: 16,
@@ -666,6 +669,7 @@ var DATA = [
     away: "NEW ZEALAND",
     group: "BẢNG G",
     round: "group",
+    result: { homeScore: 2, awayScore: 2, goals: [{ team: "away", player: "E. Just", min: "7'" }, { team: "home", player: "R. Rezaeian", min: "32'" }, { team: "away", player: "E. Just", min: "55'" }, { team: "home", player: "M. Mohebi", min: "64'" }], reds: [] },
   },
   {
     id: 17,
