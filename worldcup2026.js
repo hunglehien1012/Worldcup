@@ -680,6 +680,7 @@ var DATA = [
     away: "SENEGAL",
     group: "BẢNG I",
     round: "group",
+    result: { homeScore: 3, awayScore: 1, goals: [{ team: "home", player: "K. Mbappé", min: "66'" }, { team: "home", player: "B. Barcola", min: "82'" }, { team: "away", player: "I. Mbaye", min: "90+5'" }, { team: "home", player: "K. Mbappé", min: "90+6'" }], reds: [] },
   },
   {
     id: 18,
@@ -690,6 +691,7 @@ var DATA = [
     away: "NORWAY",
     group: "BẢNG I",
     round: "group",
+    result: { homeScore: 1, awayScore: 4, goals: [{ team: "away", player: "E. Haaland", min: "29'" }, { team: "home", player: "A. Hussein", min: "39'" }, { team: "away", player: "E. Haaland", min: "43'" }, { team: "away", player: "L. Østigård", min: "76'" }, { team: "away", player: "A. Hussein (OG)", min: "90+6'" }], reds: [] },
   },
   {
     id: 19,
@@ -700,6 +702,7 @@ var DATA = [
     away: "ALGERIA",
     group: "BẢNG J",
     round: "group",
+    result: { homeScore: 3, awayScore: 0, goals: [{ team: "home", player: "L. Messi", min: "17'" }, { team: "home", player: "L. Messi", min: "60'" }, { team: "home", player: "L. Messi", min: "76'" }], reds: [] },
   },
   {
     id: 20,
