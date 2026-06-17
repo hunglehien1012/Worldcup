@@ -713,6 +713,7 @@ var DATA = [
     away: "JORDAN",
     group: "BẢNG J",
     round: "group",
+    result: { homeScore: 3, awayScore: 1, goals: [{ team: "home", player: "R. Schmid", min: "21'" }, { team: "away", player: "A. Olwan", min: "50'" }, { team: "home", player: "Y. Al-Arab (OG)", min: "76'" }, { team: "home", player: "M. Arnautović", min: "90+12' (P)" }], reds: [] },
   },
   {
     id: 21,
