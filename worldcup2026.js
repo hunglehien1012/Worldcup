@@ -724,6 +724,7 @@ var DATA = [
     away: "DR CONGO",
     group: "BẢNG K",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [{ team: "home", player: "J. Neves", min: "6'" }, { team: "away", player: "Y. Wissa", min: "45+5'" }], reds: [] },
   },
   {
     id: 22,
@@ -734,6 +735,7 @@ var DATA = [
     away: "CROATIA",
     group: "BẢNG L",
     round: "group",
+    result: { homeScore: 4, awayScore: 2, goals: [{ team: "home", player: "H. Kane", min: "12' (P)" }, { team: "away", player: "M. Baturina", min: "36'" }, { team: "home", player: "H. Kane", min: "42'" }, { team: "away", player: "P. Musa", min: "45+5'" }, { team: "home", player: "J. Bellingham", min: "47'" }, { team: "home", player: "M. Rashford", min: "85'" }], reds: [] },
   },
   {
     id: 23,
@@ -744,6 +746,7 @@ var DATA = [
     away: "PANAMA",
     group: "BẢNG L",
     round: "group",
+    result: { homeScore: 1, awayScore: 0, goals: [{ team: "home", player: "C. Yirenkyi", min: "90+5'" }], reds: [] },
   },
   {
     id: 24,
