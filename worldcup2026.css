@@ -1156,6 +1156,22 @@
       }
 
       /* PAST DAY in date dropdown */
+      .cs-week-header {
+        padding: 6px 14px 3px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        pointer-events: none;
+        user-select: none;
+        border-top: 1px solid var(--border);
+        margin-top: 2px;
+      }
+      .cs-week-header:first-child {
+        border-top: none;
+        margin-top: 0;
+      }
       .cs-option.past-day {
         opacity: 0.4;
       }
