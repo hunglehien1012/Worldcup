@@ -831,6 +831,7 @@ var DATA = [
     away: "AUSTRALIA",
     group: "BẢNG C",
     round: "group",
+    result: { homeScore: 2, awayScore: 0, goals: [{ team: "home", player: "C. Burgess (OG)", min: "11'" }, { team: "home", player: "A. Freeman", min: "43'" }], reds: [] },
   },
   {
     id: 30,
@@ -841,6 +842,7 @@ var DATA = [
     away: "MOROCCO",
     group: "BẢNG D",
     round: "group",
+    result: { homeScore: 0, awayScore: 1, goals: [{ team: "away", player: "I. Saibari", min: "2'" }], reds: [] },
   },
   {
     id: 31,
@@ -851,6 +853,7 @@ var DATA = [
     away: "HAITI",
     group: "BẢNG D",
     round: "group",
+    result: { homeScore: 3, awayScore: 0, goals: [{ team: "home", player: "M. Cunha", min: "23'" }, { team: "home", player: "M. Cunha", min: "36'" }, { team: "home", player: "Vinícius Jr.", min: "45+3'" }], reds: [] },
   },
   {
     id: 32,
@@ -861,6 +864,7 @@ var DATA = [
     away: "PARAGUAY",
     group: "BẢNG C",
     round: "group",
+    result: { homeScore: 0, awayScore: 1, goals: [{ team: "away", player: "M. Galarza", min: "2'" }], reds: [{ team: "away", player: "M. Almirón", min: "45+3'" }] },
   },
   {
     id: 33,
@@ -881,6 +885,7 @@ var DATA = [
     away: "IVORY COAST",
     group: "BẢNG E",
     round: "group",
+    result: { homeScore: 2, awayScore: 1, goals: [{ team: "away", player: "F. Kessié", min: "30'" }, { team: "home", player: "D. Undav", min: "68'" }, { team: "home", player: "D. Undav", min: "90+4'" }], reds: [] },
   },
   {
     id: 35,
@@ -891,6 +896,7 @@ var DATA = [
     away: "CURACAO",
     group: "BẢNG E",
     round: "group",
+    result: { homeScore: 0, awayScore: 0, goals: [], reds: [] },
   },
   {
     id: 36,
@@ -901,6 +907,7 @@ var DATA = [
     away: "JAPAN",
     group: "BẢNG F",
     round: "group",
+    result: { homeScore: 0, awayScore: 4, goals: [{ team: "away", player: "D. Kamada", min: "4'" }, { team: "away", player: "A. Ueda", min: "31'" }, { team: "away", player: "J. Ito", min: "69'" }, { team: "away", player: "A. Ueda", min: "83'" }], reds: [] },
   },
   {
     id: 37,
