@@ -875,6 +875,7 @@ var DATA = [
     away: "SWEDEN",
     group: "BẢNG F",
     round: "group",
+    result: { homeScore: 5, awayScore: 1, goals: [{ team: "home", player: "B. Brobbey", min: "5'" }, { team: "home", player: "B. Brobbey", min: "17'" }, { team: "home", player: "C. Gakpo", min: "47'" }, { team: "home", player: "C. Gakpo", min: "54'" }, { team: "home", player: "C. Summerville", min: "89'" }, { team: "away", player: "A. Elanga", min: "59'" }], reds: [] },
   },
   {
     id: 34,
