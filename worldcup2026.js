@@ -777,6 +777,7 @@ var DATA = [
     away: "COLOMBIA",
     group: "BẢNG K",
     round: "group",
+    result: { homeScore: 1, awayScore: 3, goals: [{ team: "away", player: "L. Díaz", min: "15'" }, { team: "away", player: "D. Muñoz", min: "36'" }, { team: "home", player: "A. Fayzullaev", min: "74'" }, { team: "away", player: "J. Rodríguez", min: "89'" }], reds: [] },
   },
   // --- Lượt 2 ---
   {
@@ -788,6 +789,7 @@ var DATA = [
     away: "SOUTH AFRICA",
     group: "BẢNG A",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [{ team: "home", player: "M. Sadílek", min: "6'" }, { team: "away", player: "T. Mokoena", min: "83' (P)" }], reds: [] },
   },
   {
     id: 26,
@@ -919,6 +921,7 @@ var DATA = [
     away: "SAUDI ARABIA",
     group: "BẢNG G",
     round: "group",
+    result: { homeScore: 4, awayScore: 0, goals: [{ team: "home", player: "L. Yamal", min: "10'" }, { team: "home", player: "M. Oyarzabal", min: "21'" }, { team: "home", player: "M. Oyarzabal", min: "24'" }, { team: "home", player: "H. Al-Tambakti (OG)", min: "49'" }], reds: [] },
   },
   {
     id: 38,
@@ -929,6 +932,7 @@ var DATA = [
     away: "IRAN",
     group: "BẢNG H",
     round: "group",
+    result: { homeScore: 0, awayScore: 0, goals: [], reds: [{ team: "home", player: "N. Ngoy", min: "66'" }] },
   },
   {
     id: 39,
@@ -939,6 +943,7 @@ var DATA = [
     away: "CAPE VERDE",
     group: "BẢNG G",
     round: "group",
+    result: { homeScore: 2, awayScore: 2, goals: [{ team: "away", player: "K. Pina", min: "21'" }, { team: "home", player: "M. Araújo", min: "44'" }, { team: "home", player: "A. Canobbio", min: "45+6'" }, { team: "away", player: "H. Varela", min: "61'" }], reds: [] },
   },
   {
     id: 40,
@@ -949,6 +954,7 @@ var DATA = [
     away: "EGYPT",
     group: "BẢNG H",
     round: "group",
+    result: { homeScore: 1, awayScore: 3, goals: [{ team: "home", player: "F. Surman", min: "15'" }, { team: "away", player: "M. Zico", min: "58'" }, { team: "away", player: "M. Salah", min: "67'" }, { team: "away", player: "Trézéguet", min: "82'" }], reds: [] },
   },
   // --- Lượt 3 ---
   {
@@ -960,6 +966,7 @@ var DATA = [
     away: "AUSTRIA",
     group: "BẢNG J",
     round: "group",
+    result: { homeScore: 2, awayScore: 0, goals: [{ team: "home", player: "L. Messi", min: "38'" }, { team: "home", player: "L. Messi", min: "90+5'" }], reds: [] },
   },
   {
     id: 42,
@@ -970,6 +977,7 @@ var DATA = [
     away: "IRAQ",
     group: "BẢNG I",
     round: "group",
+    result: { homeScore: 3, awayScore: 0, goals: [{ team: "home", player: "K. Mbappé", min: "14'" }, { team: "home", player: "K. Mbappé", min: "54'" }, { team: "home", player: "O. Dembélé", min: "66'" }], reds: [] },
   },
   {
     id: 43,
@@ -980,6 +988,7 @@ var DATA = [
     away: "SENEGAL",
     group: "BẢNG I",
     round: "group",
+    result: { homeScore: 3, awayScore: 2, goals: [{ team: "home", player: "M. Holmgren Pedersen", min: "43'" }, { team: "home", player: "E. Haaland", min: "48'" }, { team: "away", player: "I. Sarr", min: "53'" }, { team: "home", player: "E. Haaland", min: "58'" }, { team: "away", player: "I. Sarr", min: "90+3'" }], reds: [] },
   },
   {
     id: 44,
@@ -990,6 +999,7 @@ var DATA = [
     away: "ALGERIA",
     group: "BẢNG J",
     round: "group",
+    result: { homeScore: 1, awayScore: 2, goals: [{ team: "home", player: "N. Al-Rashdan", min: "36'" }, { team: "away", player: "N. Benbouali", min: "69'" }, { team: "away", player: "A. Gouiri", min: "82'" }], reds: [] },
   },
   {
     id: 45,
@@ -1000,6 +1010,7 @@ var DATA = [
     away: "UZBEKISTAN",
     group: "BẢNG K",
     round: "group",
+    result: { homeScore: 5, awayScore: 0, goals: [{ team: "home", player: "C. Ronaldo", min: "6'" }, { team: "home", player: "N. Mendes", min: "17'" }, { team: "home", player: "C. Ronaldo", min: "39'" }, { team: "home", player: "A. Nematov (OG)", min: "60'" }, { team: "home", player: "R. Leão", min: "87'" }], reds: [] },
   },
   {
     id: 46,
@@ -1010,6 +1021,7 @@ var DATA = [
     away: "GHANA",
     group: "BẢNG L",
     round: "group",
+    result: { homeScore: 0, awayScore: 0, goals: [], reds: [] },
   },
   {
     id: 47,
@@ -1020,6 +1032,7 @@ var DATA = [
     away: "CROATIA",
     group: "BẢNG L",
     round: "group",
+    result: { homeScore: 0, awayScore: 1, goals: [{ team: "away", player: "A. Budimir", min: "54'" }], reds: [] },
   },
   {
     id: 48,
@@ -1030,6 +1043,7 @@ var DATA = [
     away: "DR CONGO",
     group: "BẢNG K",
     round: "group",
+    result: { homeScore: 1, awayScore: 0, goals: [{ team: "home", player: "D. Muñoz", min: "76'" }], reds: [] },
   },
   {
     id: 49,
@@ -1040,6 +1054,7 @@ var DATA = [
     away: "CANADA",
     group: "BẢNG B",
     round: "group",
+    result: { homeScore: 2, awayScore: 1, goals: [{ team: "home", player: "R. Vargas", min: "46'" }, { team: "home", player: "J. Manzambi", min: "57'" }, { team: "away", player: "P. David", min: "76'" }], reds: [] },
   },
   {
     id: 50,
@@ -1050,6 +1065,7 @@ var DATA = [
     away: "QATAR",
     group: "BẢNG B",
     round: "group",
+    result: { homeScore: 3, awayScore: 1, goals: [{ team: "home", player: "K. Alajbegovic", min: "29'" }, { team: "home", player: "M. Abunada (OG)", min: "34'" }, { team: "away", player: "H. Al-Haydos", min: "42'" }, { team: "home", player: "E. Mahmic", min: "80'" }], reds: [] },
   },
   {
     id: 51,
@@ -1060,6 +1076,7 @@ var DATA = [
     away: "HAITI",
     group: "BẢNG C",
     round: "group",
+    result: { homeScore: 4, awayScore: 2, goals: [{ team: "away", player: "Y. Bounou (OG)", min: "10'" }, { team: "home", player: "A. Hakimi", min: "39'" }, { team: "away", player: "W. Isidor", min: "43'" }, { team: "home", player: "I. Saibari", min: "45+1'" }, { team: "home", player: "S. Rahimi", min: "78'" }, { team: "home", player: "G. Yassine", min: "89'" }], reds: [] },
   },
   {
     id: 52,
@@ -1070,6 +1087,7 @@ var DATA = [
     away: "BRAZIL",
     group: "BẢNG C",
     round: "group",
+    result: { homeScore: 0, awayScore: 3, goals: [{ team: "away", player: "Vinícius Jr.", min: "7'" }, { team: "away", player: "Vinícius Jr.", min: "45+3'" }, { team: "away", player: "M. Cunha", min: "60'" }], reds: [] },
   },
   {
     id: 53,
@@ -1080,6 +1098,7 @@ var DATA = [
     away: "MEXICO",
     group: "BẢNG A",
     round: "group",
+    result: { homeScore: 0, awayScore: 3, goals: [{ team: "away", player: "M. Chávez", min: "55'" }, { team: "away", player: "J. Quiñones", min: "61'" }, { team: "away", player: "Á. Fidalgo", min: "90+4'" }], reds: [] },
   },
   {
     id: 54,
@@ -1090,6 +1109,7 @@ var DATA = [
     away: "SOUTH KOREA",
     group: "BẢNG A",
     round: "group",
+    result: { homeScore: 1, awayScore: 0, goals: [{ team: "home", player: "T. Maseko", min: "63'" }], reds: [] },
   },
   {
     id: 55,
@@ -1100,6 +1120,7 @@ var DATA = [
     away: "GERMANY",
     group: "BẢNG E",
     round: "group",
+    result: { homeScore: 2, awayScore: 1, goals: [{ team: "away", player: "L. Sané", min: "2'" }, { team: "home", player: "N. Angulo", min: "23'" }, { team: "home", player: "G. Plata", min: "77'" }], reds: [] },
   },
   {
     id: 56,
@@ -1110,6 +1131,7 @@ var DATA = [
     away: "IVORY COAST",
     group: "BẢNG E",
     round: "group",
+    result: { homeScore: 0, awayScore: 2, goals: [{ team: "away", player: "N. Pépé", min: "7'" }, { team: "away", player: "N. Pépé", min: "68'" }], reds: [] },
   },
   {
     id: 57,
@@ -1120,6 +1142,7 @@ var DATA = [
     away: "SWEDEN",
     group: "BẢNG F",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [{ team: "home", player: "K. Nakamura", min: "34'" }, { team: "away", player: "V. Gyökeres", min: "71'" }], reds: [] },
   },
   {
     id: 58,
@@ -1130,6 +1153,7 @@ var DATA = [
     away: "NETHERLANDS",
     group: "BẢNG F",
     round: "group",
+    result: { homeScore: 1, awayScore: 3, goals: [{ team: "away", player: "C. Gakpo", min: "12'" }, { team: "home", player: "O. Rekik", min: "55'" }, { team: "away", player: "C. Gakpo", min: "70'" }, { team: "away", player: "C. Summerville", min: "88'" }], reds: [] },
   },
   {
     id: 59,
@@ -1140,6 +1164,7 @@ var DATA = [
     away: "UNITED STATES",
     group: "BẢNG D",
     round: "group",
+    result: { homeScore: 3, awayScore: 2, goals: [{ team: "away", player: "A. Trusty", min: "3'" }, { team: "home", player: "A. Güler", min: "10'" }, { team: "home", player: "O. Kökçü", min: "31'" }, { team: "away", player: "S. Berhalter", min: "49'" }, { team: "home", player: "K. Ayhan", min: "90+8'" }], reds: [] },
   },
   {
     id: 60,
@@ -1150,6 +1175,7 @@ var DATA = [
     away: "AUSTRALIA",
     group: "BẢNG D",
     round: "group",
+    result: { homeScore: 0, awayScore: 0, goals: [], reds: [] },
   },
   {
     id: 61,
@@ -1160,6 +1186,7 @@ var DATA = [
     away: "IRAQ",
     group: "BẢNG I",
     round: "group",
+    result: { homeScore: 5, awayScore: 0, goals: [], reds: [] },
   },
   {
     id: 62,
@@ -1170,6 +1197,7 @@ var DATA = [
     away: "FRANCE",
     group: "BẢNG I",
     round: "group",
+    result: { homeScore: 4, awayScore: 1, goals: [], reds: [] },
   },
   {
     id: 63,
@@ -1180,6 +1208,7 @@ var DATA = [
     away: "SPAIN",
     group: "BẢNG H",
     round: "group",
+    result: { homeScore: 0, awayScore: 1, goals: [], reds: [] },
   },
   {
     id: 64,
@@ -1190,6 +1219,7 @@ var DATA = [
     away: "SAUDI ARABIA",
     group: "BẢNG H",
     round: "group",
+    result: { homeScore: 0, awayScore: 0, goals: [], reds: [] },
   },
   {
     id: 65,
@@ -1200,6 +1230,7 @@ var DATA = [
     away: "IRAN",
     group: "BẢNG G",
     round: "group",
+    result: { homeScore: 1, awayScore: 1, goals: [], reds: [] },
   },
   {
     id: 66,
@@ -1210,6 +1241,7 @@ var DATA = [
     away: "BELGIUM",
     group: "BẢNG G",
     round: "group",
+    result: { homeScore: 1, awayScore: 5, goals: [], reds: [] },
   },
   {
     id: 67,
